@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manage Stock - WR Smile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Google Fonts for Luxury Feel: Inter for body, Playfair Display for headings -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Base Body Styling for Luxury UI */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #e0e7ee, #c8d3e0); /* Soft, cool grey gradient */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column; /* Allow content to stack and footer to push down */
+      align-items: center;
+      justify-content: flex-start; /* Align content to top initially */
+      padding: 20px;
+      color: #334155; /* Darker default text color */
+      box-sizing: border-box; /* Include padding in element's total width and height */
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif; /* Elegant serif for headings */
+      font-weight: 700;
+      color: #2c5282; /* Deep blue for titles */
+      letter-spacing: 0.5px; /* Subtle letter spacing */
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Soft text shadow */
+    }
+
+    /* Main Container Styling */
+    .main-container {
+      max-width: 1000px; /* Wider container */
+      width: 100%;
+      background: #ffffff;
+      padding: 2.5rem 2rem; /* More generous padding */
+      border-radius: 24px; /* More rounded corners */
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
+      margin-top: 30px; /* Space from top */
+      margin-bottom: 30px; /* Space from bottom */
+      position: relative;
+      overflow: hidden; /* For subtle background patterns if desired */
+      z-index: 1; /* Ensure content is above pseudo-element */
+    }
+    .main-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234a5568" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); /* Subtle geometric pattern */
+        opacity: 0.8;
+        z-index: -1; /* Place behind content */
+        pointer-events: none;
+    }
+
+    /* Heading Styling */
+    h2 {
+      text-align: center;
+      font-weight: 700;
+      color: #2c5282; /* Deep blue for titles */
+      margin-bottom: 2.5rem; /* More space below title */
+      letter-spacing: 1px;
+      font-size: 2.5rem; /* Larger heading */
+      text-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Input and Button Focus Styles */
+    input, button, select {
+      transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transitions */
+    }
+    input:focus, select:focus {
+      border-color: #4299e1; /* Elegant blue focus border */
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3); /* Subtle blue glow */
+      outline: none;
+    }
+
+    /* Custom Button Styles for Luxury */
+    .btn-primary-custom {
+      background: linear-gradient(to right, #4299e1, #3182ce); /* Blue gradient */
+      border: none;
+      font-weight: 600;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px; /* More rounded */
+      box-shadow: 0 8px 20px rgba(66, 153, 225, 0.3); /* Soft shadow */
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 1.05rem;
+    }
+    .btn-primary-custom:hover {
+      background: linear-gradient(to right, #3182ce, #2b6cb0); /* Darker gradient on hover */
+      transform: translateY(-3px); /* Subtle lift effect */
+      box-shadow: 0 12px 25px rgba(66, 153, 225, 0.4); /* Stronger shadow on hover */
+    }
+    .btn-primary-custom:active {
+        transform: translateY(0); /* Return to original position on click */
+        box-shadow: 0 5px 15px rgba(66, 153, 225, 0.2);
+    }
+
+    .btn-danger-custom {
+      background-color: #ef4444; /* Tailwind red-500 */
+      border: none;
+      font-weight: 500;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px; /* Slightly less rounded than primary for distinction */
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+      cursor: pointer;
+    }
+    .btn-danger-custom:hover {
+      background-color: #dc2626; /* Tailwind red-600 */
+      transform: scale(1.05); /* Slight scale for emphasis */
+      box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-secondary-custom {
+        background-color: #6b7280; /* Tailwind gray-500 */
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(107, 114, 128, 0.2);
+    }
+    .btn-secondary-custom:hover {
+        background-color: #4b5563; /* Tailwind gray-700 */
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(107, 114, 128, 0.3);
+    }
+
+    /* Table Styling for Luxury */
+    .table-custom {
+      width: 100%;
+      border-collapse: separate; /* Use separate for rounded corners */
+      border-spacing: 0; /* No space between cells */
+      border-radius: 16px; /* Rounded table corners */
+      overflow: hidden; /* Ensures content respects border-radius */
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1); /* Soft table shadow */
+      margin-top: 20px;
+      table-layout: fixed; /* Fixed column width */
+      word-wrap: break-word; /* Wrap long words */
+      background-color: #f8fafc; /* Light background for table body */
+    }
+    .table-custom thead {
+      background: linear-gradient(to right, #2c5282, #4299e1); /* Dark blue gradient header */
+      color: white;
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .table-custom th, .table-custom td {
+      padding: 1rem 0.75rem; /* More padding in cells */
+      text-align: center;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.7); /* Subtle row separators */
+      border-right: 1px solid rgba(226, 232, 240, 0.7); /* Subtle column separators */
+    }
+    .table-custom th:last-child, .table-custom td:last-child {
+        border-right: none; /* No right border on last column */
+    }
+    .table-custom tbody tr:hover {
+      background-color: #e6f0ff; /* Light blue on hover */
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .table-custom tbody tr:last-child td {
+        border-bottom: none; /* No bottom border on last row */
+    }
+    .text-start-col {
+        text-align: left; /* Align product name to left */
+    }
+
+    /* Custom Modal styles */
+    .modal-custom {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1050; /* Ensure it's on top */
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6); /* This now acts as the backdrop */
+        display: flex; /* To center content */
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        outline: 0;
+        opacity: 0; /* Initial state for transition */
+        transition: opacity 0.3s ease-in-out;
+    }
+    /* When shown, ensure it's flex and opaque */
+    .modal-custom:not(.hidden) {
+        opacity: 1; /* Fade in */
+    }
+    .modal-custom.hidden {
+        display: none; /* Hide completely when hidden */
+        opacity: 0;
+        pointer-events: none; /* Ensure no clicks */
+    }
+
+    .modal-custom-content {
+        background-color: #fff;
+        border-radius: 16px; /* Rounded corners */
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Deep shadow */
+        max-width: 600px; /* Adjusted max width */
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: translateY(-20px); /* Initial lift for animation */
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        opacity: 0; /* Start invisible for the content itself */
+        pointer-events: auto; /* Ensure content is clickable */
+    }
+    .modal-custom:not(.hidden) .modal-custom-content {
+        transform: translateY(0); /* Slide down */
+        opacity: 1; /* Fade in content */
+    }
+
+    .modal-custom-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e2e8f0; /* Subtle border */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f0f4f8; /* Light header background */
+        border-radius: 16px 16px 0 0;
+    }
+    .modal-custom-title {
+        color: #2c5282;
+        font-weight: 700;
+        font-size: 1.8rem; /* Larger modal title */
+        letter-spacing: 0.5px;
+    }
+    .modal-custom-body {
+        padding: 1.5rem;
+    }
+    .modal-custom-footer {
+        padding: 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: flex-end; /* Align buttons to end */
+        gap: 0.75rem; /* Spacing between buttons */
+    }
+    .form-label-custom {
+        font-weight: 600;
+        color: #2d3748; /* Dark grey for labels */
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    .form-input-custom {
+        padding: 0.75rem 1rem;
+        border: 1px solid #cbd5e0; /* Subtle grey border */
+        border-radius: 8px; /* Rounded input fields */
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    .form-input-custom:focus {
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+    }
+    .invalid-feedback-custom {
+        color: #ef4444; /* Red for validation feedback */
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Back Button Styling */
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #4a5568; /* Dark grey */
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 10; /* Ensure it's above other content */
+    }
+    .back-button:hover {
+      background-color: #2d3748; /* Darker grey on hover */
+      transform: translateX(-5px); /* Slight slide effect */
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Utility for hidden elements */
+    .hidden {
+        display: none !important;
+    }
+
+    /* Message Alert Styling */
+    .alert-message {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .alert-message.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .alert-message.info { background-color: #3b82f6; } /* blue-500 */
+    .alert-message.success { background-color: #10b981; } /* emerald-500 */
+    .alert-message.error { background-color: #ef4444; } /* red-500 */
+
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .main-container {
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .table-custom th, .table-custom td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.9rem;
+        }
+        .btn-primary-custom, .btn-secondary-custom {
+            width: 100%;
+            margin-bottom: 0.75rem;
+            justify-content: center;
+        }
+        .btn-danger-custom {
+            width: 100%;
+        }
+        .modal-custom-content {
+            max-width: 95%;
+            padding: 1rem;
+        }
+        .modal-custom-header, .modal-custom-footer, .modal-custom-body {
+            padding: 1rem;
+        }
+        .modal-custom-title {
+            font-size: 1.5rem;
+        }
+        .back-button {
+            top: 10px;
+            left: 10px;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.9rem;
+        }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page Loader -->
+<div id="page-loader" class="fixed inset-0 bg-white bg-opacity-95 z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="spinner"></div>
+    <div class="mt-6 text-2xl text-gray-700 font-semibold animate-pulse tracking-wide">Loading Stock Data...</div>
+</div>
+
+<a href="index.html" class="back-button">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+    </svg>
+    Back to Dashboard
+</a>
+
+<div class="main-container">
+  <h2>📦 Product Stock Management</h2>
+  
+  <button id="add-product-btn" class="btn-primary-custom mb-6" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+    </svg>
+    Add New Product
+  </button>
+
+  <div class="overflow-x-auto rounded-lg shadow-lg">
+    <table class="table-custom">
+      <thead>
+        <tr>
+          <th style="width: 5%;">#</th>
+          <th style="width: 35%;">Product Name</th>
+          <th style="width: 15%;">Cost Price (Rs.)</th>
+          <th style="width: 15%;">Selling Price (Rs.)</th>
+          <th style="width: 15%;">Stock</th>
+          <th style="width: 15%;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="stock-table-body" class="font-normal text-gray-700">
+        <!-- Products will be loaded here -->
+        <tr>
+            <td colspan="6" class="text-center py-4 text-gray-500">Loading products...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Custom Add Product Modal -->
+<div id="addProductModal" class="modal-custom hidden">
+  <!-- The modal-custom-backdrop is now integrated into .modal-custom CSS -->
+  <div class="modal-custom-content">
+    <div class="modal-custom-header">
+      <h5 class="modal-custom-title">Add New Product</h5>
+      <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeAddProductModal">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+    <form id="add-product-form" class="needs-validation" novalidate>
+      <div class="modal-custom-body">
+        <div class="mb-4">
+          <label for="productName" class="form-label-custom">Product Name</label>
+          <input id="productName" class="form-input-custom" required autocomplete="off" />
+          <div class="invalid-feedback-custom">Please enter product name.</div>
+        </div>
+        <div class="mb-4">
+          <label for="productCostPrice" class="form-label-custom">Cost Price (Rs.)</label>
+          <input id="productCostPrice" type="number" min="0" step="0.01" class="form-input-custom" required autocomplete="off" />
+          <div class="invalid-feedback-custom">Please enter valid cost price.</div>
+        </div>
+        <div class="mb-4">
+          <label for="productPrice" class="form-label-custom">Selling Price (Rs.)</label>
+          <input id="productPrice" type="number" min="0" step="0.01" class="form-input-custom" required autocomplete="off" />
+          <div class="invalid-feedback-custom">Please enter valid selling price.</div>
+        </div>
+        <div class="mb-4">
+          <label for="productStock" class="form-label-custom">Stock Quantity</label>
+          <input id="productStock" type="number" min="0" step="1" class="form-input-custom" required autocomplete="off" />
+          <div class="invalid-feedback-custom">Please enter stock quantity.</div>
+        </div>
+      </div>
+      <div class="modal-custom-footer">
+        <button type="button" class="btn-secondary-custom" id="closeAddProductModal2">Cancel</button>
+        <button type="submit" class="btn-primary-custom">Add Product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Custom Confirmation Modal (for Delete) -->
+<div id="confirmModal" class="modal-custom hidden">
+    <!-- The modal-custom-backdrop is now integrated into .modal-custom CSS -->
+    <div class="modal-custom-content">
+        <div class="modal-custom-header">
+            <h5 class="modal-custom-title">Confirm Deletion</h5>
+            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeConfirmModal">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="modal-custom-body">
+            <p id="confirmMessage" class="text-gray-700 text-lg">Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-custom-footer">
+            <button type="button" class="btn-secondary-custom" id="cancelConfirm">No, Cancel</button>
+            <button type="button" class="btn-danger-custom" id="confirmDelete">Yes, Delete</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Firebase SDK Imports -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // Firebase Configuration - Using the exact config provided by the user
+  const firebaseConfig = {
+    apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
+    authDomain: "wr-smile-shop.firebaseapp.com",
+    databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
+    projectId: "wr-smile-shop",
+    storageBucket: "wr-smile-shop.firebasestorage.app",
+    messagingSenderId: "299864260187",
+    appId: "1:299864260187:web:fa6af65ef95674aff1097e",
+    measurementId: "G-3Z38G6MCYJ"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Global variable for Canvas App ID. Assuming a consistent pattern across your pages.
+  const appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId; // Fallback to projectId if __app_id is not set by Canvas
+
+  // Firestore Collection Reference
+  // Stock data is public across the app, stored under /artifacts/{appId}/public/data/products
+  const productsCollectionRef = collection(db, `artifacts/${appId}/public/data/products`);
+
+  const tbody = document.getElementById('stock-table-body');
+  const addProductForm = document.getElementById('add-product-form');
+  const addProductModal = document.getElementById('addProductModal');
+  const confirmModal = document.getElementById('confirmModal');
+  let productToDeleteId = null; // To store the ID of the product to be deleted
+
+  // --- Utility Functions for UI feedback ---
+
+  /**
+   * Displays a temporary message to the user.
+   * @param {string} message - The message content.
+   * @param {'success' | 'error' | 'info'} type - Type of message for styling.
+   */
+  function showMessage(message, type = 'info') {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert-message ${type}`;
+      alertDiv.textContent = message;
+      document.body.appendChild(alertDiv);
+      setTimeout(() => {
+          alertDiv.classList.add('show');
+      }, 10); // Small delay to trigger transition
+      setTimeout(() => {
+          alertDiv.classList.remove('show');
+          alertDiv.addEventListener('transitionend', () => alertDiv.remove());
+      }, 3000);
+  }
+
+  /**
+   * Shows a custom modal.
+   * @param {HTMLElement} modalElement - The main modal container (which also acts as backdrop).
+   */
+  function showCustomModal(modalElement) {
+      modalElement.classList.remove('hidden'); // Make it visible and apply backdrop styles
+      // Trigger a reflow to ensure `display: flex` is applied before transition
+      void modalElement.offsetWidth;
+      // Now apply the content's initial state for transition
+      const content = modalElement.querySelector('.modal-custom-content');
+      content.style.transform = 'translateY(-20px)';
+      content.style.opacity = '0';
+      // After a tiny delay, transition to final state
+      setTimeout(() => {
+          content.style.transform = 'translateY(0)';
+          content.style.opacity = '1';
+          // Optional: focus the first input field
+          const firstInput = content.querySelector('input');
+          if (firstInput) {
+              firstInput.focus();
+          }
+      }, 10);
+  }
+
+  /**
+   * Hides a custom modal.
+   * @param {HTMLElement} modalElement - The main modal container.
+   */
+  function hideCustomModal(modalElement) {
+      const content = modalElement.querySelector('.modal-custom-content');
+      content.style.transform = 'translateY(-20px)';
+      content.style.opacity = '0';
+      // Wait for the content's transition to complete, then hide the entire modal
+      setTimeout(() => {
+          modalElement.classList.add('hidden');
+      }, 350); // Match content's transition duration (0.3s + small buffer)
+  }
+
+  // --- Product Management Functions ---
+
+  /**
+   * Loads products from Firestore and updates the table in real-time.
+   */
+  function loadProducts() {
+    // onSnapshot provides real-time updates
+    onSnapshot(productsCollectionRef, (snapshot) => {
+      tbody.innerHTML = ''; // Clear existing rows
+      if (snapshot.empty) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">No products found. Add some new products!</td></tr>`;
+        return;
+      }
+
+      let index = 1;
+      snapshot.forEach(doc => {
+        const product = doc.data();
+        const productId = doc.id; // Get the Firestore document ID
+        tbody.innerHTML += `
+          <tr>
+            <td>${index++}</td>
+            <td class="text-start-col">${product.name}</td>
+            <td>Rs. ${parseFloat(product.costPrice || 0).toFixed(2)}</td>
+            <td>Rs. ${parseFloat(product.price || 0).toFixed(2)}</td>
+            <td>${product.stock || 0}</td>
+            <td class="flex justify-center items-center h-full gap-2">
+              <button class="btn-danger-custom" data-product-id="${productId}" data-product-name="${product.name}">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      // Attach event listeners for delete buttons (delegated)
+      tbody.querySelectorAll('.btn-danger-custom').forEach(button => {
+        button.addEventListener('click', (event) => {
+          productToDeleteId = event.target.dataset.productId;
+          const productName = event.target.dataset.productName;
+          document.getElementById('confirmMessage').textContent = `Are you sure you want to delete "${productName}"?`;
+          showCustomModal(confirmModal);
+        });
+      });
+    }, (error) => {
+      console.error("Error loading products from Firestore: ", error);
+      showMessage("Failed to load products. Check console and Firebase rules.", "error");
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Error loading products.</td></tr>`;
+    });
+  }
+
+  /**
+   * Handles product deletion after confirmation.
+   */
+  async function confirmDeleteProduct() {
+    if (productToDeleteId) {
+      try {
+        await deleteDoc(doc(productsCollectionRef, productToDeleteId));
+        showMessage("Product deleted successfully!", "success");
+        productToDeleteId = null; // Clear the ID
+      } catch (err) {
+        console.error("Error deleting product: ", err);
+        showMessage('Error deleting product: ' + err.message, "error");
+      } finally {
+        hideCustomModal(confirmModal);
+      }
+    }
+  }
+
+  // --- Event Listeners ---
+
+  // Show Add Product Modal
+  document.getElementById('add-product-btn').addEventListener('click', () => {
+    // Reset form and validation before showing
+    addProductForm.reset();
+    addProductForm.classList.remove('was-validated');
+    showCustomModal(addProductModal);
+  });
+
+  // Close Add Product Modal
+  document.getElementById('closeAddProductModal').addEventListener('click', () => hideCustomModal(addProductModal));
+  document.getElementById('closeAddProductModal2').addEventListener('click', () => hideCustomModal(addProductModal));
+
+  // Add Product Form Submit Handler
+  addProductForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    // HTML5 validation check (controlled by `novalidate` on form and manual `checkValidity`)
+    if (!addProductForm.checkValidity()) {
+      addProductForm.classList.add('was-validated');
+      showMessage("Please fill all required fields correctly.", "error");
+      return;
+    }
+
+    const name = document.getElementById('productName').value.trim();
+    const costPrice = parseFloat(document.getElementById('productCostPrice').value);
+    const price = parseFloat(document.getElementById('productPrice').value);
+    const stock = parseInt(document.getElementById('productStock').value);
+
+    // Additional validation (though HTML5 `required` and `min` attributes help)
+    if (!name || isNaN(costPrice) || isNaN(price) || isNaN(stock)) {
+      showMessage('Please fill all fields correctly.', "error");
+      return;
+    }
+
+    try {
+      await addDoc(productsCollectionRef, { name, costPrice, price, stock });
+      showMessage("Product added successfully!", "success");
+      addProductForm.reset();
+      addProductForm.classList.remove('was-validated');
+      hideCustomModal(addProductModal);
+    } catch (error) {
+      console.error("Failed to add product: ", error);
+      showMessage('Failed to add product: ' + error.message, "error");
+    }
+  });
+
+  // Confirm Delete Modal actions
+  document.getElementById('cancelConfirm').addEventListener('click', () => hideCustomModal(confirmModal));
+  document.getElementById('confirmDelete').addEventListener('click', confirmDeleteProduct);
+  document.getElementById('closeConfirmModal').addEventListener('click', () => hideCustomModal(confirmModal));
+
+
+  // Initial load of products on DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
+    // Hide loader after a short delay, assuming products will load or error will show quickly
+    setTimeout(() => {
+        document.getElementById("page-loader").classList.add('hidden');
+    }, 1000); // Give 1 second for initial Firebase fetch
+  });
+
+  // Failsafe to hide loader
+  setTimeout(() => {
+      const loader = document.getElementById("page-loader");
+      if (loader && !loader.classList.contains('hidden')) {
+          loader.classList.add('hidden');
+          console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
+      }
+  }, 10000); // Max 10 seconds load time
+</script>
+
+</body>
+</html>

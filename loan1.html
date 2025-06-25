@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Manager - WR Smile</title>
+    <!-- Google Fonts for Luxury Feel: Inter for body, Playfair Display for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <!-- jsPDF Import for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Base Body Styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #e0e7ee, #c8d3e0); /* Soft, cool grey gradient */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            color: #334155;
+            box-sizing: border-box;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #2c5282;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            margin-top: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234a5568" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            opacity: 0.8;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Section Box */
+        .section-box {
+            background-color: #fdfdfd;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #2dd4bf; /* Accent color */
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.4rem;
+            display: block;
+            font-size: 0.95rem;
+        }
+        .form-input {
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1rem;
+            color: #4a5568;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .input-group .form-input {
+            flex-grow: 1;
+        }
+
+        /* Buttons */
+        .btn-custom {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-decoration: none; /* For anchor tags used as buttons */
+        }
+        .btn-primary-custom {
+            background: linear-gradient(to right, #2dd4bf, #14b8a6);
+            color: white;
+            box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3);
+        }
+        .btn-primary-custom:hover {
+            background: linear-gradient(to right, #14b8a6, #118e82);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(45, 212, 191, 0.4);
+        }
+        .btn-secondary-custom {
+            background-color: #6b7280;
+            color: white;
+            box-shadow: 0 8px 20px rgba(107, 114, 128, 0.2);
+        }
+        .btn-secondary-custom:hover {
+            background-color: #4b5563;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(107, 114, 128, 0.3);
+        }
+        .btn-info-custom {
+            background-color: #3b82f6; /* Blue */
+            color: white;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+        }
+        .btn-info-custom:hover {
+            background-color: #2563eb;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.3);
+        }
+        .btn-success-custom {
+            background-color: #10b981; /* Green */
+            color: white;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+        }
+        .btn-success-custom:hover {
+            background-color: #059669;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(16, 185, 129, 0.3);
+        }
+        .btn-danger-custom {
+            background-color: #ef4444; /* Red */
+            color: white;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger-custom:hover {
+            background-color: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(239, 68, 68, 0.3);
+        }
+        .btn-sm-custom {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 8px;
+        }
+        .btn-full-width {
+            width: 100%;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        .loan-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+            border-radius: 12px; /* Apply to table itself for consistent look */
+            overflow: hidden; /* For rounded corners on the table */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .loan-table th, .loan-table td {
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .loan-table thead th {
+            background-color: #e2e8f0; /* Light grey header */
+            color: #2d3748;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        .loan-table tbody tr:nth-child(even) {
+            background-color: #f8fafc; /* Subtle stripe */
+        }
+        .loan-table tbody tr:hover {
+            background-color: #eef2f6;
+        }
+        .status-paid { color: #10b981; font-weight: 600; } /* Green */
+        .status-due { color: #ef4444; font-weight: 600; } /* Red */
+        .text-center { text-align: center; }
+        .text-gray-500 { color: #6b7280; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+
+        /* Loader */
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 2000;
+            transition: opacity 0.3s ease;
+        }
+        #page-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader-spinner {
+            border: 8px solid rgba(45, 212, 191, 0.2);
+            border-top: 8px solid #2dd4bf;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Alert Container */
+        .alert-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .alert-message {
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .alert-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .alert-message.info { background-color: #3b82f6; }
+        .alert-message.success { background-color: #10b981; }
+        .alert-message.warning { background-color: #f59e0b; }
+        .alert-message.error { background-color: #ef4444; }
+
+        /* Custom Modal Styling */
+        .custom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 1060;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+        .custom-modal:not(.hidden) {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .custom-modal-dialog {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            max-width: 500px;
+            width: 100%;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+        .custom-modal:not(.hidden) .custom-modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .custom-modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f4f8;
+            border-radius: 16px 16px 0 0;
+        }
+        .custom-modal-title {
+            color: #2c5282;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+        .custom-modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #6b7280;
+            line-height: 1; /* Adjust to better center the 'x' */
+            padding: 0;
+            margin: 0;
+        }
+        .custom-modal-body {
+            padding: 1.5rem;
+        }
+        .custom-modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+        .custom-modal.hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="dashboard.html" class="btn-custom btn-secondary-custom back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16" style="margin-right: 5px;">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5a.5.5 0 0 0 .5-.5z"/>
+        </svg>
+        Back to Dashboard
+    </a>
+    <div class="section-box">
+        <div class="section-title text-center">
+            💼 Loan Management - WR Smile
+        </div>
+        <div class="section-body">
+            <div class="form-group">
+                <label for="searchPhoneName" class="form-label">Search by Phone or Name</label>
+                <div class="input-group">
+                    <input type="text" id="searchPhoneName" class="form-input" placeholder="Enter customer phone or name">
+                    <button class="btn-custom btn-primary-custom btn-sm-custom" type="button" id="searchButton" style="width: auto;">Search</button>
+                </div>
+            </div>
+            <div id="customerInfo" class="section-box" style="display:none; padding: 10px; border: 1px solid #bee3f8; background-color: #ebf8ff; color: #2c5282;">
+                <strong>Customer:</strong> <span id="customerNameDisplay"></span><br>
+                <strong>Phone:</strong> <span id="customerPhoneDisplay"></span>
+            </div>
+            <div class="table-responsive">
+                <table class="loan-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Invoice ID</th>
+                            <th>Total Loan</th>
+                            <th>Paid</th>
+                            <th>Balance</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loan-table-body">
+                        <tr><td colspan="8" class="text-center text-gray-500 py-4">Search for a customer to view loans.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div id="confirmationModal" class="custom-modal hidden">
+    <div class="custom-modal-dialog">
+        <div class="custom-modal-header">
+            <h5 class="custom-modal-title">Confirm Action</h5>
+            <button type="button" class="custom-modal-close-btn" id="confirmCloseBtn">&times;</button>
+        </div>
+        <div class="custom-modal-body">
+            <p id="confirmMessage"></p>
+        </div>
+        <div class="custom-modal-footer">
+            <button type="button" class="btn-custom btn-secondary-custom btn-sm-custom" id="confirmCancelBtn">Cancel</button>
+            <button type="button" class="btn-custom btn-primary-custom btn-sm-custom" id="confirmProceedBtn">Proceed</button>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="custom-modal hidden">
+    <div class="custom-modal-dialog">
+        <div class="custom-modal-header">
+            <h5 class="custom-modal-title">Add Payment</h5>
+            <button type="button" class="custom-modal-close-btn" id="paymentCloseBtn">&times;</button>
+        </div>
+        <form id="paymentForm">
+            <p id="paymentLoanInfo" style="margin-bottom: 1rem; color: #4a5568;"></p>
+            <div class="form-group">
+                <label for="paymentAmount" class="form-label">Amount (Rs.)</label>
+                <input type="number" id="paymentAmount" class="form-input" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="paymentNote" class="form-label">Note (Optional)</label>
+                <textarea id="paymentNote" class="form-input" rows="2"></textarea>
+            </div>
+            <div class="custom-modal-footer">
+                <button type="button" class="btn-custom btn-secondary-custom btn-sm-custom" id="paymentCancelBtn">Cancel</button>
+                <button type="submit" class="btn-custom btn-success-custom btn-sm-custom">Submit Payment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Adjust Loan Modal -->
+<div id="adjustLoanModal" class="custom-modal hidden">
+    <div class="custom-modal-dialog">
+        <div class="custom-modal-header">
+            <h5 class="custom-modal-title">Adjust Loan Balance</h5>
+            <button type="button" class="custom-modal-close-btn" id="adjustCloseBtn">&times;</button>
+        </div>
+        <form id="adjustLoanForm">
+            <p id="adjustLoanInfo" style="margin-bottom: 1rem; color: #4a5568;"></p>
+            <div class="form-group">
+                <label for="adjustAmount" class="form-label">Adjustment Amount (Rs.)</label>
+                <input type="number" id="adjustAmount" class="form-input" step="0.01" required placeholder="Enter positive or negative amount">
+            </div>
+            <div class="form-group">
+                <label for="adjustNote" class="form-label">Reason for Adjustment</label>
+                <textarea id="adjustNote" class="form-input" rows="2" required placeholder="e.g., 'Discount applied', 'Error correction', 'Additional credit given'"></textarea>
+            </div>
+            <div class="custom-modal-footer">
+                <button type="button" class="btn-custom btn-secondary-custom btn-sm-custom" id="adjustCancelBtn">Cancel</button>
+                <button type="submit" class="btn-custom btn-info-custom btn-sm-custom">Apply Adjustment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Page Loader -->
+<div id="page-loader" class="hidden">
+    <div class="loader-spinner"></div>
+    <div style="margin-top: 1rem; font-size: 1.2rem; color: #4a5568;">Loading...</div>
+</div>
+
+<!-- Alert Container -->
+<div id="alert-container"></div>
+
+<script type="module">
+    // Firebase SDK Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    // Removed getAuth and onAuthStateChanged as per request
+    // import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // Your Firebase Configuration (replace with your actual project config)
+    const firebaseConfig = {
+        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
+        authDomain: "wr-smile-shop.firebaseapp.com",
+        databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
+        projectId: "wr-smile-shop",
+        storageBucket: "wr-smile-shop.firebasestorage.app",
+        messagingSenderId: "299864260187",
+        appId: "1:299864260187:web:fa6af65ef95674aff1097e",
+        measurementId: "G-3Z38G6MCYJ"
+    };
+
+    // DOM Elements (Moved relevant elements up for early access)
+    const pageLoader = document.getElementById('page-loader');
+    const alertContainer = document.getElementById('alert-container');
+
+    // --- Utility Functions (Must be declared before being called) ---
+    function formatLKR(amount) {
+        return new Intl.NumberFormat('en-LK', {
+            style: 'currency',
+            currency: 'LKR',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount);
+    }
+
+    function showAlert(message, type = 'info', duration = 3000) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert-message ${type}`;
+        alertDiv.textContent = message;
+        alertContainer.appendChild(alertDiv);
+        setTimeout(() => {
+            alertDiv.classList.add('show');
+        }, 10);
+        setTimeout(() => {
+            alertDiv.classList.remove('show');
+            setTimeout(() => {
+                alertContainer.removeChild(alertDiv);
+            }, 300);
+        }, duration);
+    }
+
+    function showLoader() {
+        pageLoader.classList.remove('hidden');
+    }
+
+    function hideLoader() {
+        setTimeout(() => {
+            pageLoader.classList.add('hidden');
+        }, 300);
+    }
+
+    // --- IMPORTANT: Check Firebase Config ---
+    // The previous check assumed placeholder values; now it's logging the actual config.
+    console.log("Firebase configuration loaded:", firebaseConfig);
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    // Removed auth initialization as per request
+    // const auth = getAuth(app);
+
+    // App ID for Firestore paths (consistent with your previous structure)
+    // This __app_id variable is provided by the Canvas environment.
+    // If running outside Canvas, you might use firebaseConfig.projectId as a fallback.
+    const appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId;
+
+    console.log(`Using appId for Firestore paths: ${appId}`);
+
+    // Firestore Collection References
+    const customersCollectionRef = collection(db, `artifacts/${appId}/public/data/customers`);
+    const invoicesCollectionRef = collection(db, `artifacts/${appId}/public/data/invoices`); // Loans are essentially invoices with a balance due
+    const paymentsCollectionRef = collection(db, `artifacts/${appId}/public/data/payments`); // To track individual payments against loans
+
+    console.log("Firestore Collection Paths:");
+    console.log("Customers:", customersCollectionRef.path);
+    console.log("Invoices (Loans):", invoicesCollectionRef.path);
+    console.log("Payments:", paymentsCollectionRef.path);
+
+
+    // Other DOM Elements (these can remain here as they are used after the initial config check)
+    const tableBody = document.getElementById('loan-table-body');
+    const searchPhoneNameInput = document.getElementById('searchPhoneName');
+    const searchButton = document.getElementById('searchButton');
+    const customerInfoDiv = document.getElementById('customerInfo');
+    const customerNameDisplay = document.getElementById('customerNameDisplay');
+    const customerPhoneDisplay = document.getElementById('customerPhoneDisplay');
+
+    // Modals
+    const confirmationModal = document.getElementById('confirmationModal');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmCloseBtn = document.getElementById('confirmCloseBtn');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const confirmProceedBtn = document.getElementById('confirmProceedBtn');
+
+    const paymentModal = document.getElementById('paymentModal');
+    const paymentCloseBtn = document.getElementById('paymentCloseBtn');
+    const paymentCancelBtn = document.getElementById('paymentCancelBtn');
+    const paymentForm = document.getElementById('paymentForm');
+    const paymentLoanInfo = document.getElementById('paymentLoanInfo');
+    const paymentAmountInput = document.getElementById('paymentAmount');
+    const paymentNoteInput = document.getElementById('paymentNote');
+
+    const adjustLoanModal = document.getElementById('adjustLoanModal');
+    const adjustCloseBtn = document.getElementById('adjustCloseBtn');
+    const adjustCancelBtn = document.getElementById('adjustCancelBtn');
+    const adjustLoanForm = document.getElementById('adjustLoanForm');
+    const adjustLoanInfo = document.getElementById('adjustLoanInfo');
+    const adjustAmountInput = document.getElementById('adjustAmount');
+    const adjustNoteInput = document.getElementById('adjustNote');
+
+
+    // Global State
+    let currentCustomerId = null;
+    let currentCustomerPhone = ''; // Store phone for WhatsApp
+    let selectedLoanForPayment = null; // Stores the full loan document data for the payment modal
+    let selectedLoanForAdjustment = null; // Stores the full loan document data for adjustment modal
+
+    // --- Custom Modal Handlers ---
+    function showConfirmationModal(message, onProceed) {
+        confirmMessage.textContent = message;
+        confirmationModal.classList.remove('hidden');
+
+        const proceedHandler = () => {
+            onProceed();
+            confirmationModal.classList.add('hidden');
+            confirmProceedBtn.removeEventListener('click', proceedHandler);
+            confirmCancelBtn.removeEventListener('click', cancelHandler);
+            confirmCloseBtn.removeEventListener('click', cancelHandler);
+        };
+        const cancelHandler = () => {
+            confirmationModal.classList.add('hidden');
+            confirmProceedBtn.removeEventListener('click', proceedHandler);
+            confirmCancelBtn.removeEventListener('click', cancelHandler);
+            confirmCloseBtn.removeEventListener('click', cancelHandler);
+        };
+
+        confirmProceedBtn.addEventListener('click', proceedHandler);
+        confirmCancelBtn.addEventListener('click', cancelHandler);
+        confirmCloseBtn.addEventListener('click', cancelHandler);
+    }
+
+    // --- Core Loan Management Functions ---
+
+    async function loadLoans(customerId) {
+        if (!customerId) {
+            tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-500 py-4">Search for a customer to view loans.</td></tr>';
+            customerInfoDiv.style.display = 'none';
+            return;
+        }
+
+        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-500 py-4">Loading loans...</td></tr>';
+        showLoader();
+        console.log(`[loadLoans] Attempting to load loans for customerId: ${customerId}`);
+
+        try {
+            // Query invoices that are 'pending_loan' and belong to this customer
+            const q = query(
+                invoicesCollectionRef,
+                where("customerId", "==", customerId),
+                where("status", "==", "pending_loan") // Filter only for loans (pending invoices)
+            );
+            console.log(`[loadLoans] Executing query: customerId == ${customerId}, status == pending_loan`);
+            const querySnapshot = await getDocs(q);
+            tableBody.innerHTML = ''; // Clear loading message
+
+            let index = 1;
+            if (querySnapshot.empty) {
+                console.log(`[loadLoans] No outstanding loans found for customerId: ${customerId}`);
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-500 py-4">No outstanding loans found for this customer.</td></tr>';
+            } else {
+                console.log(`[loadLoans] Found ${querySnapshot.size} loans for customerId: ${customerId}`);
+                querySnapshot.forEach(docSnapshot => {
+                    const loan = { id: docSnapshot.id, ...docSnapshot.data() };
+                    console.log("[loadLoans] Found loan:", loan); // Log each found loan
+
+                    // Ensure numeric values exist
+                    loan.totalAmount = Number(loan.totalAmount) || 0;
+                    loan.paidAmount = Number(loan.paidAmount) || 0;
+                    loan.balance = Number(loan.balance) || (loan.totalAmount - loan.paidAmount); // Recalculate if balance is missing
+
+                    const statusClass = loan.balance > 0.01 ? 'status-due' : 'status-paid'; // Use 0.01 for precision
+                    const statusText = loan.balance > 0.01 ? 'Due' : 'Paid';
+                    const loanDate = loan.date && loan.date.toDate ? new Date(loan.date.toDate()).toLocaleDateString() : 'N/A'; // Handle Firestore Timestamp
+
+                    const row = `
+                        <tr>
+                            <td>${index++}</td>
+                            <td>${loan.invoiceNumber || loan.id}</td>
+                            <td>${formatLKR(loan.totalAmount)}</td>
+                            <td>${formatLKR(loan.paidAmount)}</td>
+                            <td>${formatLKR(loan.balance)}</td>
+                            <td><span class="${statusClass}">${statusText}</span></td>
+                            <td>${loanDate}</td>
+                            <td>
+                                <button class="btn-custom btn-info-custom btn-sm-custom add-payment-btn" data-loan-id="${loan.id}" ${loan.balance <= 0.01 ? 'disabled' : ''}>Add Payment</button>
+                                <button class="btn-custom btn-secondary-custom btn-sm-custom export-pdf-btn" data-loan-id="${loan.id}">PDF</button>
+                                <button class="btn-custom btn-success-custom btn-sm-custom whatsapp-btn" data-loan-id="${loan.id}">WhatsApp</button>
+                                <button class="btn-custom btn-primary-custom btn-sm-custom mark-paid-btn" data-loan-id="${loan.id}" data-total-amount="${loan.totalAmount}" ${loan.balance <= 0.01 ? 'disabled' : ''}>Mark Fully Paid</button>
+                                <button class="btn-custom btn-info-custom btn-sm-custom adjust-loan-btn" data-loan-id="${loan.id}">Adjust</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+                // Attach event listeners after rendering all rows
+                attachLoanActionListeners(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            }
+        } catch (error) {
+            console.error("[loadLoans] Error loading loans:", error);
+            showAlert('Error loading loans. Please try again.', 'error');
+            tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-4">Failed to load loans.</td></tr>';
+        } finally {
+            hideLoader();
+        }
+    }
+
+    function attachLoanActionListeners(loansData) {
+        // Add Payment button
+        document.querySelectorAll('.add-payment-btn').forEach(button => {
+            button.onclick = (event) => {
+                const loanId = event.target.dataset.loanId;
+                selectedLoanForPayment = loansData.find(loan => loan.id === loanId);
+
+                if (selectedLoanForPayment) {
+                    paymentLoanInfo.innerHTML = `<strong>Loan ID:</strong> ${selectedLoanForPayment.invoiceNumber || selectedLoanForPayment.id}<br><strong>Balance:</strong> ${formatLKR(selectedLoanForPayment.balance)}`;
+                    paymentAmountInput.value = ''; // Clear previous input
+                    paymentNoteInput.value = ''; // Clear previous input
+                    paymentModal.classList.remove('hidden');
+                } else {
+                    showAlert('Loan data not found.', 'error');
+                }
+            };
+        });
+
+        // Export PDF button
+        document.querySelectorAll('.export-pdf-btn').forEach(button => {
+            button.onclick = (event) => {
+                const loanId = event.target.dataset.loanId;
+                const loan = loansData.find(l => l.id === loanId);
+                if (loan) {
+                    exportPdf(loanId, loan);
+                } else {
+                    showAlert('Loan details not found for PDF export.', 'error');
+                }
+            };
+        });
+
+        // WhatsApp button
+        document.querySelectorAll('.whatsapp-btn').forEach(button => {
+            button.onclick = (event) => {
+                const loanId = event.target.dataset.loanId;
+                const loan = loansData.find(l => l.id === loanId);
+                if (loan && currentCustomerPhone) {
+                    sendWhatsAppMessage(loanId, loan, currentCustomerPhone);
+                } else {
+                    showAlert('Loan details or customer phone not found for WhatsApp.', 'error');
+                }
+            };
+        });
+
+        // Mark Fully Paid button
+        document.querySelectorAll('.mark-paid-btn').forEach(button => {
+            button.onclick = (event) => {
+                const loanId = event.target.dataset.loanId;
+                const loan = loansData.find(l => l.id === loanId); // Get full loan object
+                if (loan) {
+                    showConfirmationModal(`Are you sure you want to mark this loan (Invoice ID: ${loan.invoiceNumber || loanId}) as fully paid? This will set balance to ${formatLKR(0)}.`, () => {
+                        markLoanAsFullyPaid(loanId, loan.totalAmount);
+                    });
+                } else {
+                    showAlert('Loan data not found for marking as paid.', 'error');
+                }
+            };
+        });
+
+        // Adjust Loan button
+        document.querySelectorAll('.adjust-loan-btn').forEach(button => {
+            button.onclick = (event) => {
+                const loanId = event.target.dataset.loanId;
+                selectedLoanForAdjustment = loansData.find(loan => loan.id === loanId);
+
+                if (selectedLoanForAdjustment) {
+                    adjustLoanInfo.innerHTML = `<strong>Loan ID:</strong> ${selectedLoanForAdjustment.invoiceNumber || selectedLoanForAdjustment.id}<br><strong>Current Balance:</strong> ${formatLKR(selectedLoanForAdjustment.balance)}`;
+                    adjustAmountInput.value = ''; // Clear previous input
+                    adjustNoteInput.value = ''; // Clear previous input
+                    adjustLoanModal.classList.remove('hidden');
+                } else {
+                    showAlert('Loan data not found for adjustment.', 'error');
+                }
+            };
+        });
+    }
+
+    async function markLoanAsFullyPaid(loanId, totalAmount) {
+        showLoader();
+        try {
+            await updateDoc(doc(db, invoicesCollectionRef.path, loanId), {
+                paidAmount: totalAmount, // Set paid amount to total amount
+                balance: 0,
+                status: 'paid'
+            });
+
+            // Add a payment record for the full payment marking
+            await addDoc(paymentsCollectionRef, {
+                loanId: loanId,
+                customerId: currentCustomerId, // Use currentCustomerId
+                amount: totalAmount, // The full amount is 'paid' at once
+                paymentDate: Timestamp.now(),
+                note: "Loan marked as fully paid (auto-payment)",
+                loanBalanceAfterPayment: 0,
+                type: 'full_payment_mark' // Custom type for audit trail
+            });
+
+            showAlert("Loan marked as fully paid.", 'success');
+            loadLoans(currentCustomerId); // Reload data
+        } catch (error) {
+            console.error("Error marking loan as paid:", error);
+            showAlert("Error marking loan as paid: " + error.message, 'error');
+        } finally {
+            hideLoader();
+        }
+    }
+
+    // --- Payment Form Submission ---
+    paymentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        showLoader();
+
+        const paymentAmount = parseFloat(paymentAmountInput.value);
+        const paymentNote = paymentNoteInput.value.trim();
+
+        if (isNaN(paymentAmount) || paymentAmount <= 0) {
+            showAlert('Please enter a valid payment amount.', 'warning');
+            hideLoader();
+            return;
+        }
+        if (paymentAmount > selectedLoanForPayment.balance + 0.01) { // Add small epsilon for float comparison
+            showAlert('Payment amount cannot exceed the remaining balance.', 'warning');
+            hideLoader();
+            return;
+        }
+
+        try {
+            const newPaidAmount = (selectedLoanForPayment.paidAmount || 0) + paymentAmount;
+            const newBalance = selectedLoanForPayment.totalAmount - newPaidAmount;
+            const newStatus = newBalance <= 0.01 ? 'paid' : 'pending_loan'; // Use 0.01 for floating point precision
+
+            // Update the loan document (invoice)
+            await updateDoc(doc(db, invoicesCollectionRef.path, selectedLoanForPayment.id), {
+                paidAmount: newPaidAmount,
+                balance: newBalance,
+                status: newStatus
+            });
+
+            // Add payment record
+            await addDoc(paymentsCollectionRef, {
+                loanId: selectedLoanForPayment.id,
+                customerId: selectedLoanForPayment.customerId,
+                amount: paymentAmount,
+                paymentDate: Timestamp.now(),
+                note: paymentNote,
+                loanBalanceAfterPayment: newBalance,
+                type: 'payment' // Standard payment type
+            });
+
+            showAlert('Payment recorded successfully!', 'success');
+            paymentModal.classList.add('hidden');
+            loadLoans(currentCustomerId); // Reload loans to reflect changes
+        } catch (error) {
+            console.error("Error processing payment:", error);
+            showAlert('Error processing payment: ' + error.message, 'error');
+        } finally {
+            hideLoader();
+        }
+    });
+
+    // --- Adjust Loan Form Submission ---
+    adjustLoanForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        showLoader();
+
+        const adjustmentAmount = parseFloat(adjustAmountInput.value);
+        const adjustmentNote = adjustNoteInput.value.trim();
+
+        if (isNaN(adjustmentAmount) || adjustmentNote === '') {
+            showAlert('Please enter a valid adjustment amount and a reason.', 'warning');
+            hideLoader();
+            return;
+        }
+
+        try {
+            // Calculate new balance based on adjustment amount
+            // If adjustmentAmount is positive, it reduces the balance (like a payment/credit)
+            // If adjustmentAmount is negative, it increases the balance (like adding more credit)
+            const newBalance = selectedLoanForAdjustment.balance - adjustmentAmount;
+
+            // The totalAmount of the loan needs to be adjusted too, to maintain `totalAmount = paidAmount + balance`
+            // If balance goes down by X, and paidAmount stays same, then totalAmount must go down by X
+            // If balance goes up by X, and paidAmount stays same, then totalAmount must go up by X
+            // So, newTotalAmount = oldTotalAmount - adjustmentAmount
+            const newTotalAmount = selectedLoanForAdjustment.totalAmount - adjustmentAmount;
+
+
+            // Determine new status
+            const newStatus = newBalance <= 0.01 ? 'paid' : 'pending_loan';
+
+            // Update the loan document
+            await updateDoc(doc(db, invoicesCollectionRef.path, selectedLoanForAdjustment.id), {
+                balance: newBalance,
+                totalAmount: newTotalAmount, // Update totalAmount
+                status: newStatus
+            });
+
+            // Add an adjustment record to the payments collection for audit trail
+            await addDoc(paymentsCollectionRef, {
+                loanId: selectedLoanForAdjustment.id,
+                customerId: selectedLoanForAdjustment.customerId,
+                amount: adjustmentAmount, // Store the adjustment amount
+                paymentDate: Timestamp.now(),
+                note: adjustmentNote,
+                loanBalanceAfterPayment: newBalance,
+                type: 'adjustment' // Custom type for adjustments
+            });
+
+            showAlert('Loan balance adjusted successfully!', 'success');
+            adjustLoanModal.classList.add('hidden');
+            loadLoans(currentCustomerId); // Reload loans to reflect changes
+        } catch (error) {
+            console.error("Error adjusting loan balance:", error);
+            showAlert('Error adjusting loan balance: ' + error.message, 'error');
+        } finally {
+            hideLoader();
+        }
+    });
+
+    // --- Adjust Loan Modal Close Buttons ---
+    adjustCloseBtn.addEventListener('click', () => adjustLoanModal.classList.add('hidden'));
+    adjustCancelBtn.addEventListener('click', () => adjustLoanModal.classList.add('hidden'));
+
+    // --- PDF Export Function ---
+    async function exportPdf(loanId, loan) {
+        showLoader();
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        try {
+            // Fetch payments specifically for this loan
+            const paymentsQ = query(paymentsCollectionRef, where("loanId", "==", loanId));
+            const paymentsSnapshot = await getDocs(paymentsQ);
+            const payments = [];
+            paymentsSnapshot.forEach(doc => payments.push(doc.data()));
+            payments.sort((a, b) => (a.paymentDate.toMillis() || 0) - (b.paymentDate.toMillis() || 0)); // Sort by date
+
+            let y = 20;
+            doc.setFontSize(22);
+            doc.text("WR Smile - Loan Details", 105, y, null, null, "center");
+            y += 10;
+            doc.setFontSize(12);
+            doc.text(`Invoice/Loan ID: ${loan.invoiceNumber || loanId}`, 10, y);
+            y += 7;
+            doc.text(`Customer: ${loan.customerName}`, 10, y);
+            y += 7;
+            doc.text(`Loan Date: ${loan.date && loan.date.toDate ? new Date(loan.date.toDate()).toLocaleDateString() : 'N/A'}`, 10, y);
+            y += 15;
+
+            doc.setFontSize(14);
+            doc.text("Products:", 10, y);
+            y += 7;
+
+            (loan.items || []).forEach(item => {
+                doc.setFontSize(12);
+                doc.text(`${item.name} x ${item.quantity}`, 15, y);
+                doc.text(`${formatLKR(item.price)} each`, 80, y);
+                doc.text(formatLKR(item.price * item.quantity), 190, y, null, null, "right");
+                y += 6;
+            });
+
+            y += 10;
+            doc.setFontSize(12);
+            if (loan.discount > 0) {
+                doc.text(`Discount: ${formatLKR(loan.discount)}`, 190, y, null, null, "right");
+                y += 7;
+            }
+            doc.setFontSize(14);
+            doc.text(`Total Loan Amount: ${formatLKR(loan.totalAmount || 0)}`, 190, y, null, null, "right");
+            y += 10;
+
+            doc.text(`Paid Amount: ${formatLKR(loan.paidAmount || 0)}`, 190, y, null, null, "right");
+            y += 7;
+            doc.setFontSize(16);
+            doc.text(`Remaining Balance: ${formatLKR(loan.balance || 0)}`, 190, y, null, null, "right");
+            y += 15;
+
+            doc.setFontSize(14);
+            doc.text("Payment/Adjustment History:", 10, y);
+            y += 7;
+
+            if (payments.length === 0) {
+                doc.setFontSize(12);
+                doc.text("No payments or adjustments recorded yet.", 15, y);
+                y += 7;
+            } else {
+                payments.forEach(pay => {
+                    const paymentDate = pay.paymentDate && pay.paymentDate.toDate ? new Date(pay.paymentDate.toDate()).toLocaleDateString() : 'N/A';
+                    let typeText = pay.type === 'adjustment' ? 'Adjustment' : 'Payment';
+                    if (pay.type === 'full_payment_mark') typeText = 'Full Payment';
+                    const amountText = pay.type === 'adjustment' ? (pay.amount > 0 ? `-${formatLKR(pay.amount)}` : `+${formatLKR(Math.abs(pay.amount))}`) : formatLKR(pay.amount);
+
+                    doc.setFontSize(12);
+                    doc.text(`${typeText}: ${amountText} on ${paymentDate}`, 15, y);
+                    if (pay.note) {
+                        doc.text(`(${pay.note})`, 100, y);
+                    }
+                    y += 6;
+                });
+            }
+
+            if (loan.loanNote) { // Using loanNote from invoice structure
+                y += 10;
+                doc.setFontSize(12);
+                doc.text(`Loan Note: ${loan.loanNote}`, 10, y);
+            }
+
+            window.open(doc.output('bloburl'), '_blank');
+            showAlert('Loan details PDF generated.', 'success');
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            showAlert('Failed to generate PDF.', 'error');
+        } finally {
+            hideLoader();
+        }
+    }
+
+    // --- WhatsApp Message Function ---
+    async function sendWhatsAppMessage(loanId, loan, customerPhone) {
+        showLoader();
+        if (!customerPhone) {
+            showAlert('Customer phone number not available for WhatsApp.', 'warning');
+            hideLoader();
+            return;
+        }
+
+        try {
+            // Fetch payments specifically for this loan
+            const paymentsQ = query(paymentsCollectionRef, where("loanId", "==", loanId));
+            const paymentsSnapshot = await getDocs(paymentsQ);
+            const payments = [];
+            paymentsSnapshot.forEach(doc => payments.push(doc.data()));
+            payments.sort((a, b) => (a.paymentDate.toMillis() || 0) - (b.paymentDate.toMillis() || 0)); // Sort by date
+
+            let message = `*WR Smile - Loan Details*\n\n`;
+            message += `*Invoice/Loan ID:* ${loan.invoiceNumber || loanId}\n`;
+            message += `*Customer:* ${loan.customerName}\n`;
+            message += `*Loan Date:* ${loan.date && loan.date.toDate ? new Date(loan.date.toDate()).toLocaleDateString() : 'N/A'}\n\n`;
+
+            message += `*Products:*\n`;
+            (loan.items || []).forEach(item => {
+                message += `• ${item.name} x ${item.quantity} @ ${formatLKR(item.price)} = ${formatLKR(item.price * item.quantity)}\n`;
+            });
+
+            message += `\n*Summary:*\n`;
+            message += `Total Loan Amount: ${formatLKR(loan.totalAmount || 0)}\n`;
+            message += `Paid Amount: ${formatLKR(loan.paidAmount || 0)}\n`;
+            message += `*Remaining Balance:* ${formatLKR(loan.balance || 0)}\n`;
+
+            if (payments.length > 0) {
+                message += `\n*Recent Payments/Adjustments:*\n`;
+                payments.slice(-3).forEach(pay => { // Show last 3
+                    const paymentDate = pay.paymentDate && pay.paymentDate.toDate ? new Date(pay.paymentDate.toDate()).toLocaleDateString() : 'N/A';
+                    let typeText = pay.type === 'adjustment' ? 'Adj' : 'Pay';
+                    if (pay.type === 'full_payment_mark') typeText = 'Full Pay';
+                    const amountText = pay.type === 'adjustment' ? (pay.amount > 0 ? `-${formatLKR(pay.amount)}` : `+${formatLKR(Math.abs(pay.amount))}`) : formatLKR(pay.amount);
+
+                    message += `• ${typeText}: ${amountText} on ${paymentDate}${pay.note ? ` (${pay.note})` : ''}\n`;
+                });
+            } else {
+                message += `No payments or adjustments recorded yet.\n`;
+            }
+
+            if (loan.loanNote) {
+                message += `\n*Loan Note:* ${loan.loanNote}\n`;
+            }
+
+            message += `\n_For any queries, please contact WR Smile._`;
+
+            let whatsappNumber = customerPhone;
+            if (whatsappNumber.startsWith('0') && whatsappNumber.length === 10) {
+                whatsappNumber = '+94' + whatsappNumber.substring(1);
+            } else if (!whatsappNumber.startsWith('+')) {
+                whatsappNumber = '+94' + whatsappNumber;
+            }
+
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            showAlert('WhatsApp message prepared.', 'success');
+        } catch (error) {
+            console.error("Error preparing WhatsApp message:", error);
+            showAlert('Failed to prepare WhatsApp message.', 'error');
+        } finally {
+            hideLoader();
+        }
+    }
+
+    // --- Event Listeners ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        showLoader();
+        // Since authentication is removed, ensure we hide loader and allow operations to proceed
+        // This assumes anonymous access is enabled in Firebase Security Rules
+        // Or that data is publicly readable/writable for this app.
+        hideLoader();
+
+
+        searchButton.addEventListener('click', async () => {
+            const searchTerm = searchPhoneNameInput.value.trim();
+            if (searchTerm) {
+                showLoader();
+                try {
+                    let customerFound = false;
+                    let customerData = null;
+                    let customerDocId = null;
+
+                    // 1. Try searching by phone
+                    console.log(`[Search] Attempting to search customer by phone: ${searchTerm}`);
+                    const phoneQuery = query(customersCollectionRef, where("phone", "==", searchTerm));
+                    const phoneSnapshot = await getDocs(phoneQuery);
+
+                    if (!phoneSnapshot.empty) {
+                        customerDocId = phoneSnapshot.docs[0].id;
+                        customerData = phoneSnapshot.docs[0].data();
+                        customerFound = true;
+                        console.log("[Search] Customer found by phone:", customerData);
+                    } else {
+                        // 2. If not found by phone, try searching by name
+                        // For more robust search, you'd show a list to the user if multiple names match.
+                        console.log(`[Search] Customer not found by phone. Attempting to search by name: ${searchTerm}`);
+                        const nameQuery = query(customersCollectionRef, where("name", "==", searchTerm));
+                        const nameSnapshot = await getDocs(nameQuery);
+                        if (!nameSnapshot.empty) {
+                            customerDocId = nameSnapshot.docs[0].id;
+                            customerData = nameSnapshot.docs[0].data();
+                            customerFound = true;
+                            console.log("[Search] Customer found by name:", customerData);
+                        } else {
+                            console.log("[Search] Customer not found by name.");
+                        }
+                    }
+
+                    if (customerFound) {
+                        currentCustomerId = customerDocId;
+                        currentCustomerPhone = customerData.phone; // Store phone for WhatsApp
+                        customerNameDisplay.textContent = customerData.name;
+                        customerPhoneDisplay.textContent = customerData.phone;
+                        customerInfoDiv.style.display = 'block';
+                        await loadLoans(currentCustomerId);
+                        showAlert(`Customer found: ${customerData.name}`, 'success');
+                    } else {
+                        currentCustomerId = null;
+                        currentCustomerPhone = '';
+                        customerInfoDiv.style.display = 'none';
+                        showAlert('Customer not found with this phone number or name.', 'warning');
+                        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-500 py-4">No customer found with this phone number or name.</td></tr>';
+                    }
+                } catch (error) {
+                    console.error("[Search] Error searching customer:", error);
+                    showAlert('Error searching for customer: ' + error.message, 'error');
+                } finally {
+                    hideLoader();
+                }
+            } else {
+                showAlert('Please enter a phone number or name to search.', 'info');
+                customerInfoDiv.style.display = 'none';
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-500 py-4">Search for a customer to view loans.</td></tr>';
+            }
+        });
+    });
+</script>
+</body>
+</html>
