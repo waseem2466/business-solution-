@@ -154,6 +154,7 @@
         .loan-card .loan-actions {
             display: flex;
             justify-content: flex-end;
+            gap: 0.5rem; /* Space between buttons */
             margin-top: 0.8rem;
         }
         .loan-status-badge {
@@ -231,6 +232,30 @@
             background-color: #4b5563;
             transform: translateY(-3px);
             box-shadow: 0 12px 25px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-whatsapp-custom {
+            background-color: #25D366; /* WhatsApp green */
+            border: none;
+            font-weight: 500;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-whatsapp-custom:hover {
+            background-color: #1DA851;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4);
+        }
+        .btn-whatsapp-custom.small {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
         }
 
         /* Back Button Styling */
@@ -428,13 +453,13 @@
                 padding: 0.6rem 0.8rem;
                 font-size: 0.9rem;
             }
-            .btn-primary-custom, .btn-secondary-custom, .btn-danger-custom {
+            .btn-primary-custom, .btn-secondary-custom, .btn-danger-custom, .btn-whatsapp-custom {
                 padding: 0.6rem 1rem;
                 font-size: 0.95rem;
                 width: 100%; /* Stack buttons on small screens */
                 margin-bottom: 0.5rem;
             }
-            .btn-danger-custom.small {
+            .btn-danger-custom.small, .btn-whatsapp-custom.small {
                 padding: 0.15rem 0.4rem;
                 font-size: 0.75rem;
             }
@@ -859,7 +884,7 @@
                 name: name,
                 createdDate: new Date() // Add creation date
             };
-            await addDoc(customersCollectionRef, newCustomer); // No need for docRef here if not used
+            const docRef = await addDoc(customersCollectionRef, newCustomer); // No need for docRef here if not used
             customerData = { id: docRef.id, ...newCustomer }; // Update global customerData
             selectedCustomerId = customerData.id; // Set selected customer ID
             customerNameInput.value = customerData.name; // Update main form field
@@ -944,23 +969,25 @@
                         // customerId: The ID of the customer
                         // invoiceId: The ID of the invoice from which the loan originated
 
+                        const totalAmt = Number(data.totalAmount || data.loanAmount || 0);
+                        const paidAmt = Number(data.paidAmount || 0);
+
                         const loan = {
                             id: doc.id,
                             customerId: data.customerId,
                             invoiceId: data.invoiceId || 'N/A',
-                            // Use 'totalAmount' if available, otherwise 'loanAmount', default to 0
-                            totalAmount: parseFloat(data.totalAmount || data.loanAmount || 0),
-                            // Use 'paidAmount' if available, otherwise 0
-                            paidAmount: parseFloat(data.paidAmount || 0),
-                            // Use 'balance' if available, otherwise default to totalAmount, ensure it's not negative
-                            balance: parseFloat(data.balance || data.totalAmount || data.loanAmount || 0),
+                            // Calculate balance explicitly to ensure consistency
+                            totalAmount: parseFloat(totalAmt.toFixed(2)),
+                            paidAmount: parseFloat(paidAmt.toFixed(2)),
+                            balance: parseFloat((totalAmt - paidAmt).toFixed(2)),
                             loanDate: parseFirestoreDate(data.date || data.loanDate || new Date()).toISOString(),
                             note: data.note || '',
                             status: data.status || 'pending' // Default status
                         };
 
                         // Ensure balance is never negative, correct for precision issues
-                        if (loan.balance < 0.01 && loan.balance > -0.01) { // Treat very small negative/positive as zero
+                        // Now, with consistent rounding, this check is more reliable for floating point near-zero
+                        if (loan.balance < 0.01 && loan.balance > -0.01) { // Treat very small positive/negative as zero
                            loan.balance = 0;
                         } else if (loan.balance < 0) { // If truly negative, likely a data error, cap at 0
                            loan.balance = 0;
@@ -972,8 +999,8 @@
                             console.warn(`Loan ${loan.id} (status: ${loan.status}) has total amount ${loan.totalAmount} but zero balance. Check data consistency in Firestore.`);
                         }
                         
-                        console.log("Parsed loan object for rendering:", loan); // <--- NEW LOG
-                        console.log(`Loan ID: ${loan.id}, Balance: ${loan.balance}, Is Paid In Full (calculated): ${loan.balance <= 0.01}`); // <--- NEW LOG
+                        console.log("[loadAndRenderLoans] Parsed loan object for rendering:", loan); // <--- NEW LOG
+                        console.log(`[loadAndRenderLoans] Loan ID: ${loan.id}, Balance: ${loan.balance}, Is Paid In Full (calculated): ${loan.balance <= 0.01}`); // <--- NEW LOG
                         
                         return loan;
                     }).sort((a, b) => new Date(b.loanDate).getTime() - new Date(a.loanDate).getTime()); // Sort by ISO string or parsed Date
@@ -996,6 +1023,20 @@
                         // Ensure date is formatted for display
                         const displayDate = new Date(loan.loanDate).toLocaleDateString();
 
+                        const whatsappBtnHtml = `
+                            <button class="btn-whatsapp-custom small whatsapp-loan-btn"
+                                data-loan-id="${loan.id}"
+                                data-loan-status="${loan.status}"
+                                data-loan-balance="${loan.balance}"
+                                data-customer-name="${customerData ? customerData.name : ''}"
+                                data-customer-phone="${customerData ? customerData.phone : ''}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                                  <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.542.06 7.917c0 1.254.337 2.454.924 3.541L.002 16l4.207-1.35a7.66 7.66 0 0 0 3.684.92h.001c4.364 0 7.925-3.542 7.925-7.917s-3.561-7.917-7.925-7.917M4.062 13.93c-1.426-.35-2.584-1.025-3.328-1.745A6.7 6.7 0 0 1 1 7.917C1 4.14 4.093 1 7.999 1S15 4.14 15 7.917a6.68 6.68 0 0 1-.92 3.54c-.744.72-1.902 1.395-3.328 1.745L8.98 14.93zM8 4.673c-.314 0-.57.256-.57.576v2.9c0 .319.256.576.57.576s.57-.256.57-.576v-2.9c0-.32-.256-.576-.57-.576Zm-2.858 2.89c-.314 0-.57.256-.57.576v.576c0 .319.256.576.576.57.576s.57-.256.57-.576v-.576c0-.32-.256-.576-.57-.576Zm5.716 0c-.314 0-.57.256-.57.576v.576c0 .319.256.576.576.57.576s.57-.256.57-.576v-.576c0-.32-.256-.576-.57-.576Z"/>
+                                </svg>
+                                WhatsApp
+                            </button>
+                        `;
+
                         loanElement.innerHTML = `
                             <p>Loan ID: <span class="loan-id">${loan.id.substring(0, 8)}...</span></p>
                             <p>Loan Date: ${displayDate}</p>
@@ -1006,14 +1047,17 @@
                             ${isPaidInFull ? '<span class="loan-status-badge">PAID IN FULL</span>' : ''}
                             <div class="loan-actions">
                                 <button class="btn-primary-custom small add-payment-btn" data-loan-id="${loan.id}" ${isPaidInFull ? 'disabled' : ''}>Add Payment</button>
+                                ${customerData && (customerData.phone || customerData.name) ? whatsappBtnHtml : ''}
                             </div>
                         `;
                         customerLoansListDiv.appendChild(loanElement);
                     });
                     attachLoanEventListeners(); // Re-attach listeners for new elements
+                    attachWhatsAppEventListeners(); // Attach listeners for new WhatsApp buttons
 
                     // Update the small pending loan info text
                     if (totalPendingForAllLoans > 0) {
+                        totalPendingForAllLoans = parseFloat(totalPendingForAllLoans.toFixed(2)); // Round final total for display
                         pendingLoanInfoDiv.textContent = `Total Pending Loan: ${formatLKR(totalPendingForAllLoans)}`;
                         pendingLoanInfoDiv.style.color = '#ef4444'; // Red for outstanding
                     } else {
@@ -1033,6 +1077,9 @@
             customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4 text-red-500">Failed to load loans due to an unexpected error.</p>';
             pendingLoanInfoDiv.textContent = "Error loading pending loans.";
             pendingLoanInfoDiv.style.color = '#ef4444';
+        } finally {
+            // Ensure loader is hidden even if listener setup fails
+            pageLoader.classList.add('hidden');
         }
     }
 
@@ -1056,6 +1103,58 @@
     }
 
     /**
+     * Attaches event listeners to dynamically added WhatsApp buttons.
+     */
+    function attachWhatsAppEventListeners() {
+        customerLoansListDiv.querySelectorAll('.whatsapp-loan-btn').forEach(button => {
+            // Remove any existing listeners to prevent duplicates
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+
+            newButton.addEventListener('click', (e) => {
+                const loanId = e.currentTarget.dataset.loanId;
+                const loanStatus = e.currentTarget.dataset.loanStatus;
+                const loanBalance = parseFloat(e.currentTarget.dataset.loanBalance);
+                const customerName = e.currentTarget.dataset.customerName;
+                const customerPhone = e.currentTarget.dataset.customerPhone;
+
+                sendWhatsAppMessage(loanId, loanStatus, loanBalance, customerName, customerPhone);
+            });
+        });
+    }
+
+    /**
+     * Constructs and opens a WhatsApp message link.
+     * @param {string} loanId - The ID of the loan.
+     * @param {string} loanStatus - The status of the loan ('pending' or 'paid').
+     * @param {number} loanBalance - The outstanding balance of the loan.
+     * @param {string} customerName - The name of the customer.
+     * @param {string} customerPhone - The phone number of the customer.
+     */
+    function sendWhatsAppMessage(loanId, loanStatus, loanBalance, customerName, customerPhone) {
+        if (!customerPhone) {
+            showMessage("Customer phone number not available for WhatsApp message.", "warning");
+            return;
+        }
+
+        let message = "";
+        const truncatedLoanId = loanId.substring(0, 8); // Truncate loan ID for message
+
+        // Use a threshold for balance when checking status to avoid float precision issues
+        if (loanStatus === 'pending' && loanBalance > 0.01) {
+            message = `Dear ${customerName || 'customer'}, this is a friendly reminder regarding your loan with Loan ID ${truncatedLoanId}.... Your outstanding balance is ${formatLKR(loanBalance)}. Please make your payment at your earliest convenience. Thank you, WR Smile.`;
+        } else if (loanStatus === 'paid' || loanBalance <= 0.01) { // Also check balance <= 0.01 for paid status
+            message = `Dear ${customerName || 'customer'}, your loan with Loan ID ${truncatedLoanId}.... has been successfully paid in full. Thank you for your payment! - WR Smile`;
+        } else {
+            showMessage("Loan status is unclear or invalid for sending a WhatsApp message.", "warning");
+            return;
+        }
+
+        const whatsappLink = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappLink, '_blank');
+    }
+
+    /**
      * Displays the Add Payment modal.
      * @param {string} loanId - The ID of the loan to pay.
      */
@@ -1066,19 +1165,23 @@
             const loanSnap = await getDoc(loanDocRef);
             if (loanSnap.exists()) {
                 const data = loanSnap.data();
+                const totalAmt = Number(data.totalAmount || data.loanAmount || 0);
+                const paidAmt = Number(data.paidAmount || 0);
+
                 currentLoanBeingPaid = {
                     id: loanSnap.id,
                     customerId: data.customerId,
                     invoiceId: data.invoiceId,
-                    totalAmount: parseFloat(data.totalAmount || data.loanAmount || 0),
-                    paidAmount: parseFloat(data.paidAmount || 0),
-                    balance: parseFloat(data.balance || 0),
+                    // Calculate balance explicitly here too
+                    totalAmount: parseFloat(totalAmt.toFixed(2)),
+                    paidAmount: parseFloat(paidAmt.toFixed(2)),
+                    balance: parseFloat((totalAmt - paidAmt).toFixed(2)),
                     loanDate: parseFirestoreDate(data.date || data.loanDate || new Date()).toISOString(),
                     note: data.note || '',
                     status: data.status || 'pending'
                 };
-                console.log("Opening payment modal for loan:", currentLoanBeingPaid); // <--- NEW LOG
-                console.log(`Balance when opening payment modal: ${currentLoanBeingPaid.balance}`); // <--- NEW LOG
+                console.log("[showPaymentModal] Opening payment modal for loan:", currentLoanBeingPaid); // <--- NEW LOG
+                console.log(`[showPaymentModal] Balance when opening payment modal: ${currentLoanBeingPaid.balance}`); // <--- NEW LOG
 
                 paymentLoanIdInput.value = currentLoanBeingPaid.id.substring(0, 8) + '...'; // Show truncated ID
                 paymentCurrentBalanceInput.value = formatLKR(currentLoanBeingPaid.balance);
@@ -1089,7 +1192,7 @@
                 showMessage("Loan not found. Please refresh.", "error");
             }
         } catch (error) {
-            console.error("Error fetching loan for payment:", error);
+            console.error("[showPaymentModal] Error fetching loan for payment:", error);
             showMessage("Error loading loan details. Please try again.", "error");
         } finally {
             pageLoader.classList.add('hidden');
@@ -1103,31 +1206,50 @@
     async function processPayment(event) {
         event.preventDefault();
 
-        if (!currentLoanBeingPaid) {
+        if (!currentLoanBeingPaid || !currentLoanBeingPaid.id) {
             showMessage("No loan selected for payment.", "error");
             return;
         }
 
         const paymentAmount = parseFloat(paymentAmountInput.value);
         const paymentNote = paymentNoteTextarea.value.trim();
-        const currentBalance = parseFloat(currentLoanBeingPaid.balance); // Use the balance from currentLoanBeingPaid
-
-        console.log(`Processing payment for Loan ID: ${currentLoanBeingPaid.id}`); // <--- NEW LOG
-        console.log(`Payment Amount: ${paymentAmount}, Current Balance (from state): ${currentBalance}`); // <--- NEW LOG
 
         if (isNaN(paymentAmount) || paymentAmount <= 0) {
             showMessage("Please enter a valid positive payment amount.", "warning");
             return;
         }
-        if (paymentAmount > currentBalance) {
-            const confirmed = await showConfirmModal(`Payment amount (${formatLKR(paymentAmount)}) exceeds outstanding balance (${formatLKR(currentBalance)}). Do you want to pay this amount?`);
-            if (!confirmed) {
-                return;
-            }
-        }
 
         pageLoader.classList.remove('hidden');
         try {
+            // Re-fetch the latest loan data right before processing the payment
+            const loanDocRef = doc(loansCollectionRef, currentLoanBeingPaid.id);
+            const latestLoanSnap = await getDoc(loanDocRef);
+
+            if (!latestLoanSnap.exists()) {
+                showMessage("Loan not found or has been deleted. Cannot process payment.", "error");
+                return;
+            }
+
+            const latestLoanData = latestLoanSnap.data();
+            // Ensure the latest totalAmount and paidAmount are used for calculation, and explicitly parse/round
+            const actualTotalAmount = parseFloat((Number(latestLoanData.totalAmount || latestLoanData.loanAmount || 0)).toFixed(2));
+            const actualPaidAmount = parseFloat((Number(latestLoanData.paidAmount || 0)).toFixed(2));
+
+            // Recalculate the actual current balance from the latest data
+            const actualCurrentBalance = parseFloat((actualTotalAmount - actualPaidAmount).toFixed(2));
+
+
+            console.log(`[processPayment] Re-fetched latest loan data for ID ${currentLoanBeingPaid.id}:`, latestLoanData);
+            console.log(`[processPayment] Payment Amount: ${paymentAmount}, Actual Current Balance (re-fetched and calculated): ${actualCurrentBalance}`);
+
+            if (paymentAmount > actualCurrentBalance + 0.01) { // Allow for slight overpayment if it's very close to 0
+                const confirmed = await showConfirmModal(`Payment amount (${formatLKR(paymentAmount)}) exceeds outstanding balance (${formatLKR(actualCurrentBalance)}). Do you want to pay this amount?`);
+                if (!confirmed) {
+                    pageLoader.classList.add('hidden'); // Hide loader if user cancels
+                    return;
+                }
+            }
+
             // 1. Record the payment
             await addDoc(paymentsCollectionRef, {
                 loanId: currentLoanBeingPaid.id,
@@ -1136,33 +1258,33 @@
                 paymentDate: new Date().toISOString(), // Consistent date format
                 note: paymentNote
             });
-            console.log(`Recorded payment of ${formatLKR(paymentAmount)} for loan ID: ${currentLoanBeingPaid.id}`);
+            console.log(`[processPayment] Recorded payment of ${formatLKR(paymentAmount)} for loan ID: ${currentLoanBeingPaid.id}`);
 
-            // 2. Update the loan document
-            const newPaidAmount = parseFloat(currentLoanBeingPaid.paidAmount) + paymentAmount;
-            let newBalance = parseFloat(currentLoanBeingPaid.balance) - paymentAmount;
+            // 2. Calculate new balances based on the *latest* data
+            const newPaidAmount = parseFloat((actualPaidAmount + paymentAmount).toFixed(2));
+            let newBalance = parseFloat((actualCurrentBalance - paymentAmount).toFixed(2));
 
-            // Ensure balance doesn't go negative due to overpayment or floating point
-            if (newBalance < 0.01 && newBalance > -0.01) { // Treat very small positive/negative as zero
+            // Ensure balance doesn't go negative or remain as a tiny floating point
+            if (newBalance < 0.01 && newBalance > -0.01) { // If it's very close to zero, make it exactly zero
                 newBalance = 0;
-            } else if (newBalance < 0) { // If truly negative after calculation, cap to 0
+            } else if (newBalance < 0) { // If it becomes genuinely negative (e.g., due to overpayment), cap it at 0
                 newBalance = 0;
             }
 
-            console.log(`Calculated New Paid Amount: ${newPaidAmount}, New Balance: ${newBalance}`); // <--- NEW LOG
+            console.log(`[processPayment] Calculated New Paid Amount: ${newPaidAmount}, New Balance: ${newBalance}`);
 
-            await updateDoc(doc(loansCollectionRef, currentLoanBeingPaid.id), {
+            await updateDoc(loanDocRef, { // Use loanDocRef which is for the latest loan
                 paidAmount: newPaidAmount,
                 balance: newBalance, // Use the adjusted newBalance
                 status: (newBalance <= 0.01) ? 'paid' : 'pending' // Update loan status based on final balance
             });
-            console.log(`Updated loan ID: ${currentLoanBeingPaid.id}. New balance: ${formatLKR(newBalance)}`);
+            console.log(`[processPayment] Updated loan ID: ${currentLoanBeingPaid.id} in Firestore. New balance: ${formatLKR(newBalance)}`);
 
             showMessage(`Payment of ${formatLKR(paymentAmount)} recorded successfully!`, "success");
             hideCustomModal(addPaymentModal);
             // The onSnapshot listener in loadAndRenderLoans will automatically refresh the list.
         } catch (error) {
-            console.error("Error processing payment:", error);
+            console.error("[processPayment] Error processing payment:", error);
             showMessage("Failed to record payment. Please try again.", "error");
         } finally {
             pageLoader.classList.add('hidden');
