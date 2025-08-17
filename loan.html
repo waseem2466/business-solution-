@@ -557,114 +557,6 @@
     </div>
 </div>
 
-<!-- Custom Add Loan Modal -->
-<div id="addLoanModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Add New Loan</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeAddLoanModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <form id="add-loan-form">
-            <div class="modal-custom-body">
-                <div class="form-group">
-                    <label class="form-label-custom">Customer Name:</label>
-                    <input type="text" id="loanCustomerName" class="form-input-custom" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="loanAmount" class="form-label-custom">Loan Amount (Rs.):</label>
-                    <input type="number" id="loanAmount" class="form-input-custom" min="0.01" step="0.01" required placeholder="Enter loan amount" />
-                </div>
-                <div class="form-group">
-                    <label for="loanDate" class="form-label-custom">Loan Date:</label>
-                    <input type="date" id="loanDate" class="form-input-custom" required />
-                </div>
-                <div class="form-group">
-                    <label for="loanDueDate" class="form-label-custom">Due Date (Optional):</label>
-                    <input type="date" id="loanDueDate" class="form-input-custom" />
-                </div>
-                <div class="form-group">
-                    <label for="loanNote" class="form-label-custom">Loan Note (Optional):</label>
-                    <textarea id="loanNote" class="form-input-custom form-textarea" rows="2" placeholder="e.g., 'For business investment', 'Personal loan'"></textarea>
-                </div>
-            </div>
-            <div class="modal-custom-footer">
-                <button type="button" class="btn-secondary-custom" id="cancelAddLoanModal">Cancel</button>
-                <button type="submit" class="btn-primary-custom">Add Loan</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Custom Loan Details Modal -->
-<div id="loanDetailsModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Loan Details</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeLoanDetailsModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <div class="modal-custom-body">
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Loan ID:</p>
-                <p id="detailLoanId" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Customer Name:</p>
-                <p id="detailCustomerName" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Loan Amount:</p>
-                <p id="detailLoanAmount" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Paid Amount:</p>
-                <p id="detailPaidAmount" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Current Balance:</p>
-                <p id="detailCurrentBalance" class="text-gray-900 font-bold text-red-600"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Loan Date:</p>
-                <p id="detailLoanDate" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Due Date:</p>
-                <p id="detailDueDate" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Status:</p>
-                <p id="detailLoanStatus" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Completed At:</p>
-                <p id="detailCompletedAt" class="text-gray-900"></p>
-            </div>
-            <div class="loan-detail-item mb-3">
-                <p class="font-semibold text-gray-700">Note:</p>
-                <p id="detailLoanNote" class="text-gray-900 italic"></p>
-            </div>
-
-            <h6 class="section-title mt-6 mb-3">Payment History</h6>
-            <div id="paymentHistoryList" class="loan-list-container">
-                <p class="text-gray-500 text-center py-2">No payments recorded yet.</p>
-            </div>
-        </div>
-        <div class="modal-custom-footer">
-            <button type="button" class="btn-whatsapp-custom" id="whatsappShareBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                    <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.334.002 7.508c-.01.109.016.218.068.312l1.546 5.385a.723.723 0 0 0 .265.316.732.732 0 0 0 .393.109c.088-.009.176-.021.264-.035l4.81-1.488a7.866 7.866 0 0 0 4.098 1.055h.002c4.366 0 7.925-3.334 7.925-7.508 0-2.071-.806-3.992-2.194-5.419zM7.994 14.28c-3.153 0-5.748-2.375-6.088-5.412a6.37 6.37 0 0 1-.004-.266c.003-.102.016-.204.037-.305l1.01-3.518a.553.553 0 0 1 .18-.242.53.53 0 0 1 .28-.08c.074-.007.149-.009.223-.01v-.002c3.483.003 6.331 2.659 6.331 5.952 0 1.708-.7 3.266-1.84 4.41zM14.07 8.006c0 3.321-2.71 6.012-6.012 6.012-1.492 0-2.887-.534-3.977-1.442l-4.507 1.39a.7.7 0 0 1-.926-.298.706.706 0 0 1-.061-.595l1.39-4.507c-.908-1.09-1.442-2.485-1.442-3.977 0-3.302 2.69-6.002 6.012-6.002C11.36 2.004 14.07 4.704 14.07 8.006zM11.854 5.347c-.247-.247-.647-.247-.894 0l-3.238 3.238-1.523-1.523c-.247-.247-.647-.247-.894 0-.247.247-.247.647 0 .894l2.003 2.003c.122.122.28.183.437.183.157 0 .315-.061.437-.183l3.732-3.732c.247-.247.247-.647 0-.894z"/>
-                </svg>
-                Share on WhatsApp
-            </button>
-            <button type="button" class="btn-secondary-custom" id="closeLoanDetailsModalFooter">Close</button>
-        </div>
-    </div>
-</div>
-
 
 <!-- Page Loader -->
 <div id="page-loader" class="fixed inset-0 bg-white bg-opacity-95 z-[9999] flex flex-col items-center justify-content-center transition-opacity duration-500">
@@ -695,9 +587,7 @@
     </div>
 
     <div class="section-box">
-        <h3 class="section-title">Customer Loans
-            <button id="add-loan-btn" class="btn-primary-custom small ml-4 hidden" type="button">Add New Loan</button>
-        </h3>
+        <h3 class="section-title">Customer Loans</h3>
         <div id="customer-loans-list" class="loan-list-container">
             <!-- Customer loans will be rendered here -->
             <p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>
@@ -711,16 +601,14 @@
 <!-- Firebase SDK Imports -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, onSnapshot, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     // Firebase Configuration - Using the exact config provided by the user
-    // IMPORTANT: Do not hardcode API key. It's automatically provided by Canvas runtime if empty.
     const firebaseConfig = {
-        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo", // Corrected API Key
+        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
         authDomain: "wr-smile-shop.firebaseapp.com",
         databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
-        projectId: "wr-smile-shop", // Explicitly set projectId
+        projectId: "wr-smile-shop",
         storageBucket: "wr-smile-shop.firebasestorage.app",
         messagingSenderId: "299864260187",
         appId: "1:299864260187:web:fa6af65ef95674aff1097e",
@@ -730,16 +618,15 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const auth = getAuth(app);
 
     // Global variable for Canvas App ID. Assuming a consistent pattern across your pages.
     const appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId;
 
-    // Firestore Collection References (Public data for sharing across users)
-    let customersCollectionRef;
-    let loansCollectionRef;
-    let paymentsCollectionRef;
-    let userId; // Will be set after authentication
+    // Firestore Collection References
+    // Data is public across the app, stored under /artifacts/${appId}/public/data/
+    const customersCollectionRef = collection(db, `artifacts/${appId}/public/data/customers`);
+    const loansCollectionRef = collection(db, `artifacts/${appId}/public/data/loans`); // For customer loans
+    const paymentsCollectionRef = collection(db, `artifacts/${appId}/public/data/payments`); // For loan payments
 
     // --- DOM Elements ---
     const pageLoader = document.getElementById('page-loader');
@@ -748,7 +635,6 @@
     const searchCustomerBtn = document.getElementById('search-customer-btn');
     const pendingLoanInfoDiv = document.getElementById('pending-loan-info');
     const customerLoansListDiv = document.getElementById('customer-loans-list');
-    const addLoanBtn = document.getElementById('add-loan-btn');
 
     // Modals
     const confirmModal = document.getElementById('confirmModal');
@@ -762,33 +648,11 @@
     const paymentCurrentBalanceInput = document.getElementById('paymentCurrentBalance');
     const paymentAmountInput = document.getElementById('paymentAmount');
     const paymentNoteTextarea = document.getElementById('paymentNote');
-    const addLoanModal = document.getElementById('addLoanModal');
-    const addLoanForm = document.getElementById('add-loan-form');
-    const loanCustomerNameInput = document.getElementById('loanCustomerName');
-    const loanAmountInput = document.getElementById('loanAmount');
-    const loanDateInput = document.getElementById('loanDate');
-    const loanDueDateInput = document.getElementById('loanDueDate');
-    const loanNoteTextarea = document.getElementById('loanNote');
-    const loanDetailsModal = document.getElementById('loanDetailsModal');
-    const detailLoanId = document.getElementById('detailLoanId');
-    const detailCustomerName = document.getElementById('detailCustomerName');
-    const detailLoanAmount = document.getElementById('detailLoanAmount');
-    const detailPaidAmount = document.getElementById('detailPaidAmount');
-    const detailCurrentBalance = document.getElementById('detailCurrentBalance');
-    const detailLoanDate = document.getElementById('detailLoanDate');
-    const detailDueDate = document.getElementById('detailDueDate');
-    const detailLoanNote = document.getElementById('detailLoanNote');
-    const detailLoanStatus = document.getElementById('detailLoanStatus');
-    const detailCompletedAt = document.getElementById('detailCompletedAt');
-    const paymentHistoryList = document.getElementById('paymentHistoryList');
-    const whatsappShareBtn = document.getElementById('whatsappShareBtn');
-
 
     // --- Global State Variables ---
     let customerData = null; // Stores currently loaded customer's full data
     let selectedCustomerId = null; // Store ID of selected customer for consistency
     let currentLoanBeingPaid = null; // Stores the full loan object when payment modal is open
-    let currentLoanDetails = null; // Stores the loan object currently being viewed in the details modal
 
     // --- Utility Functions ---
 
@@ -809,7 +673,7 @@
     /**
      * Displays a temporary message to the user.
      * @param {string} message - The message content.
-     * @param {'success' | 'error' | 'info'} type - Type of message for styling.
+     * @param {'success' | 'error' | 'info' | 'warning'} type - Type of message for styling.
      * @param {number} duration - How long the alert should be visible in milliseconds.
      */
     function showMessage(message, type = 'info', duration = 3000) {
@@ -901,18 +765,6 @@
         }, 350); // Match content's transition duration
     }
 
-    /**
-     * Resets the customer information fields and loan list.
-     */
-    function resetCustomerInfo() {
-        customerData = null;
-        selectedCustomerId = null;
-        customerNameInput.value = '';
-        pendingLoanInfoDiv.textContent = '';
-        customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
-        addLoanBtn.classList.add('hidden'); // Hide Add Loan button
-    }
-
     // --- Customer Management ---
 
     /**
@@ -928,438 +780,420 @@
 
         pageLoader.classList.remove('hidden'); // Show loader at the very beginning
         try {
-            let customerDocSnapshot = null;
-            let q;
+            let customerDoc = null;
 
             // 1. Try searching by phone number (exact match)
             const isPhoneNumber = /^\d+$/.test(searchTerm); // Simple check for digits only
             if (isPhoneNumber) {
-                q = query(customersCollectionRef, where("phoneNumber", "==", searchTerm));
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    customerDocSnapshot = querySnapshot.docs[0];
+                console.log(`Attempting to search by phone: ${searchTerm}`);
+                const qPhone = query(customersCollectionRef, where("phone", "==", searchTerm));
+                const snapshotPhone = await getDocs(qPhone);
+                if (!snapshotPhone.empty) {
+                    customerDoc = snapshotPhone.docs[0];
+                } else {
+                    console.log("No customer found by phone.");
                 }
             }
 
-            // 2. If not found by phone or if it's not a phone number, try searching by name (exact match, case-insensitive)
-            if (!customerDocSnapshot) {
-                // For case-insensitive search, Firebase usually requires storing a lowercase version
-                // or fetching all and filtering. For simplicity, we'll do an exact match for now.
-                // A more robust solution would involve a lowercase 'customerNameLower' field in Firestore.
-                q = query(customersCollectionRef, where("customerName", "==", searchTerm));
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    customerDocSnapshot = querySnapshot.docs[0];
+            // 2. If not found by phone, or if input was not purely numeric, try searching by name (prefix match)
+            if (!customerDoc) { // Only attempt name search if phone search didn't find anyone
+                console.log(`Attempting to search by name: ${searchTerm}`);
+                // Firestore queries for prefix matching: starts with `searchTerm` and ends with `searchTerm` + '\uf8ff' (a high-value unicode character)
+                const qName = query(
+                    customersCollectionRef,
+                    where("name", ">=", searchTerm),
+                    where("name", "<=", searchTerm + '\uf8ff')
+                );
+                const snapshotName = await getDocs(qName);
+                if (!snapshotName.empty) {
+                    customerDoc = snapshotName.docs[0]; // Take the first match
+                    if (snapshotName.docs.length > 1) {
+                        showMessage(`Multiple customers found for "${searchTerm}". Showing the first match.`, "info", 5000);
+                        console.warn(`Multiple customers found for "${searchTerm}". Consider showing a selection list.`);
+                    }
+                } else {
+                    console.log("No customer found by name.");
                 }
             }
 
-            if (customerDocSnapshot) {
-                customerData = { id: customerDocSnapshot.id, ...customerDocSnapshot.data() };
+
+            if (customerDoc) {
+                customerData = { id: customerDoc.id, ...customerDoc.data() };
                 selectedCustomerId = customerData.id;
-                customerNameInput.value = customerData.customerName;
-                addLoanBtn.classList.remove('hidden'); // Show Add Loan button
-                await loadCustomerLoans(selectedCustomerId);
-                showMessage(`Customer "${customerData.customerName}" found!`, "success");
+                customerNameInput.value = customerData.name || 'N/A';
+                customerPhoneInput.value = customerData.phone || searchTerm; // Update phone input field with actual phone from DB or initial search term
+                showMessage(`Customer found: "${customerData.name}".`, "success");
+                console.log("Customer found (final):", customerData);
+
+                await loadAndRenderLoans(selectedCustomerId);
+                // Loader explicitly hidden by the loadAndRenderLoans function or this block.
             } else {
-                resetCustomerInfo();
-                showMessage("Customer not found.", "info");
-                // Prompt to add new customer
-                const confirmed = await showConfirmModal(`Customer "${searchTerm}" not found. Do you want to add them as a new customer?`);
+                console.log("No customer found with the provided input.");
+                resetCustomerInfo(); // Clear previous customer data
+                const confirmed = await showConfirmModal(`Customer not found. Do you want to add "${searchTerm}" as a new customer?`);
                 if (confirmed) {
-                    customerPhoneInModal.value = isPhoneNumber ? searchTerm : ''; // Pre-fill phone if it was a phone search
-                    customerNameInModal.value = isPhoneNumber ? '' : searchTerm; // Pre-fill name if it was a name search
+                    // Pre-fill modal based on whether input looked like a phone or a name
+                    customerPhoneInModal.value = isPhoneNumber ? searchTerm : '';
+                    customerNameInModal.value = isPhoneNumber ? '' : searchTerm;
+                    customerNameInModal.focus();
                     showCustomModal(addCustomerModal);
+                    // The loader will be hidden by addCustomerInModal's finally block
+                } else {
+                    showMessage("Customer not added.", "info");
+                    // If user cancels adding, ensure loader is hidden
+                    pageLoader.classList.add('hidden');
                 }
             }
         } catch (error) {
             console.error("Error searching customer:", error);
-            showMessage("Error searching customer. Please try again.", "error");
-        } finally {
-            pageLoader.classList.add('hidden'); // Hide loader
+            showMessage("Error searching customer. See console for details.", "error");
+            pageLoader.classList.add('hidden'); // Hide loader on error
         }
     }
 
     /**
-     * Adds a new customer to Firestore.
-     * @param {Event} event - The form submission event.
+     * Resets customer related fields and clears loan list.
      */
-    async function addCustomer(event) {
+    function resetCustomerInfo() {
+        customerNameInput.value = '';
+        customerData = null;
+        selectedCustomerId = null;
+        pendingLoanInfoDiv.textContent = 'No pending loans.';
+        pendingLoanInfoDiv.style.color = '#6b7280';
+        customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
+    }
+
+    /**
+     * Adds a new customer via the modal form.
+     */
+    async function addCustomerInModal(event) {
         event.preventDefault();
-        pageLoader.classList.remove('hidden');
+
+        const phone = customerPhoneInModal.value.trim();
+        const name = customerNameInModal.value.trim();
+
+        if (!name) {
+            showMessage("Customer name is required.", "warning");
+            return;
+        }
+
+        pageLoader.classList.remove('hidden'); // Show loader
         try {
-            const phoneNumber = customerPhoneInModal.value.trim();
-            const customerName = customerNameInModal.value.trim();
+            const newCustomer = {
+                phone: phone,
+                name: name,
+                createdDate: new Date() // Add creation date
+            };
+            const docRef = await addDoc(customersCollectionRef, newCustomer); // No need for docRef here if not used
+            customerData = { id: docRef.id, ...newCustomer }; // Update global customerData
+            selectedCustomerId = customerData.id; // Set selected customer ID
+            customerNameInput.value = customerData.name; // Update main form field
+            customerPhoneInput.value = customerData.phone; // Update main form field as well
 
-            if (!customerName) {
-                showMessage("Customer name is required.", "error");
-                return;
-            }
-
-            // Check if customer with this phone number already exists
-            if (phoneNumber) {
-                const q = query(customersCollectionRef, where("phoneNumber", "==", phoneNumber));
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    showMessage("A customer with this phone number already exists.", "error");
-                    return;
-                }
-            }
-
-            const newCustomerRef = await addDoc(customersCollectionRef, {
-                phoneNumber: phoneNumber,
-                customerName: customerName,
-                createdAt: serverTimestamp()
-            });
-
-            customerData = { id: newCustomerRef.id, phoneNumber, customerName };
-            selectedCustomerId = customerData.id;
-            customerPhoneInput.value = phoneNumber;
-            customerNameInput.value = customerName;
-            addLoanBtn.classList.remove('hidden'); // Show Add Loan button
             hideCustomModal(addCustomerModal);
-            showMessage("Customer added successfully!", "success");
-            await loadCustomerLoans(selectedCustomerId); // Load loans for the newly added customer
+            showMessage(`New customer "${customerData.name}" added successfully!`, "success");
+            console.log("New customer added:", customerData);
+
+            // Since it's a new customer, there are no loans yet, but we should clear any previous state
+            pendingLoanInfoDiv.textContent = 'No pending loans.';
+            pendingLoanInfoDiv.style.color = '#6b7280';
+            customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
+
         } catch (error) {
-            console.error("Error adding customer:", error);
-            showMessage("Error adding customer. Please try again.", "error");
+            console.error("Error adding new customer:", error);
+            showMessage("Failed to add new customer. Please try again.", "error");
         } finally {
-            pageLoader.classList.add('hidden');
+            pageLoader.classList.add('hidden'); // Hide loader after customer addition attempt
         }
     }
 
     // --- Loan Management ---
 
     /**
-     * Loads and displays all loans for a given customer.
-     * Sets up a real-time listener for loans.
+     * Helper to safely parse date from Firestore (could be Timestamp or ISO string).
+     * @param {any} firebaseDate - The date value from Firestore.
+     * @returns {Date} A JavaScript Date object.
+     */
+    function parseFirestoreDate(firebaseDate) {
+        if (firebaseDate && typeof firebaseDate.toDate === 'function') {
+            return firebaseDate.toDate(); // Firestore Timestamp
+        } else if (typeof firebaseDate === 'string') {
+            try {
+                const date = new Date(firebaseDate);
+                // Basic validation to ensure it's a valid date and not 'Invalid Date'
+                if (!isNaN(date.getTime())) {
+                    return date;
+                }
+            } catch (e) {
+                console.warn("Could not parse date string:", firebaseDate, e);
+            }
+        }
+        return new Date(); // Fallback to current date if format is unexpected or invalid
+    }
+
+    /**
+     * Loads and renders loans for the given customer ID.
+     * Includes improved parsing for numeric fields and dates.
      * @param {string} customerId - The ID of the customer.
      */
-    function loadCustomerLoans(customerId) {
+    async function loadAndRenderLoans(customerId) {
+        customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Loading loans...</p>';
         if (!customerId) {
             customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
-            pendingLoanInfoDiv.textContent = '';
+            console.warn("loadAndRenderLoans called with no customerId.");
             return;
         }
 
-        // Detach previous listener if any
-        if (typeof loadCustomerLoans.unsubscribe === 'function') {
-            loadCustomerLoans.unsubscribe();
+        try {
+            console.log(`Setting up real-time listener for loans for customer ID: ${customerId}`);
+            // Attach a real-time listener using onSnapshot for immediate updates
+            // This will automatically re-render loans whenever changes occur in Firestore
+            onSnapshot(query(loansCollectionRef, where("customerId", "==", customerId)), (querySnapshot) => {
+                customerLoansListDiv.innerHTML = ''; // Clear previous content
+
+                if (querySnapshot.empty) {
+                    customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
+                    console.log(`No loans found for customer ID: ${customerId}`);
+                } else {
+                    // Map and sort loans by date, most recent first
+                    const loans = querySnapshot.docs.map(doc => {
+                        const data = doc.data();
+                        console.log("Fetched raw loan document data:", { id: doc.id, ...data });
+
+                        // *** IMPORTANT: Verify these field names and ensure they are saved correctly from billing.html ***
+                        // loanAmount: The total original loan amount
+                        // paidAmount: The amount that has been paid towards the loan
+                        // balance: The remaining outstanding balance (totalAmount - paidAmount)
+                        // date / loanDate: The date the loan was issued
+                        // status: Can be 'pending' or 'paid'
+                        // customerId: The ID of the customer
+                        // invoiceId: The ID of the invoice from which the loan originated
+
+                        const totalAmt = Number(data.totalAmount || data.loanAmount || 0);
+                        const paidAmt = Number(data.paidAmount || 0);
+
+                        const loan = {
+                            id: doc.id,
+                            customerId: data.customerId,
+                            invoiceId: data.invoiceId || 'N/A',
+                            // Calculate balance explicitly to ensure consistency
+                            totalAmount: parseFloat(totalAmt.toFixed(2)),
+                            paidAmount: parseFloat(paidAmt.toFixed(2)),
+                            balance: parseFloat((totalAmt - paidAmt).toFixed(2)),
+                            loanDate: parseFirestoreDate(data.date || data.loanDate || new Date()).toISOString(),
+                            note: data.note || '',
+                            status: data.status || 'pending' // Default status
+                        };
+
+                        // Ensure balance is never negative, correct for precision issues
+                        // Now, with consistent rounding, this check is more reliable for floating point near-zero
+                        if (loan.balance < 0.01 && loan.balance > -0.01) { // Treat very small positive/negative as zero
+                           loan.balance = 0;
+                        } else if (loan.balance < 0) { // If truly negative, likely a data error, cap at 0
+                           loan.balance = 0;
+                           console.warn(`Loan ${loan.id} has negative balance: ${loan.balance}. Capping to 0.`);
+                        }
+
+                        // Sanity check: If totalAmount is non-zero, but balance is zero, and status is not 'paid', warn.
+                        if (loan.totalAmount > 0 && loan.balance === 0 && loan.status !== 'paid') {
+                            console.warn(`Loan ${loan.id} (status: ${loan.status}) has total amount ${loan.totalAmount} but zero balance. Check data consistency in Firestore.`);
+                        }
+                        
+                        console.log("[loadAndRenderLoans] Parsed loan object for rendering:", loan); // <--- NEW LOG
+                        console.log(`[loadAndRenderLoans] Loan ID: ${loan.id}, Balance: ${loan.balance}, Is Paid In Full (calculated): ${loan.balance <= 0.01}`); // <--- NEW LOG
+                        
+                        return loan;
+                    }).sort((a, b) => new Date(b.loanDate).getTime() - new Date(a.loanDate).getTime()); // Sort by ISO string or parsed Date
+
+                    let totalPendingForAllLoans = 0;
+
+                    loans.forEach(loan => {
+                        // A loan is considered 'pending' if its status is not 'paid' OR if its balance is greater than 0
+                        const isPending = (loan.status === 'pending' || loan.balance > 0.01); 
+                        const isPaidInFull = !isPending; // If it's not pending, it's paid in full
+
+                        if (isPending) {
+                            totalPendingForAllLoans += loan.balance;
+                        }
+
+                        const loanElement = document.createElement('div');
+                        // Use isPaidInFull for styling class
+                        loanElement.className = `loan-card ${isPaidInFull ? 'loan-paid-in-full' : ''}`;
+
+                        // Ensure date is formatted for display
+                        const displayDate = new Date(loan.loanDate).toLocaleDateString();
+
+                        const whatsappBtnHtml = `
+                            <button class="btn-whatsapp-custom small whatsapp-loan-btn"
+                                data-loan-id="${loan.id}"
+                                data-loan-status="${loan.status}"
+                                data-loan-balance="${loan.balance}"
+                                data-customer-name="${customerData ? customerData.name : ''}"
+                                data-customer-phone="${customerData ? customerData.phone : ''}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                                  <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.542.06 7.917c0 1.254.337 2.454.924 3.541L.002 16l4.207-1.35a7.66 7.66 0 0 0 3.684.92h.001c4.364 0 7.925-3.542 7.925-7.917s-3.561-7.917-7.925-7.917M4.062 13.93c-1.426-.35-2.584-1.025-3.328-1.745A6.7 6.7 0 0 1 1 7.917C1 4.14 4.093 1 7.999 1S15 4.14 15 7.917a6.68 6.68 0 0 1-.92 3.54c-.744.72-1.902 1.395-3.328 1.745L8.98 14.93zM8 4.673c-.314 0-.57.256-.57.576v2.9c0 .319.256.576.57.576s.57-.256.57-.576v-2.9c0-.32-.256-.576-.57-.576Zm-2.858 2.89c-.314 0-.57.256-.57.576v.576c0 .319.256.576.576.57.576s.57-.256.57-.576v-.576c0-.32-.256-.576-.57-.576Zm5.716 0c-.314 0-.57.256-.57.576v.576c0 .319.256.576.576.57.576s.57-.256.57-.576v-.576c0-.32-.256-.576-.57-.576Z"/>
+                                </svg>
+                                WhatsApp
+                            </button>
+                        `;
+
+                        loanElement.innerHTML = `
+                            <p>Loan ID: <span class="loan-id">${loan.id.substring(0, 8)}...</span></p>
+                            <p>Loan Date: ${displayDate}</p>
+                            <p>Total Loan Amount: ${formatLKR(loan.totalAmount)}</p>
+                            <p class="loan-paid">Paid Amount: ${formatLKR(loan.paidAmount)}</p>
+                            <p>Outstanding Balance: <span class="loan-balance">${formatLKR(loan.balance)}</span></p>
+                            ${loan.note ? `<p>Note: ${loan.note}</p>` : ''}
+                            ${isPaidInFull ? '<span class="loan-status-badge">PAID IN FULL</span>' : ''}
+                            <div class="loan-actions">
+                                <button class="btn-primary-custom small add-payment-btn" data-loan-id="${loan.id}" ${isPaidInFull ? 'disabled' : ''}>Add Payment</button>
+                                ${customerData && (customerData.phone || customerData.name) ? whatsappBtnHtml : ''}
+                            </div>
+                        `;
+                        customerLoansListDiv.appendChild(loanElement);
+                    });
+                    attachLoanEventListeners(); // Re-attach listeners for new elements
+                    attachWhatsAppEventListeners(); // Attach listeners for new WhatsApp buttons
+
+                    // Update the small pending loan info text
+                    if (totalPendingForAllLoans > 0) {
+                        totalPendingForAllLoans = parseFloat(totalPendingForAllLoans.toFixed(2)); // Round final total for display
+                        pendingLoanInfoDiv.textContent = `Total Pending Loan: ${formatLKR(totalPendingForAllLoans)}`;
+                        pendingLoanInfoDiv.style.color = '#ef4444'; // Red for outstanding
+                    } else {
+                        pendingLoanInfoDiv.textContent = "No pending loans.";
+                        pendingLoanInfoDiv.style.color = '#10b981'; // Green for no pending
+                    }
+                }
+            }, (error) => {
+                console.error("Error listening to customer loans:", error);
+                customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4 text-red-500">Failed to load loans.</p>';
+                pendingLoanInfoDiv.textContent = "Error loading pending loans.";
+                pendingLoanInfoDiv.style.color = '#ef4444';
+            });
+
+        } catch (error) {
+            console.error("Error setting up loan listener or initial query:", error);
+            customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4 text-red-500">Failed to load loans due to an unexpected error.</p>';
+            pendingLoanInfoDiv.textContent = "Error loading pending loans.";
+            pendingLoanInfoDiv.style.color = '#ef4444';
+        } finally {
+            // Ensure loader is hidden even if listener setup fails
+            pageLoader.classList.add('hidden');
         }
-
-        const q = query(loansCollectionRef, where("customerId", "==", customerId));
-
-        loadCustomerLoans.unsubscribe = onSnapshot(q, (snapshot) => {
-            const loans = [];
-            let totalPendingBalance = 0;
-
-            snapshot.forEach((doc) => {
-                const loan = { id: doc.id, ...doc.data() };
-                loan.balance = loan.loanAmount - loan.paidAmount;
-                // Use the explicit status from Firestore, or derive if missing
-                loan.status = loan.status || (loan.balance <= 0 ? 'paid' : 'pending');
-                loan.isPaidInFull = loan.status === 'paid';
-
-                if (!loan.isPaidInFull) {
-                    totalPendingBalance += loan.balance;
-                }
-                loans.push(loan);
-            });
-
-            // Sort loans: pending loans first, then by loanDate (newest first)
-            loans.sort((a, b) => {
-                if (a.isPaidInFull === b.isPaidInFull) {
-                    return new Date(b.loanDate) - new Date(a.loanDate); // Newest first
-                }
-                return a.isPaidInFull ? 1 : -1; // Pending (false) comes before paid (true)
-            });
-
-            renderCustomerLoans(loans);
-            pendingLoanInfoDiv.textContent = `Total Pending Balance: ${formatLKR(totalPendingBalance)}`;
-        }, (error) => {
-            console.error("Error listening to customer loans:", error);
-            showMessage("Error loading customer loans.", "error");
-        });
     }
 
     /**
-     * Renders the list of customer loans in the UI.
-     * @param {Array<Object>} loans - An array of loan objects.
+     * Attaches event listeners to dynamically added loan elements.
      */
-    function renderCustomerLoans(loans) {
-        customerLoansListDiv.innerHTML = ''; // Clear previous loans
-        if (loans.length === 0) {
-            customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
-            return;
-        }
-
-        loans.forEach(loan => {
-            const loanCard = document.createElement('div');
-            loanCard.className = `loan-card ${loan.status === 'paid' ? 'loan-paid-in-full' : ''}`;
-            loanCard.innerHTML = `
-                <p class="loan-id">Loan ID: ${loan.id}</p>
-                <p><strong>Amount:</strong> ${formatLKR(loan.loanAmount)}</p>
-                <p class="loan-paid"><strong>Paid:</strong> ${formatLKR(loan.paidAmount)}</p>
-                <p class="loan-balance"><strong>Balance:</strong> ${formatLKR(loan.balance)}</p>
-                <p><strong>Date:</strong> ${new Date(loan.loanDate).toLocaleDateString()}</p>
-                ${loan.dueDate ? `<p><strong>Due Date:</strong> ${new Date(loan.dueDate).toLocaleDateString()}</p>` : ''}
-                ${loan.note ? `<p><strong>Note:</strong> ${loan.note}</p>` : ''}
-                ${loan.status === 'paid' ? '<span class="loan-status-badge">Paid in Full</span>' : ''}
-                <div class="loan-actions">
-                    <button class="btn-primary-custom small add-payment-btn"
-                        data-loan-id="${loan.id}"
-                        data-loan-amount="${loan.loanAmount}"
-                        data-loan-paid="${loan.paidAmount}"
-                        data-loan-balance="${loan.balance}"
-                        ${loan.status === 'paid' ? 'disabled' : ''}>
-                        Add Payment
-                    </button>
-                    <button class="btn-secondary-custom small view-details-btn" data-loan-id="${loan.id}">
-                        View Details
-                    </button>
-                    <button class="btn-danger-custom small delete-loan-btn" data-loan-id="${loan.id}">
-                        Delete Loan
-                    </button>
-                </div>
-            `;
-            customerLoansListDiv.appendChild(loanCard);
-        });
-
-        // Attach event listeners to the dynamically created buttons
+    function attachLoanEventListeners() {
         customerLoansListDiv.querySelectorAll('.add-payment-btn').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const loanId = event.target.dataset.loanId;
-                const loanAmount = parseFloat(event.target.dataset.loanAmount);
-                const paidAmount = parseFloat(event.target.dataset.loanPaid);
-                const balance = parseFloat(event.target.dataset.loanBalance);
-                openAddPaymentModal({ id: loanId, loanAmount, paidAmount, balance });
-            });
-        });
+            // Remove any existing listeners to prevent duplicates (important for onSnapshot updates)
+            // This cloning ensures that when the list is refreshed, old listeners are gone and new ones are attached.
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
 
-        customerLoansListDiv.querySelectorAll('.view-details-btn').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const loanId = event.target.dataset.loanId;
-                viewLoanDetails(loanId);
-            });
-        });
-
-        customerLoansListDiv.querySelectorAll('.delete-loan-btn').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const loanId = event.target.dataset.loanId;
-                deleteLoan(loanId);
-            });
-        });
-    }
-
-    /**
-     * Opens the Add Loan modal and pre-fills customer name.
-     */
-    function openAddLoanModal() {
-        if (!selectedCustomerId || !customerData) {
-            showMessage("Please select a customer first.", "info");
-            return;
-        }
-        loanCustomerNameInput.value = customerData.customerName;
-        loanAmountInput.value = '';
-        loanDateInput.valueAsDate = new Date(); // Set default to today
-        loanDueDateInput.value = '';
-        loanNoteTextarea.value = '';
-        showCustomModal(addLoanModal);
-    }
-
-    /**
-     * Adds a new loan for the selected customer to Firestore.
-     * @param {Event} event - The form submission event.
-     */
-    async function addLoan(event) {
-        event.preventDefault();
-        pageLoader.classList.remove('hidden');
-        try {
-            if (!selectedCustomerId) {
-                showMessage("No customer selected for adding a loan.", "error");
-                return;
-            }
-
-            const loanAmount = parseFloat(loanAmountInput.value);
-            const loanDate = loanDateInput.value;
-            const loanDueDate = loanDueDateInput.value || null;
-            const loanNote = loanNoteTextarea.value.trim();
-
-            if (isNaN(loanAmount) || loanAmount <= 0) {
-                showMessage("Please enter a valid loan amount.", "error");
-                return;
-            }
-            if (!loanDate) {
-                showMessage("Loan date is required.", "error");
-                return;
-            }
-
-            await addDoc(loansCollectionRef, {
-                customerId: selectedCustomerId,
-                customerName: customerData.customerName, // Store name for easier querying
-                loanAmount: loanAmount,
-                paidAmount: 0, // Initially no amount paid
-                loanDate: loanDate,
-                dueDate: loanDueDate,
-                note: loanNote,
-                status: 'pending', // New field: Loan status
-                completedAt: null, // New field: Timestamp when loan is fully paid
-                createdAt: serverTimestamp()
-            });
-
-            hideCustomModal(addLoanModal);
-            showMessage("Loan added successfully!", "success");
-            // loadCustomerLoans will automatically update due to onSnapshot listener
-        } catch (error) {
-            console.error("Error adding loan:", error);
-            showMessage("Error adding loan. Please try again.", "error");
-        } finally {
-            pageLoader.classList.add('hidden');
-        }
-    }
-
-    /**
-     * Opens the Add Payment modal and pre-fills loan details.
-     * @param {Object} loan - The loan object to which payment is being added.
-     */
-    function openAddPaymentModal(loan) {
-        currentLoanBeingPaid = loan;
-        paymentLoanIdInput.value = loan.id;
-        paymentCurrentBalanceInput.value = formatLKR(loan.balance);
-        paymentAmountInput.value = ''; // Clear previous amount
-        paymentNoteTextarea.value = ''; // Clear previous note
-        showCustomModal(addPaymentModal);
-    }
-
-    /**
-     * Records a payment for a loan in Firestore.
-     * @param {Event} event - The form submission event.
-     */
-    async function addPayment(event) {
-        event.preventDefault();
-        pageLoader.classList.remove('hidden');
-        try {
-            if (!currentLoanBeingPaid) {
-                showMessage("No loan selected for payment.", "error");
-                return;
-            }
-
-            const paymentAmount = parseFloat(paymentAmountInput.value);
-            const paymentNote = paymentNoteTextarea.value.trim();
-
-            if (isNaN(paymentAmount) || paymentAmount <= 0) {
-                showMessage("Please enter a valid payment amount.", "error");
-                return;
-            }
-            if (paymentAmount > currentLoanBeingPaid.balance) {
-                showMessage("Payment amount cannot exceed the current balance.", "error");
-                return;
-            }
-
-            const newPaidAmount = currentLoanBeingPaid.paidAmount + paymentAmount;
-            const newBalance = currentLoanBeingPaid.loanAmount - newPaidAmount;
-            const loanRef = doc(db, `artifacts/${appId}/public/data/loans`, currentLoanBeingPaid.id);
-
-            const updates = {
-                paidAmount: newPaidAmount,
-            };
-
-            // Update status and completedAt if loan is fully paid
-            if (newBalance <= 0) {
-                updates.status = 'paid';
-                updates.completedAt = serverTimestamp();
-            } else {
-                updates.status = 'pending'; // Ensure status is 'pending' if not fully paid
-                updates.completedAt = null; // Clear completedAt if it somehow became paid and then more was added
-            }
-
-            await updateDoc(loanRef, updates);
-
-            // Add a payment record
-            await addDoc(paymentsCollectionRef, {
-                loanId: currentLoanBeingPaid.id,
-                customerId: selectedCustomerId,
-                paymentAmount: paymentAmount,
-                paymentDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
-                note: paymentNote,
-                createdAt: serverTimestamp()
-            });
-
-            hideCustomModal(addPaymentModal);
-            showMessage("Payment recorded successfully!", "success");
-            // loadCustomerLoans will automatically update due to onSnapshot listener
-        } catch (error) {
-            console.error("Error adding payment:", error);
-            showMessage("Error recording payment. Please try again.", "error");
-        } finally {
-            pageLoader.classList.add('hidden');
-        }
-    }
-
-    /**
-     * Displays detailed information about a specific loan, including its payment history.
-     * @param {string} loanId - The ID of the loan to view.
-     */
-    async function viewLoanDetails(loanId) {
-        pageLoader.classList.remove('hidden');
-        try {
-            const loanRef = doc(db, `artifacts/${appId}/public/data/loans`, loanId);
-            const loanDoc = await getDoc(loanRef);
-
-            if (!loanDoc.exists()) {
-                showMessage("Loan not found.", "error");
-                return;
-            }
-
-            const loan = { id: loanDoc.id, ...loanDoc.data() };
-            loan.balance = loan.loanAmount - loan.paidAmount;
-            currentLoanDetails = loan; // Store for WhatsApp share
-
-            detailLoanId.textContent = loan.id;
-            detailCustomerName.textContent = loan.customerName;
-            detailLoanAmount.textContent = formatLKR(loan.loanAmount);
-            detailPaidAmount.textContent = formatLKR(loan.paidAmount);
-            detailCurrentBalance.textContent = formatLKR(loan.balance);
-            detailLoanDate.textContent = new Date(loan.loanDate).toLocaleDateString();
-            detailDueDate.textContent = loan.dueDate ? new Date(loan.dueDate).toLocaleDateString() : 'N/A';
-            detailLoanNote.textContent = loan.note || 'No note.';
-            detailLoanStatus.textContent = loan.status ? loan.status.charAt(0).toUpperCase() + loan.status.slice(1) : 'N/A';
-            detailCompletedAt.textContent = loan.completedAt && loan.completedAt.toDate ? loan.completedAt.toDate().toLocaleString() : 'N/A';
-            detailCurrentBalance.style.color = loan.balance > 0 ? '#ef4444' : '#10b981'; // Red if pending, green if paid
-
-            // Fetch payment history for this loan
-            const paymentsQuery = query(paymentsCollectionRef, where("loanId", "==", loanId));
-            const paymentsSnapshot = await getDocs(paymentsQuery);
-            const payments = [];
-            paymentsSnapshot.forEach(doc => {
-                payments.push({ id: doc.id, ...doc.data() });
-            });
-
-            // Sort payments by date (newest first)
-            payments.sort((a, b) => {
-                const dateA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.paymentDate);
-                const dateB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.paymentDate);
-                return dateB - dateA;
-            });
-
-            paymentHistoryList.innerHTML = ''; // Clear previous history
-            if (payments.length === 0) {
-                paymentHistoryList.innerHTML = '<p class="text-gray-500 text-center py-2">No payments recorded yet.</p>';
-            } else {
-                payments.forEach(payment => {
-                    const paymentItem = document.createElement('div');
-                    paymentItem.className = 'loan-card !bg-white !shadow-none !border-0 !p-2 !mb-2'; // Simpler styling for history
-                    paymentItem.innerHTML = `
-                        <p class="text-sm text-gray-700"><strong>Date:</strong> ${new Date(payment.paymentDate).toLocaleDateString()}</p>
-                        <p class="text-sm text-gray-700"><strong>Amount:</strong> ${formatLKR(payment.paymentAmount)}</p>
-                        ${payment.note ? `<p class="text-xs text-gray-600 italic">Note: ${payment.note}</p>` : ''}
-                    `;
-                    paymentHistoryList.appendChild(paymentItem);
+            if (!newButton.disabled) {
+                newButton.addEventListener('click', (e) => {
+                    const loanId = e.target.dataset.loanId;
+                    showPaymentModal(loanId);
                 });
             }
+        });
+    }
 
-            showCustomModal(loanDetailsModal);
+    /**
+     * Attaches event listeners to dynamically added WhatsApp buttons.
+     */
+    function attachWhatsAppEventListeners() {
+        customerLoansListDiv.querySelectorAll('.whatsapp-loan-btn').forEach(button => {
+            // Remove any existing listeners to prevent duplicates
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+
+            newButton.addEventListener('click', (e) => {
+                const loanId = e.currentTarget.dataset.loanId;
+                const loanStatus = e.currentTarget.dataset.loanStatus;
+                const loanBalance = parseFloat(e.currentTarget.dataset.loanBalance);
+                const customerName = e.currentTarget.dataset.customerName;
+                const customerPhone = e.currentTarget.dataset.customerPhone;
+
+                sendWhatsAppMessage(loanId, loanStatus, loanBalance, customerName, customerPhone);
+            });
+        });
+    }
+
+    /**
+     * Constructs and opens a WhatsApp message link.
+     * @param {string} loanId - The ID of the loan.
+     * @param {string} loanStatus - The status of the loan ('pending' or 'paid').
+     * @param {number} loanBalance - The outstanding balance of the loan.
+     * @param {string} customerName - The name of the customer.
+     * @param {string} customerPhone - The phone number of the customer.
+     */
+    function sendWhatsAppMessage(loanId, loanStatus, loanBalance, customerName, customerPhone) {
+        if (!customerPhone) {
+            showMessage("Customer phone number not available for WhatsApp message.", "warning");
+            return;
+        }
+
+        let message = "";
+        const truncatedLoanId = loanId.substring(0, 8); // Truncate loan ID for message
+
+        // Use a threshold for balance when checking status to avoid float precision issues
+        if (loanStatus === 'pending' && loanBalance > 0.01) {
+            message = `Dear ${customerName || 'customer'}, this is a friendly reminder regarding your loan with Loan ID ${truncatedLoanId}.... Your outstanding balance is ${formatLKR(loanBalance)}. Please make your payment at your earliest convenience. Thank you, WR Smile.`;
+        } else if (loanStatus === 'paid' || loanBalance <= 0.01) { // Also check balance <= 0.01 for paid status
+            message = `Dear ${customerName || 'customer'}, your loan with Loan ID ${truncatedLoanId}.... has been successfully paid in full. Thank you for your payment! - WR Smile`;
+        } else {
+            showMessage("Loan status is unclear or invalid for sending a WhatsApp message.", "warning");
+            return;
+        }
+
+        const whatsappLink = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappLink, '_blank');
+    }
+
+    /**
+     * Displays the Add Payment modal.
+     * @param {string} loanId - The ID of the loan to pay.
+     */
+    async function showPaymentModal(loanId) {
+        pageLoader.classList.remove('hidden');
+        try {
+            const loanDocRef = doc(loansCollectionRef, loanId);
+            const loanSnap = await getDoc(loanDocRef);
+            if (loanSnap.exists()) {
+                const data = loanSnap.data();
+                const totalAmt = Number(data.totalAmount || data.loanAmount || 0);
+                const paidAmt = Number(data.paidAmount || 0);
+
+                currentLoanBeingPaid = {
+                    id: loanSnap.id,
+                    customerId: data.customerId,
+                    invoiceId: data.invoiceId,
+                    // Calculate balance explicitly here too
+                    totalAmount: parseFloat(totalAmt.toFixed(2)),
+                    paidAmount: parseFloat(paidAmt.toFixed(2)),
+                    balance: parseFloat((totalAmt - paidAmt).toFixed(2)),
+                    loanDate: parseFirestoreDate(data.date || data.loanDate || new Date()).toISOString(),
+                    note: data.note || '',
+                    status: data.status || 'pending'
+                };
+                console.log("[showPaymentModal] Opening payment modal for loan:", currentLoanBeingPaid); // <--- NEW LOG
+                console.log(`[showPaymentModal] Balance calculated when opening modal: ${currentLoanBeingPaid.balance}`); // <--- NEW LOG
+                console.log(`[showPaymentModal] Attempting to set paymentCurrentBalanceInput.value to: ${formatLKR(currentLoanBeingPaid.balance)}`); // <--- NEW LOG
+
+                paymentLoanIdInput.value = currentLoanBeingPaid.id.substring(0, 8) + '...'; // Show truncated ID
+                paymentCurrentBalanceInput.value = formatLKR(currentLoanBeingPaid.balance);
+                paymentAmountInput.value = ''; // Clear previous amount
+                paymentNoteTextarea.value = ''; // Clear previous note
+                showCustomModal(addPaymentModal);
+            } else {
+                showMessage("Loan not found. Please refresh.", "error");
+            }
         } catch (error) {
-            console.error("Error viewing loan details:", error);
+            console.error("[showPaymentModal] Error fetching loan for payment:", error);
             showMessage("Error loading loan details. Please try again.", "error");
         } finally {
             pageLoader.classList.add('hidden');
@@ -1367,147 +1201,135 @@
     }
 
     /**
-     * Deletes a loan and its associated payments from Firestore.
-     * @param {string} loanId - The ID of the loan to delete.
+     * Processes the payment for a loan.
+     * @param {Event} event - The form submission event.
      */
-    async function deleteLoan(loanId) {
-        const confirmed = await showConfirmModal("Are you sure you want to delete this loan and all its associated payments? This action cannot be undone.");
-        if (!confirmed) {
+    async function processPayment(event) {
+        event.preventDefault();
+
+        if (!currentLoanBeingPaid || !currentLoanBeingPaid.id) {
+            showMessage("No loan selected for payment.", "error");
+            return;
+        }
+
+        const paymentAmount = parseFloat(paymentAmountInput.value);
+        const paymentNote = paymentNoteTextarea.value.trim();
+
+        if (isNaN(paymentAmount) || paymentAmount <= 0) {
+            showMessage("Please enter a valid positive payment amount.", "warning");
             return;
         }
 
         pageLoader.classList.remove('hidden');
         try {
-            const loanRef = doc(db, `artifacts/${appId}/public/data/loans`, loanId);
+            // Re-fetch the latest loan data right before processing the payment
+            const loanDocRef = doc(loansCollectionRef, currentLoanBeingPaid.id);
+            const latestLoanSnap = await getDoc(loanDocRef);
 
-            // Delete associated payments first
-            const paymentsQuery = query(paymentsCollectionRef, where("loanId", "==", loanId));
-            const paymentsSnapshot = await getDocs(paymentsQuery);
-            const deletePaymentPromises = [];
-            paymentsSnapshot.forEach(paymentDoc => {
-                deletePaymentPromises.push(deleteDoc(doc(db, `artifacts/${appId}/public/data/payments`, paymentDoc.id)));
-            });
-            await Promise.all(deletePaymentPromises);
-
-            // Then delete the loan itself
-            await deleteDoc(loanRef);
-
-            showMessage("Loan and its payments deleted successfully!", "success");
-            // loadCustomerLoans will automatically update due to onSnapshot listener
-        } catch (error) {
-            console.error("Error deleting loan:", error);
-            showMessage("Error deleting loan. Please try again.", "error");
-        } finally {
-            pageLoader.classList.add('hidden');
-        }
-    }
-
-    /**
-     * Generates and shares loan details via WhatsApp.
-     */
-    function shareLoanDetailsOnWhatsApp() {
-        if (!currentLoanDetails || !customerData) {
-            showMessage("No loan details available to share.", "info");
-            return;
-        }
-
-        const loan = currentLoanDetails;
-        const customerPhoneNumber = customerData.phoneNumber; // Assuming customerData has phoneNumber
-
-        if (!customerPhoneNumber) {
-            showMessage("Customer phone number not available.", "error");
-            return;
-        }
-
-        let message = `*WR Smile Loan Details*\n\n`;
-        message += `*Customer Name:* ${loan.customerName}\n`;
-        message += `*Loan ID:* ${loan.id}\n`;
-        message += `*Loan Amount:* ${formatLKR(loan.loanAmount)}\n`;
-        message += `*Paid Amount:* ${formatLKR(loan.paidAmount)}\n`;
-        message += `*Current Balance:* ${formatLKR(loan.balance)}\n`;
-        message += `*Loan Date:* ${new Date(loan.loanDate).toLocaleDateString()}\n`;
-        if (loan.dueDate) {
-            message += `*Due Date:* ${new Date(loan.dueDate).toLocaleDateString()}\n`;
-        }
-        message += `*Status:* ${loan.status ? loan.status.charAt(0).toUpperCase() + loan.status.slice(1) : 'N/A'}\n`;
-        if (loan.completedAt && loan.completedAt.toDate) {
-            message += `*Completed At:* ${loan.completedAt.toDate().toLocaleString()}\n`;
-        }
-        if (loan.note) {
-            message += `*Note:* ${loan.note}\n`;
-        }
-
-        const whatsappUrl = `https://wa.me/${customerPhoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-    }
-
-    // --- Event Listeners ---
-    document.addEventListener('DOMContentLoaded', async () => {
-        pageLoader.classList.remove('hidden');
-        try {
-            // Authenticate user
-            if (typeof __initial_auth_token !== 'undefined') {
-                try {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } catch (customTokenError) {
-                    console.warn("Custom token sign-in failed, attempting anonymous sign-in:", customTokenError);
-                    // Fallback to anonymous sign-in if custom token fails
-                    await signInAnonymously(auth);
-                }
-            } else {
-                await signInAnonymously(auth);
+            if (!latestLoanSnap.exists()) {
+                showMessage("Loan not found or has been deleted. Cannot process payment.", "error");
+                return;
             }
 
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    userId = user.uid;
-                    // Initialize collection references after authentication
-                    customersCollectionRef = collection(db, `artifacts/${appId}/public/data/customers`);
-                    loansCollectionRef = collection(db, `artifacts/${appId}/public/data/loans`);
-                    paymentsCollectionRef = collection(db, `artifacts/${appId}/public/data/payments`);
-                    console.log("Firebase initialized and user authenticated:", userId);
-                    pageLoader.classList.add('hidden');
-                } else {
-                    console.log("User not authenticated.");
-                    pageLoader.classList.add('hidden');
-                    showMessage("Authentication failed. Please refresh the page.", "error");
+            const latestLoanData = latestLoanSnap.data();
+            // Ensure the latest totalAmount and paidAmount are used for calculation, and explicitly parse/round
+            const actualTotalAmount = parseFloat((Number(latestLoanData.totalAmount || latestLoanData.loanAmount || 0)).toFixed(2));
+            const actualPaidAmount = parseFloat((Number(latestLoanData.paidAmount || 0)).toFixed(2));
+
+            // Recalculate the actual current balance from the latest data
+            const actualCurrentBalance = parseFloat((actualTotalAmount - actualPaidAmount).toFixed(2));
+
+
+            console.log(`[processPayment] Re-fetched latest loan data for ID ${currentLoanBeingPaid.id}:`, latestLoanData);
+            console.log(`[processPayment] Payment Amount: ${paymentAmount}, Actual Current Balance (re-fetched and calculated): ${actualCurrentBalance}`);
+
+            if (paymentAmount > actualCurrentBalance + 0.01) { // Allow for slight overpayment if it's very close to 0
+                const confirmed = await showConfirmModal(`Payment amount (${formatLKR(paymentAmount)}) exceeds outstanding balance (${formatLKR(actualCurrentBalance)}). Do you want to pay this amount?`);
+                if (!confirmed) {
+                    pageLoader.classList.add('hidden'); // Hide loader if user cancels
+                    return;
                 }
+            }
+
+            // 1. Record the payment
+            await addDoc(paymentsCollectionRef, {
+                loanId: currentLoanBeingPaid.id,
+                customerId: currentLoanBeingPaid.customerId,
+                amount: paymentAmount,
+                paymentDate: new Date().toISOString(), // Consistent date format
+                note: paymentNote
             });
+            console.log(`[processPayment] Recorded payment of ${formatLKR(paymentAmount)} for loan ID: ${currentLoanBeingPaid.id}`);
+
+            // 2. Calculate new balances based on the *latest* data
+            const newPaidAmount = parseFloat((actualPaidAmount + paymentAmount).toFixed(2));
+            let newBalance = parseFloat((actualCurrentBalance - paymentAmount).toFixed(2));
+
+            // Ensure balance doesn't go negative or remain as a tiny floating point
+            if (newBalance < 0.01 && newBalance > -0.01) { // If it's very close to zero, make it exactly zero
+                newBalance = 0;
+            } else if (newBalance < 0) { // If it becomes genuinely negative (e.g., due to overpayment), cap it at 0
+                newBalance = 0;
+            }
+
+            console.log(`[processPayment] Calculated New Paid Amount: ${newPaidAmount}, New Balance: ${newBalance}`);
+
+            await updateDoc(loanDocRef, { // Use loanDocRef which is for the latest loan
+                paidAmount: newPaidAmount,
+                balance: newBalance, // Use the adjusted newBalance
+                status: (newBalance <= 0.01) ? 'paid' : 'pending' // Update loan status based on final balance
+            });
+            console.log(`[processPayment] Updated loan ID: ${currentLoanBeingPaid.id} in Firestore. New balance: ${formatLKR(newBalance)}`);
+
+            showMessage(`Payment of ${formatLKR(paymentAmount)} recorded successfully!`, "success");
+            hideCustomModal(addPaymentModal);
+            // The onSnapshot listener in loadAndRenderLoans will automatically refresh the list.
         } catch (error) {
-            console.error("Firebase authentication error:", error);
+            console.error("[processPayment] Error processing payment:", error);
+            showMessage("Failed to record payment. Please try again.", "error");
+        } finally {
             pageLoader.classList.add('hidden');
-            showMessage("Failed to initialize app. Please check console.", "error");
+            currentLoanBeingPaid = null; // Clear loan data after processing
         }
+    }
+
+
+    // --- Initialization & Event Listeners ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Initially hide loader, it will show again when searching customer
+        pageLoader.classList.add('hidden');
+
+        // Attach Event Listeners
+        searchCustomerBtn.addEventListener('click', searchCustomer);
+        customerPhoneInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchCustomer();
+            }
+        });
+
+        // Add customer modal listeners
+        addCustomerForm.addEventListener('submit', addCustomerInModal);
+        document.getElementById('closeAddCustomerModal').addEventListener('click', () => hideCustomModal(addCustomerModal));
+        document.getElementById('cancelAddCustomerModal').addEventListener('click', () => hideCustomModal(addCustomerModal));
+
+        // Add payment modal listeners
+        addPaymentForm.addEventListener('submit', processPayment);
+        document.getElementById('closeAddPaymentModal').addEventListener('click', () => hideCustomModal(addPaymentModal));
+        document.getElementById('cancelAddPaymentModal').addEventListener('click', () => hideCustomModal(addPaymentModal));
+
+        // Initial state for loan list
+        customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
     });
 
-    searchCustomerBtn.addEventListener('click', searchCustomer);
-    customerPhoneInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            searchCustomer();
+    // Failsafe to hide loader
+    setTimeout(() => {
+        const loader = document.getElementById("page-loader");
+        if (loader && !loader.classList.contains('hidden')) {
+            loader.classList.add('hidden');
+            console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
         }
-    });
-
-    // Add Customer Modal Listeners
-    document.getElementById('closeAddCustomerModal').addEventListener('click', () => hideCustomModal(addCustomerModal));
-    document.getElementById('cancelAddCustomerModal').addEventListener('click', () => hideCustomModal(addCustomerModal));
-    addCustomerForm.addEventListener('submit', addCustomer);
-
-    // Add Payment Modal Listeners
-    document.getElementById('closeAddPaymentModal').addEventListener('click', () => hideCustomModal(addPaymentModal));
-    document.getElementById('cancelAddPaymentModal').addEventListener('click', () => hideCustomModal(addPaymentModal));
-    addPaymentForm.addEventListener('submit', addPayment);
-
-    // Add Loan Modal Listeners
-    addLoanBtn.addEventListener('click', openAddLoanModal);
-    document.getElementById('closeAddLoanModal').addEventListener('click', () => hideCustomModal(addLoanModal));
-    document.getElementById('cancelAddLoanModal').addEventListener('click', () => hideCustomModal(addLoanModal));
-    addLoanForm.addEventListener('submit', addLoan);
-
-    // Loan Details Modal Listeners
-    document.getElementById('closeLoanDetailsModal').addEventListener('click', () => hideCustomModal(loanDetailsModal));
-    document.getElementById('closeLoanDetailsModalFooter').addEventListener('click', () => hideCustomModal(loanDetailsModal));
-    whatsappShareBtn.addEventListener('click', shareLoanDetailsOnWhatsApp);
-
+    }, 20000);
 </script>
+
 </body>
 </html>
