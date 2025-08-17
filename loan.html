@@ -1329,6 +1329,88 @@
             console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
         }
     }, 20000);
+	<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+        // Paste your config here
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const realtimeDb = getDatabase(app);
+
+    const customersCollection = collection(db, "customers");
+    const loansRef = ref(realtimeDb, "loans");
+    const paymentsRef = ref(realtimeDb, "payments");
+
+    const customerPhoneInput = document.getElementById('customer-phone-input');
+    const customerNameDiv = document.getElementById('customer-name');
+    const customerLoansListDiv = document.getElementById('customer-loans-list');
+    const addLoanBtn = document.getElementById('add-loan-btn');
+    const addPaymentBtn = document.getElementById('add-payment-btn');
+    const addLoanModal = document.getElementById('add-loan-modal');
+    const addPaymentModal = document.getElementById('add-payment-modal');
+
+    // Utility to get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const customerPhoneFromUrl = urlParams.get('customerPhone');
+
+    // Load customer data and loans automatically if phone is in URL
+    if (customerPhoneFromUrl) {
+        customerPhoneInput.value = customerPhoneFromUrl;
+        searchCustomer(customerPhoneFromUrl);
+    }
+
+    // Customer search function
+    async function searchCustomer(phone) {
+        if (!phone) {
+            customerNameDiv.textContent = 'Search a customer to view their loans.';
+            customerLoansListDiv.innerHTML = '';
+            return;
+        }
+
+        try {
+            const q = query(customersCollection, where("phone", "==", phone));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const customerDoc = querySnapshot.docs[0];
+                const customerData = customerDoc.data();
+                customerNameDiv.textContent = customerData.name;
+                // Now load loans using the customer's phone
+                loadLoansForCustomer(customerData.phone);
+            } else {
+                customerNameDiv.textContent = 'Customer not found.';
+                customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
+            }
+        } catch (error) {
+            console.error("Error searching for customer: ", error);
+            customerNameDiv.textContent = 'Failed to load customer data.';
+        }
+    }
+
+    // Your existing loadLoansForCustomer function will now use phone instead of ID
+    async function loadLoansForCustomer(customerPhone) {
+        // Your updated loadLoansForCustomer logic will go here
+    }
+
+    // Event Listeners for search bar (if user manually searches)
+    document.getElementById('search-btn').addEventListener('click', () => {
+        searchCustomer(customerPhoneInput.value);
+    });
+    customerPhoneInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchCustomer(customerPhoneInput.value);
+        }
+    });
+
+    // Modal listeners and other functions
+    // ... [Your existing modal and other functions]
+</script>
 </script>
 
 </body>

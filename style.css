@@ -320,4 +320,76 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
   }
+}/* Add to your existing style.css */
+.customer-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+}
+.customer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+.customer-card h3 {
+    margin-top: 0;
+    color: var(--text-dark);
+}
+.customer-card p {
+    margin: 0.5rem 0;
+    color: var(--gray-500);
+}
+.loan-info {
+    font-weight: bold;
+    color: var(--danger-red);
+}
+.purchase-info {
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}/* Add to your existing style.css */
+.customer-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+}
+.customer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+.customer-card h3 {
+    margin-top: 0;
+    color: var(--text-dark);
+}
+.customer-card p {
+    margin: 0.5rem 0;
+    color: var(--gray-500);
+}
+.loan-info {
+    font-weight: bold;
+    color: var(--danger-red);
+}
+.purchase-info {
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }

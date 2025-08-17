@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management - WR Smile</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+</head>
+<body>
+    <div id="page-loader" class="page-loader">
+        <div class="spinner"></div>
+    </div>
+    <div class="container">
+        <h1 class="section-title">Customer Management</h1>
+        <div class="flex-container">
+            <input type="text" id="customer-search" placeholder="Search by name or phone" class="form-input">
+            <button id="add-customer-btn" class="btn btn-primary">Add New Customer</button>
+        </div>
+        <div id="customers-list" class="customer-list">
+            <p class="text-gray-500 text-center py-4">Loading customers...</p>
+        </div>
+    </div>
+    <div id="add-customer-modal" class="modal-custom hidden">
+        <div class="modal-custom-content">
+            <span class="close-btn-custom" id="close-add-modal">&times;</span>
+            <h5 class="modal-custom-title">Add New Customer</h5>
+            <form id="add-customer-form">
+                <div class="form-group">
+                    <label for="customer-name">Name</label>
+                    <input type="text" id="customer-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Phone</label>
+                    <input type="text" id="customer-phone" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Email (Optional)</label>
+                    <input type="email" id="customer-email" class="form-input">
+                </div>
+                <div class="modal-custom-footer">
+                    <button type="submit" class="btn btn-primary">Save Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="customers.js"></script>
+</body>
+</html>
