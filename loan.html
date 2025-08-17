@@ -716,7 +716,16 @@
 
     // Firebase Configuration - Using the exact config provided by the user
     // IMPORTANT: Do not hardcode API key. It's automatically provided by Canvas runtime if empty.
-    const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+    const firebaseConfig = {
+        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo", // Corrected API Key
+        authDomain: "wr-smile-shop.firebaseapp.com",
+        databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
+        projectId: "wr-smile-shop", // Explicitly set projectId
+        storageBucket: "wr-smile-shop.firebasestorage.app",
+        messagingSenderId: "299864260187",
+        appId: "1:299864260187:web:fa6af65ef95674aff1097e",
+        measurementId: "G-3Z38G6MCYJ"
+    };
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -1438,7 +1447,13 @@
         try {
             // Authenticate user
             if (typeof __initial_auth_token !== 'undefined') {
-                await signInWithCustomToken(auth, __initial_auth_token);
+                try {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } catch (customTokenError) {
+                    console.warn("Custom token sign-in failed, attempting anonymous sign-in:", customTokenError);
+                    // Fallback to anonymous sign-in if custom token fails
+                    await signInAnonymously(auth);
+                }
             } else {
                 await signInAnonymously(auth);
             }
