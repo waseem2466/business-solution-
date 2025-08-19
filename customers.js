@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-// Correct imports for Realtime Database modular SDK
+// Correct imports for Realtime Database modular SDK: 'get' for fetching, 'query' as 'dbQuery' for building queries
 import { getDatabase, ref, query as dbQuery, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -101,7 +101,7 @@ async function renderCustomerCard(customer) {
     // Get total outstanding loans from Realtime Database
     let totalPendingLoan = 0;
     try {
-        // Use dbQuery for Realtime Database queries
+        // Use dbQuery for Realtime Database queries and get() to fetch
         const loansSnapshot = await get(dbQuery(loansRef, orderByChild("customerPhone"), equalTo(customer.phone)));
         if (loansSnapshot.exists()) {
             const loans = loansSnapshot.val();
@@ -116,7 +116,7 @@ async function renderCustomerCard(customer) {
     // Get total purchases from Realtime Database
     let totalPurchases = 0;
     try {
-        // Use dbQuery for Realtime Database queries
+        // Use dbQuery for Realtime Database queries and get() to fetch
         const salesSnapshot = await get(dbQuery(salesRef, orderByChild("customerPhone"), equalTo(customer.phone)));
         if (salesSnapshot.exists()) {
             const sales = salesSnapshot.val();
