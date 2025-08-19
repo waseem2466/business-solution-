@@ -1,5 +1,6 @@
 // This file is loaded by loan.html
-import { ref, orderByChild, equalTo, once } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+// Correct imports for Realtime Database modular SDK
+import { ref, query as dbQuery, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 // This function is now exported to be used by other scripts
 // It accepts loansRef, paymentsRef, and loanListDiv as arguments
@@ -11,8 +12,8 @@ async function loadLoansForCustomer(customerPhone, loansRef, paymentsRef, loanLi
   loanListDiv.innerHTML = "<p>Loading loans...</p>";
 
   try {
-    // Query loans by customerPhone in Realtime Database
-    const loansSnapshot = await once(query(loansRef, orderByChild("customerPhone"), equalTo(customerPhone)));
+    // Query loans by customerPhone in Realtime Database using dbQuery and get
+    const loansSnapshot = await get(dbQuery(loansRef, orderByChild("customerPhone"), equalTo(customerPhone)));
     loanListDiv.innerHTML = "";
 
     if (!loansSnapshot.exists()) {
@@ -26,8 +27,8 @@ async function loadLoansForCustomer(customerPhone, loansRef, paymentsRef, loanLi
         loan.paidAmount = Number(loan.paidAmount) || 0;
         loan.balance = Number(loan.balance) || loan.totalAmount;
 
-        // Fetch payments for this specific loan
-        const paymentsSnapshot = await once(query(paymentsRef, orderByChild("loanId"), equalTo(loanId)));
+        // Fetch payments for this specific loan using dbQuery and get
+        const paymentsSnapshot = await get(dbQuery(paymentsRef, orderByChild("loanId"), equalTo(loanId)));
         const payments = paymentsSnapshot.exists() ? Object.values(paymentsSnapshot.val()) : [];
 
         const div = document.createElement("div");
