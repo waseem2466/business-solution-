@@ -4,7 +4,14 @@ import { getDatabase, ref, orderByChild, equalTo, once } from "https://www.gstat
 
 // YOUR FIREBASE CONFIG
 const firebaseConfig = {
-    // Paste your firebase config here
+    apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
+    authDomain: "wr-smile-shop.firebaseapp.com",
+    databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
+    projectId: "wr-smile-shop",
+    storageBucket: "wr-smile-shop.firebasestorage.app",
+    messagingSenderId: "299864260187",
+    appId: "1:299864260187:web:fa6af65ef95674aff1097e",
+    measurementId: "G-3Z38G6MCYJ"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -20,13 +27,31 @@ const addCustomerBtn = document.getElementById("add-customer-btn");
 const addCustomerModal = document.getElementById("add-customer-modal");
 const addCustomerForm = document.getElementById("add-customer-form");
 const customerSearchInput = document.getElementById("customer-search");
+const pageLoader = document.getElementById("page-loader");
 
+
+// Utility functions (copied from other files for consistency)
 function showCustomModal(modal) {
+    modal.classList.add('show');
     modal.classList.remove('hidden');
 }
 function hideCustomModal(modal) {
-    modal.classList.add('hidden');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
 }
+
+function showLoader() {
+    pageLoader.classList.remove('hidden');
+}
+
+function hideLoader() {
+    setTimeout(() => {
+        pageLoader.classList.add('hidden');
+    }, 300); 
+}
+
 
 async function renderCustomerCard(customer) {
     const card = document.createElement("div");
@@ -34,22 +59,30 @@ async function renderCustomerCard(customer) {
     
     // Get total outstanding loans from Realtime Database
     let totalPendingLoan = 0;
-    const loansSnapshot = await once(query(loansRef, orderByChild("customerPhone"), equalTo(customer.phone)));
-    if (loansSnapshot.exists()) {
-        const loans = loansSnapshot.val();
-        for (const loan of Object.values(loans)) {
-            totalPendingLoan += (Number(loan.balance) || loan.totalAmount);
+    try {
+        const loansSnapshot = await once(query(loansRef, orderByChild("customerPhone"), equalTo(customer.phone)));
+        if (loansSnapshot.exists()) {
+            const loans = loansSnapshot.val();
+            for (const loan of Object.values(loans)) {
+                totalPendingLoan += (Number(loan.balance) || loan.totalAmount);
+            }
         }
+    } catch (error) {
+        console.error("Error fetching loans for customer:", customer.phone, error);
     }
     
     // Get total purchases from Realtime Database
     let totalPurchases = 0;
-    const salesSnapshot = await once(query(salesRef, orderByChild("customerPhone"), equalTo(customer.phone)));
-    if (salesSnapshot.exists()) {
-        const sales = salesSnapshot.val();
-        for (const sale of Object.values(sales)) {
-            totalPurchases += Number(sale.totalAmount);
+    try {
+        const salesSnapshot = await once(query(salesRef, orderByChild("customerPhone"), equalTo(customer.phone)));
+        if (salesSnapshot.exists()) {
+            const sales = salesSnapshot.val();
+            for (const sale of Object.values(sales)) {
+                totalPurchases += Number(sale.totalAmount);
+            }
         }
+    } catch (error) {
+        console.error("Error fetching sales for customer:", customer.phone, error);
     }
 
     card.innerHTML = `
@@ -68,6 +101,7 @@ async function renderCustomerCard(customer) {
 }
 
 async function loadCustomers() {
+    showLoader();
     customersListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Loading customers...</p>';
     try {
         const querySnapshot = await getDocs(customersCollection);
@@ -75,15 +109,18 @@ async function loadCustomers() {
         if (querySnapshot.empty) {
             customersListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No customers found.</p>';
         } else {
-            querySnapshot.forEach(async (doc) => {
+            const customerPromises = querySnapshot.docs.map(async (doc) => {
                 const customerData = { id: doc.id, ...doc.data() };
-                const card = await renderCustomerCard(customerData);
-                customersListDiv.appendChild(card);
+                return renderCustomerCard(customerData);
             });
+            const customerCards = await Promise.all(customerPromises);
+            customerCards.forEach(card => customersListDiv.appendChild(card));
         }
     } catch (error) {
         console.error("Error fetching customers: ", error);
         customersListDiv.innerHTML = '<p class="text-danger">Failed to load customers.</p>';
+    } finally {
+        hideLoader();
     }
 }
 
@@ -92,19 +129,35 @@ document.getElementById("close-add-modal").addEventListener("click", () => hideC
 
 addCustomerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = document.getElementById("customer-name").value;
-    const phone = document.getElementById("customer-phone").value;
-    const email = document.getElementById("customer-email").value;
+    const name = document.getElementById("customer-name").value.trim();
+    const phone = document.getElementById("customer-phone").value.trim();
+    const email = document.getElementById("customer-email").value.trim();
 
+    if (!name || !phone) {
+        alert("Name and Phone are required.");
+        return;
+    }
+
+    showLoader();
     try {
+        // Check if phone number already exists
+        const q = query(customersCollection, where("phone", "==", phone));
+        const existingCustomers = await getDocs(q);
+        if (!existingCustomers.empty) {
+            alert("A customer with this phone number already exists.");
+            return;
+        }
+
         await addDoc(customersCollection, { name, phone, email });
         alert("Customer added successfully!");
         hideCustomModal(addCustomerModal);
         addCustomerForm.reset();
-        loadCustomers();
+        loadCustomers(); // Reload the list
     } catch (error) {
         console.error("Error adding customer: ", error);
         alert("Failed to add customer.");
+    } finally {
+        hideLoader();
     }
 });
 
@@ -113,7 +166,7 @@ customerSearchInput.addEventListener('input', async (e) => {
     const customerCards = customersListDiv.querySelectorAll('.customer-card');
     customerCards.forEach(card => {
         const name = card.querySelector('h3').textContent.toLowerCase();
-        const phone = card.querySelector('p').textContent.toLowerCase();
+        const phone = card.querySelector('p').textContent.toLowerCase(); // Assuming phone is in a <p> tag
         if (name.includes(queryText) || phone.includes(queryText)) {
             card.style.display = '';
         } else {
@@ -122,4 +175,13 @@ customerSearchInput.addEventListener('input', async (e) => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", loadCustomers);
+document.addEventListener("DOMContentLoaded", () => {
+    loadCustomers();
+    // Failsafe to hide loader
+    setTimeout(() => {
+        if (!pageLoader.classList.contains('hidden')) {
+            pageLoader.classList.add('hidden');
+            console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
+        }
+    }, 10000); // Max 10 seconds load time
+});

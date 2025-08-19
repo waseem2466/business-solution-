@@ -23,687 +23,1130 @@
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Playfair Display', serif; /* Elegant serif for headings */
       font-weight: 700;
-      color: #2c5282; /* Deep blue for titles */
-      letter-spacing: 0.5px; /* Subtle letter spacing */
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Soft text shadow */
     }
 
-    /* Main Container Styling */
-    .main-container {
-      max-width: 1000px; /* Wider container */
-      width: 100%;
-      background: #ffffff;
-      padding: 2.5rem 2rem; /* More generous padding */
-      border-radius: 24px; /* More rounded corners */
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
-      margin-top: 30px; /* Space from top */
-      margin-bottom: 30px; /* Space from bottom */
-      position: relative;
-      overflow: hidden; /* For subtle background patterns if desired */
-      z-index: 1; /* Ensure content is above pseudo-element */
+    /* Accent Color (Teal Example) */
+    :root {
+      --accent-color: #2dd4bf; /* Example Teal */
+      --accent-hover-color: #14b8a6;
+      --danger-red: #ef4444;
+      --primary-blue: #4299e1;
     }
-    .main-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
+
+    /* Header Styling */
+    .header {
+        background: linear-gradient(to right, #1a202c, #2d3748); /* Darker, sophisticated gradient */
+        color: #e2e8f0;
+        padding: 1rem 2rem;
         width: 100%;
-        height: 100%;
-        background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234a5568" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); /* Subtle geometric pattern */
-        opacity: 0.8;
-        z-index: -1; /* Place behind content */
-        pointer-events: none;
-    }
-
-    /* Heading Styling */
-    h2 {
-      text-align: center;
-      font-weight: 700;
-      color: #2c5282; /* Deep blue for titles */
-      margin-bottom: 2.5rem; /* More space below title */
-      letter-spacing: 1px;
-      font-size: 2.5rem; /* Larger heading */
-      text-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Input and Button Focus Styles */
-    input, button, select {
-      transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transitions */
-    }
-    input:focus, select:focus {
-      border-color: #4299e1; /* Elegant blue focus border */
-      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3); /* Subtle blue glow */
-      outline: none;
-    }
-
-    /* Custom Button Styles for Luxury */
-    .btn-primary-custom {
-      background: linear-gradient(to right, #4299e1, #3182ce); /* Blue gradient */
-      border: none;
-      font-weight: 600;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px; /* More rounded */
-      box-shadow: 0 8px 20px rgba(66, 153, 225, 0.3); /* Soft shadow */
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-size: 1.05rem;
-    }
-    .btn-primary-custom:hover {
-      background: linear-gradient(to right, #3182ce, #2b6cb0); /* Darker gradient on hover */
-      transform: translateY(-3px); /* Subtle lift effect */
-      box-shadow: 0 12px 25px rgba(66, 153, 225, 0.4); /* Stronger shadow on hover */
-    }
-    .btn-primary-custom:active {
-        transform: translateY(0); /* Return to original position on click */
-        box-shadow: 0 5px 15px rgba(66, 153, 225, 0.2);
-    }
-
-    .btn-danger-custom {
-      background-color: #ef4444; /* Tailwind red-500 */
-      border: none;
-      font-weight: 500;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 8px; /* Slightly less rounded than primary for distinction */
-      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
-      cursor: pointer;
-    }
-    .btn-danger-custom:hover {
-      background-color: #dc2626; /* Tailwind red-600 */
-      transform: scale(1.05); /* Slight scale for emphasis */
-      box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
-    }
-
-    .btn-secondary-custom {
-        background-color: #6b7280; /* Tailwind gray-500 */
-        color: white;
-        padding: 0.75rem 1.5rem;
+        max-width: 960px; /* Consistent max-width for main container */
         border-radius: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 8px 20px rgba(107, 114, 128, 0.2);
-    }
-    .btn-secondary-custom:hover {
-        background-color: #4b5563; /* Tailwind gray-700 */
-        transform: translateY(-3px);
-        box-shadow: 0 12px 25px rgba(107, 114, 128, 0.3);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
     }
 
-    /* Table Styling for Luxury */
-    .table-custom {
+    .header .logo {
+        height: 50px;
+        width: auto;
+    }
+
+    .header .nav a {
+        color: #cbd5e0;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        margin-left: 10px;
+    }
+
+    .header .nav a:hover, .header .nav a.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    /* --- 4. Main Container & Section Titles --- */
+    .container {
+      background-color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      padding: 3rem;
       width: 100%;
-      border-collapse: separate; /* Use separate for rounded corners */
-      border-spacing: 0; /* No space between cells */
-      border-radius: 16px; /* Rounded table corners */
-      overflow: hidden; /* Ensures content respects border-radius */
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1); /* Soft table shadow */
-      margin-top: 20px;
-      table-layout: fixed; /* Fixed column width */
-      word-wrap: break-word; /* Wrap long words */
-      background-color: #f8fafc; /* Light background for table body */
-    }
-    .table-custom thead {
-      background: linear-gradient(to right, #2c5282, #4299e1); /* Dark blue gradient header */
-      color: white;
-      font-weight: 600;
-      font-size: 1.05rem;
-    }
-    .table-custom th, .table-custom td {
-      padding: 1rem 0.75rem; /* More padding in cells */
-      text-align: center;
-      border-bottom: 1px solid rgba(226, 232, 240, 0.7); /* Subtle row separators */
-      border-right: 1px solid rgba(226, 232, 240, 0.7); /* Subtle column separators */
-    }
-    .table-custom th:last-child, .table-custom td:last-child {
-        border-right: none; /* No right border on last column */
-    }
-    .table-custom tbody tr:hover {
-      background-color: #e6f0ff; /* Light blue on hover */
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .table-custom tbody tr:last-child td {
-        border-bottom: none; /* No bottom border on last row */
-    }
-    .text-start-col {
-        text-align: left; /* Align product name to left */
+      max-width: 900px; /* Wider for more content */
+      margin: 40px 0;
+      position: relative; /* For absolutely positioned elements inside */
     }
 
-    /* Custom Modal styles */
+    .section-title {
+      text-align: center;
+      color: #1a202c;
+      font-size: 2.5rem;
+      margin-bottom: 2.5rem;
+      letter-spacing: -0.05rem;
+    }
+
+    /* --- 5. Form Elements --- */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: var(--text-dark);
+      transition: all 0.3s ease;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+      background-color: #f7fafc;
+    }
+
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3);
+      outline: none;
+      background-color: #ffffff;
+    }
+    .form-input.is-invalid {
+        border-color: var(--danger-red);
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+    }
+
+    /* --- 6. Buttons --- */
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+      color: white;
+      box-shadow: 0 4px 10px rgba(45, 212, 191, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(45, 212, 191, 0.4);
+      background: linear-gradient(90deg, var(--accent-hover), var(--accent-color));
+    }
+
+    .btn-primary-custom { /* Used for specific buttons like Search Loan */
+        background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+        color: white;
+        box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3);
+    }
+
+    .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(66, 153, 225, 0.4);
+        background: linear-gradient(90deg, var(--dark-blue), var(--primary-blue));
+    }
+
+
+    .btn-secondary {
+      background-color: #edf2f7;
+      color: #4a5568;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-secondary:hover {
+      background-color: #e2e8f0;
+      color: #2d3748;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary-custom { /* For special secondary buttons like add product row in loan */
+      background-color: #cbd5e0;
+      color: #334155;
+      border: 1px solid #a0aec0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-secondary-custom:hover {
+      background-color: #a0aec0;
+      color: #1a202c;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-red);
+      color: white;
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-block {
+      display: block;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    /* --- 7. Flexbox & Layout Utilities --- */
+    .flex-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap; /* Allow wrapping on small screens */
+    }
+    .flex-container > * {
+        flex-grow: 1;
+    }
+    .flex-container .form-input {
+        flex-grow: 2; /* Search input takes more space */
+    }
+
+    .input-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .input-group .form-input {
+      flex-grow: 1;
+    }
+
+    .customer-name-display {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a202c;
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    /* --- 8. Product & Customer Lists (Common Styles) --- */
+    .product-list, .customer-list, .loan-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .product-card, .customer-card, .loan-card {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex; /* For loan card header alignment */
+        flex-direction: column; /* For stacking content in cards */
+    }
+    .product-card:hover, .customer-card:hover, .loan-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .product-card h3, .customer-card h3, .loan-card h3 {
+        font-size: 1.6rem;
+        margin-top: 0;
+        color: #1a202c;
+        margin-bottom: 0.5rem;
+    }
+    .product-card p, .customer-card p, .loan-card p {
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Specific product card styles */
+    .product-card .stock-qty {
+        font-weight: 600;
+        color: var(--primary-blue);
+    }
+    .product-card .stock-low {
+        color: var(--danger-red);
+        font-weight: 700;
+    }
+    .product-card .actions {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 0.8rem;
+    }
+
+    /* Specific Customer Card Styles */
+    .customer-card {
+        cursor: pointer; /* Indicate clickable */
+    }
+    .customer-card .loan-info {
+        font-weight: bold;
+        color: var(--danger-red);
+        margin-top: 10px;
+    }
+    .customer-card .purchase-info {
+        font-weight: bold;
+        color: var(--primary-blue);
+    }
+
+    /* Specific Loan Card Styles */
+    .loan-card {
+        border: 1px solid #e2e8e0;
+    }
+    .loan-card .loan-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .loan-card .loan-id {
+        font-weight: 600;
+        color: #4a5568;
+        font-size: 0.9rem;
+    }
+    .loan-card .loan-status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 9999px; /* Pill shape */
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: white;
+    }
+    .loan-card .loan-status-badge.pending {
+        background-color: var(--danger-red);
+    }
+    .loan-card .loan-status-badge.paid {
+        background-color: #28a745; /* Green */
+    }
+    .loan-card .loan-details ul {
+        list-style: disc;
+        padding-left: 20px;
+        margin-top: 0.5rem;
+        color: #4a5568;
+        font-size: 0.95rem;
+    }
+    .loan-card .loan-summary {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px dashed #e2e8e0;
+    }
+    .loan-card .loan-summary p {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+    }
+    .loan-card .loan-summary strong {
+        color: #1a202c;
+    }
+    .loan-card .loan-balance {
+        font-weight: 700;
+    }
+    .loan-card .text-red-500 { color: #ef4444; }
+    .loan-card .text-green-500 { color: #28a745; }
+
+    .loan-card .payments-section {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px dashed #e2e8e0;
+    }
+    .loan-card .payments-section h5 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+    .loan-card .payments-list {
+        margin-top: 0.5rem;
+        background-color: #f7fafc;
+        border-radius: 8px;
+        padding: 1rem;
+        max-height: 150px;
+        overflow-y: auto;
+        border: 1px solid #e2e8e0;
+    }
+    .loan-card .payments-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .loan-card .payments-list li {
+        padding: 0.3rem 0;
+        border-bottom: 1px dotted #cbd5e0;
+        font-size: 0.9rem;
+        color: #4a5568;
+    }
+    .loan-card .payments-list li:last-child {
+        border-bottom: none;
+    }
+    .loan-card .loan-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
+    }
+    .loan-card .loan-actions .btn-sm {
+        padding: 0.6rem 1.2rem;
+    }
+
+    /* Add Loan/Product Row styling */
+    .product-row {
+        display: flex;
+        gap: 0.8rem;
+        margin-bottom: 0.8rem;
+        align-items: center;
+    }
+    .product-row .product-name {
+        flex-grow: 3;
+    }
+    .product-row .product-qty, .product-row .product-price {
+        flex-grow: 1;
+        max-width: 80px; /* Limit width */
+        text-align: center;
+    }
+    .product-row .remove-product {
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--danger-red);
+        cursor: pointer;
+        line-height: 1;
+        padding: 0 5px;
+    }
+    .product-row .remove-product:hover {
+        color: #dc2626;
+    }
+
+    /* --- 9. Modals (Common Styles) --- */
     .modal-custom {
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 1050; /* Ensure it's on top */
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.6); /* This now acts as the backdrop */
-        display: flex; /* To center content */
-        align-items: center;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
         justify-content: center;
-        padding: 1rem;
-        overflow-x: hidden;
-        overflow-y: auto;
-        outline: 0;
-        opacity: 0; /* Initial state for transition */
-        transition: opacity 0.3s ease-in-out;
-    }
-    /* When shown, ensure it's flex and opaque */
-    .modal-custom:not(.hidden) {
-        opacity: 1; /* Fade in */
-    }
-    .modal-custom.hidden {
-        display: none; /* Hide completely when hidden */
+        align-items: center;
+        z-index: 1000;
         opacity: 0;
-        pointer-events: none; /* Ensure no clicks */
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-custom.show {
+        opacity: 1;
+        visibility: visible;
     }
 
     .modal-custom-content {
-        background-color: #fff;
-        border-radius: 16px; /* Rounded corners */
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Deep shadow */
-        max-width: 600px; /* Adjusted max width */
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        transform: translateY(-20px); /* Initial lift for animation */
-        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        opacity: 0; /* Start invisible for the content itself */
-        pointer-events: auto; /* Ensure content is clickable */
-    }
-    .modal-custom:not(.hidden) .modal-custom-content {
-        transform: translateY(0); /* Slide down */
-        opacity: 1; /* Fade in content */
+        background-color: #ffffff;
+        padding: 2.5rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        position: relative;
+        transform: translateY(-20px);
+        transition: transform 0.3s ease;
     }
 
-    .modal-custom-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #e2e8f0; /* Subtle border */
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #f0f4f8; /* Light header background */
-        border-radius: 16px 16px 0 0;
+    .modal-custom.show .modal-custom-content {
+        transform: translateY(0);
     }
+
+    .close-btn-custom {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #a0aec0;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .close-btn-custom:hover {
+        color: #2d3748;
+    }
+
     .modal-custom-title {
-        color: #2c5282;
-        font-weight: 700;
-        font-size: 1.8rem; /* Larger modal title */
-        letter-spacing: 0.5px;
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: #1a202c;
+        margin-bottom: 1.5rem;
+        text-align: center;
     }
-    .modal-custom-body {
-        padding: 1.5rem;
-    }
+
     .modal-custom-footer {
-        padding: 1.5rem;
-        border-top: 1px solid #e2e8f0;
+        margin-top: 2rem;
         display: flex;
-        justify-content: flex-end; /* Align buttons to end */
-        gap: 0.75rem; /* Spacing between buttons */
-    }
-    .form-label-custom {
-        font-weight: 600;
-        color: #2d3748; /* Dark grey for labels */
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-    .form-input-custom {
-        padding: 0.75rem 1rem;
-        border: 1px solid #cbd5e0; /* Subtle grey border */
-        border-radius: 8px; /* Rounded input fields */
-        width: 100%;
-        transition: all 0.3s ease;
-    }
-    .form-input-custom:focus {
-        border-color: #4299e1;
-        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
-    }
-    .invalid-feedback-custom {
-        color: #ef4444; /* Red for validation feedback */
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
+        justify-content: flex-end;
+        gap: 1rem;
     }
 
-    /* Back Button Styling */
-    .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: #4a5568; /* Dark grey */
-      color: white;
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      z-index: 10; /* Ensure it's above other content */
+    /* Specific for Confirm Modal */
+    #confirmModal .modal-custom-content {
+        max-width: 450px;
+        text-align: center;
     }
-    .back-button:hover {
-      background-color: #2d3748; /* Darker grey on hover */
-      transform: translateX(-5px); /* Slight slide effect */
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    #confirmModal .modal-custom-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    #confirmModal #confirmMessage {
+        font-size: 1.1rem;
+        color: #4a5568;
+        margin-bottom: 1.5rem;
+    }
+    #confirmModal .modal-custom-footer {
+        justify-content: center;
     }
 
-    /* Utility for hidden elements */
-    .hidden {
-        display: none !important;
-    }
-
-    /* Message Alert Styling */
-    .alert-message {
+    /* Custom Alert Styling */
+    #alert-container {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        color: white;
-        font-weight: 600;
-        z-index: 1000;
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        pointer-events: none; /* Allows clicks to pass through */
     }
-    .alert-message.show {
+
+    .custom-alert {
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        opacity: 0; /* Start hidden */
+        transform: translateY(20px); /* Start slightly below */
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        pointer-events: auto; /* Re-enable clicks for the alert itself */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .custom-alert.show {
         opacity: 1;
         transform: translateY(0);
     }
-    .alert-message.info { background-color: #3b82f6; } /* blue-500 */
-    .alert-message.success { background-color: #10b981; } /* emerald-500 */
-    .alert-message.error { background-color: #ef4444; } /* red-500 */
+
+    .custom-alert.info { background-color: #3498db; } /* Blue */
+    .custom-alert.success { background-color: #28a745; } /* Green */
+    .custom-alert.error { background-color: #dc3545; } /* Red */
+    .custom-alert.warning { background-color: #ffc107; color: #333; } /* Yellow */
+
+    /* Animation for alerts */
+    @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fade-out-down {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(20px); }
+    }
+
+    .animate-fade-in-up {
+        animation: fade-in-up 0.3s ease-out forwards;
+    }
+    .animate-fade-out-down {
+        animation: fade-out-down 0.3s ease-in forwards;
+    }
+
+    /* --- 10. Loader --- */
+    .page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .page-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
 
-    /* Responsive adjustments */
+    /* --- 11. Responsive Design --- */
+    @media (max-width: 1024px) {
+      .container {
+        padding: 2rem;
+      }
+    }
+
     @media (max-width: 768px) {
-        .main-container {
-            padding: 1.5rem;
-            border-radius: 16px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-        .table-custom th, .table-custom td {
-            padding: 0.75rem 0.5rem;
-            font-size: 0.9rem;
-        }
-        .btn-primary-custom, .btn-secondary-custom {
-            width: 100%;
-            margin-bottom: 0.75rem;
-            justify-content: center;
-        }
-        .btn-danger-custom {
-            width: 100%;
-        }
-        .modal-custom-content {
-            max-width: 95%;
-            padding: 1rem;
-        }
-        .modal-custom-header, .modal-custom-footer, .modal-custom-body {
-            padding: 1rem;
-        }
-        .modal-custom-title {
-            font-size: 1.5rem;
-        }
-        .back-button {
-            top: 10px;
-            left: 10px;
-            padding: 0.6rem 0.8rem;
-            font-size: 0.9rem;
-        }
+      body {
+        padding: 10px;
+      }
+      
+      .header {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      .header .nav {
+          margin-top: 15px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+      }
+      .header .nav a {
+          margin: 5px;
+          padding: 0.4rem 0.8rem;
+          font-size: 0.9rem;
+      }
+
+      .container {
+        padding: 1.5rem;
+        border-radius: 16px;
+        margin: 20px 0;
+      }
+      
+      .section-title {
+        font-size: 1.4rem;
+      }
+      
+      .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+      }
+      
+      .flex-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .input-group {
+          flex-direction: column;
+          gap: 1rem;
+      }
+      .input-group .form-input {
+          width: 100%;
+      }
+
+      .product-list, .customer-list, .loan-list {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .modal-custom-content {
+          padding: 1.5rem;
+          max-width: 95%;
+      }
+      .modal-custom-title {
+          font-size: 1.5rem;
+      }
+
+      /* Billing specific responsive */
+      .cart-item {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      
+      .cart-item-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      
+      .qty-input {
+        width: 50px;
+      }
+      
+      .total-line {
+        font-size: 0.95rem;
+      }
+      .total-line:last-child {
+          font-size: 1.1rem;
+      }
+      .product-row {
+          flex-wrap: wrap;
+      }
+      .product-row .product-name {
+          width: 100%;
+      }
+      .product-row .product-qty, .product-row .product-price {
+          max-width: unset;
+          width: calc(50% - 0.4rem);
+      }
+      .product-row .remove-product {
+          width: 100%;
+          text-align: right;
+      }
     }
   </style>
 </head>
 <body>
-
-<!-- Page Loader -->
-<div id="page-loader" class="fixed inset-0 bg-white bg-opacity-95 z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
-    <div class="spinner"></div>
-    <div class="mt-6 text-2xl text-gray-700 font-semibold animate-pulse tracking-wide">Loading Stock Data...</div>
-</div>
-
-<a href="index.html" class="back-button">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-    </svg>
-    Back to Dashboard
-</a>
-
-<div class="main-container">
-  <h2>📦 Product Stock Management</h2>
-  
-  <button id="add-product-btn" class="btn-primary-custom mb-6" type="button">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-    </svg>
-    Add New Product
-  </button>
-
-  <div class="overflow-x-auto rounded-lg shadow-lg">
-    <table class="table-custom">
-      <thead>
-        <tr>
-          <th style="width: 5%;">#</th>
-          <th style="width: 35%;">Product Name</th>
-          <th style="width: 15%;">Cost Price (Rs.)</th>
-          <th style="width: 15%;">Selling Price (Rs.)</th>
-          <th style="width: 15%;">Stock</th>
-          <th style="width: 15%;">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="stock-table-body" class="font-normal text-gray-700">
-        <!-- Products will be loaded here -->
-        <tr>
-            <td colspan="6" class="text-center py-4 text-gray-500">Loading products...</td>
-        </tr>
-      </tbody>
-    </table>
+  <div id="page-loader" class="page-loader">
+      <div class="spinner"></div>
   </div>
-</div>
 
-<!-- Custom Add Product Modal -->
-<div id="addProductModal" class="modal-custom hidden">
-  <!-- The modal-custom-backdrop is now integrated into .modal-custom CSS -->
-  <div class="modal-custom-content">
-    <div class="modal-custom-header">
-      <h5 class="modal-custom-title">Add New Product</h5>
-      <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeAddProductModal">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
+  <header class="header">
+        <img src="logo.png.webp" alt="WR Smile Logo" class="logo">
+        <nav class="nav">
+            <a href="index.html">Dashboard</a>
+            <a href="billing.html">Billing</a>
+            <a href="stock.html" class="active">Stock</a>
+            <a href="customers.html">Customers</a>
+            <a href="loan.html">Loans</a>
+        </nav>
+  </header>
+
+  <div class="container">
+    <h1 class="section-title">Manage Stock</h1>
+
+    <div class="flex-container">
+      <input type="text" id="product-search" class="form-input" placeholder="Search products by name or code">
+      <button id="add-product-btn" class="btn btn-primary">Add New Product</button>
     </div>
-    <form id="add-product-form" class="needs-validation" novalidate>
-      <div class="modal-custom-body">
-        <div class="mb-4">
-          <label for="productName" class="form-label-custom">Product Name</label>
-          <input id="productName" class="form-input-custom" required autocomplete="off" />
-          <div class="invalid-feedback-custom">Please enter product name.</div>
-        </div>
-        <div class="mb-4">
-          <label for="productCostPrice" class="form-label-custom">Cost Price (Rs.)</label>
-          <input id="productCostPrice" type="number" min="0" step="0.01" class="form-input-custom" required autocomplete="off" />
-          <div class="invalid-feedback-custom">Please enter valid cost price.</div>
-        </div>
-        <div class="mb-4">
-          <label for="productPrice" class="form-label-custom">Selling Price (Rs.)</label>
-          <input id="productPrice" type="number" min="0" step="0.01" class="form-input-custom" required autocomplete="off" />
-          <div class="invalid-feedback-custom">Please enter valid selling price.</div>
-        </div>
-        <div class="mb-4">
-          <label for="productStock" class="form-label-custom">Stock Quantity</label>
-          <input id="productStock" type="number" min="0" step="1" class="form-input-custom" required autocomplete="off" />
-          <div class="invalid-feedback-custom">Please enter stock quantity.</div>
-        </div>
-      </div>
-      <div class="modal-custom-footer">
-        <button type="button" class="btn-secondary-custom" id="closeAddProductModal2">Cancel</button>
-        <button type="submit" class="btn-primary-custom">Add Product</button>
-      </div>
-    </form>
-  </div>
-</div>
 
-<!-- Custom Confirmation Modal (for Delete) -->
-<div id="confirmModal" class="modal-custom hidden">
-    <!-- The modal-custom-backdrop is now integrated into .modal-custom CSS -->
+    <div id="product-list" class="product-list">
+      <p class="text-gray-500 text-center py-4">Loading products...</p>
+      <!-- Products will be dynamically loaded here -->
+    </div>
+  </div>
+
+  <!-- Add/Edit Product Modal -->
+  <div id="add-product-modal" class="modal-custom hidden">
     <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Confirm Deletion</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeConfirmModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+      <span class="close-btn-custom" id="close-add-modal">&times;</span>
+      <h5 class="modal-custom-title" id="product-modal-title">Add New Product</h5>
+      <form id="add-product-form">
+        <input type="hidden" id="product-id">
+        <div class="form-group">
+          <label for="product-name" class="form-label">Product Name</label>
+          <input type="text" id="product-name" class="form-input" required>
         </div>
-        <div class="modal-custom-body">
-            <p id="confirmMessage" class="text-gray-700 text-lg">Are you sure you want to delete this item?</p>
+        <div class="form-group">
+          <label for="product-code" class="form-label">Product Code (Optional)</label>
+          <input type="text" id="product-code" class="form-input">
+        </div>
+        <div class="form-group">
+          <label for="product-qty" class="form-label">Quantity</label>
+          <input type="number" id="product-qty" class="form-input" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="product-price" class="form-label">Selling Price (Rs)</label>
+          <input type="number" id="product-price" class="form-input" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="product-cost-price" class="form-label">Cost Price (Rs) (Optional)</label>
+          <input type="number" id="product-cost-price" class="form-input" step="0.01" min="0">
+        </div>
+        <div class="form-group">
+          <label for="low-stock-threshold" class="form-label">Low Stock Threshold</label>
+          <input type="number" id="low-stock-threshold" class="form-input" min="0" value="5">
         </div>
         <div class="modal-custom-footer">
-            <button type="button" class="btn-secondary-custom" id="cancelConfirm">No, Cancel</button>
-            <button type="button" class="btn-danger-custom" id="confirmDelete">Yes, Delete</button>
+          <button type="submit" class="btn btn-primary">Save Product</button>
         </div>
+      </form>
     </div>
-</div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmModal" class="modal-custom hidden">
+    <div class="modal-custom-content">
+      <span class="close-btn-custom" id="closeConfirmModal">&times;</span>
+      <h5 class="modal-custom-title">Confirm Action</h5>
+      <p id="confirmMessage">Are you sure you want to delete this product?</p>
+      <div class="modal-custom-footer">
+        <button class="btn btn-secondary" id="cancelConfirm">Cancel</button>
+        <button class="btn btn-danger" id="confirmDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Alert Container -->
+  <div id="alert-container"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-<!-- Firebase SDK Imports -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    // Firebase configuration (REPLACE WITH YOUR ACTUAL CONFIG)
+    const firebaseConfig = {
+        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
+        authDomain: "wr-smile-shop.firebaseapp.com",
+        databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
+        projectId: "wr-smile-shop",
+        storageBucket: "wr-smile-shop.firebasestorage.app",
+        messagingSenderId: "299864260187",
+        appId: "1:299864260187:web:fa6af65ef95674aff1097e",
+        measurementId: "G-3Z38G6MCYJ"
+    };
 
-  // Firebase Configuration - Using the exact config provided by the user
-  const firebaseConfig = {
-    apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
-    authDomain: "wr-smile-shop.firebaseapp.com",
-    databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
-    projectId: "wr-smile-shop",
-    storageBucket: "wr-smile-shop.firebasestorage.app",
-    messagingSenderId: "299864260187",
-    appId: "1:299864260187:web:fa6af65ef95674aff1097e",
-    measurementId: "G-3Z38G6MCYJ"
-  };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app); // Initialize Auth
+    const productsCollection = collection(db, "products");
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    // DOM Elements
+    const productListDiv = document.getElementById("product-list");
+    const addProductBtn = document.getElementById("add-product-btn");
+    const addProductModal = document.getElementById("add-product-modal");
+    const closeAddModalBtn = document.getElementById("close-add-modal");
+    const addProductForm = document.getElementById("add-product-form");
+    const productIdInput = document.getElementById("product-id");
+    const productNameInput = document.getElementById("product-name");
+    const productCodeInput = document.getElementById("product-code");
+    const productQtyInput = document.getElementById("product-qty");
+    const productPriceInput = document.getElementById("product-price");
+    const productCostPriceInput = document.getElementById("product-cost-price");
+    const lowStockThresholdInput = document.getElementById("low-stock-threshold");
+    const productModalTitle = document.getElementById("product-modal-title");
+    const productSearchInput = document.getElementById("product-search");
 
-  // Global variable for Canvas App ID. Assuming a consistent pattern across your pages.
-  const appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId; // Fallback to projectId if __app_id is not set by Canvas
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const cancelConfirmBtn = document.getElementById('cancelConfirm');
+    const confirmDeleteBtn = document.getElementById('confirmDelete');
+    const closeConfirmModalBtn = document.getElementById('closeConfirmModal');
 
-  // Firestore Collection Reference
-  // Stock data is public across the app, stored under /artifacts/{appId}/public/data/products
-  const productsCollectionRef = collection(db, `artifacts/${appId}/public/data/products`);
+    const pageLoader = document.getElementById("page-loader");
 
-  const tbody = document.getElementById('stock-table-body');
-  const addProductForm = document.getElementById('add-product-form');
-  const addProductModal = document.getElementById('addProductModal');
-  const confirmModal = document.getElementById('confirmModal');
-  let productToDeleteId = null; // To store the ID of the product to be deleted
+    let productToDeleteId = null; // Store ID of product to be deleted
+    let isAuthenticated = false; // Track authentication state
 
-  // --- Utility Functions for UI feedback ---
+    // --- Utility Functions ---
+    function showLoader() {
+        pageLoader.classList.remove('hidden');
+    }
 
-  /**
-   * Displays a temporary message to the user.
-   * @param {string} message - The message content.
-   * @param {'success' | 'error' | 'info'} type - Type of message for styling.
-   */
-  function showMessage(message, type = 'info') {
-      const alertDiv = document.createElement('div');
-      alertDiv.className = `alert-message ${type}`;
-      alertDiv.textContent = message;
-      document.body.appendChild(alertDiv);
-      setTimeout(() => {
-          alertDiv.classList.add('show');
-      }, 10); // Small delay to trigger transition
-      setTimeout(() => {
-          alertDiv.classList.remove('show');
-          alertDiv.addEventListener('transitionend', () => alertDiv.remove());
-      }, 3000);
-  }
+    function hideLoader() {
+        setTimeout(() => { // Small delay for smoother transition
+            pageLoader.classList.add('hidden');
+        }, 300);
+    }
 
-  /**
-   * Shows a custom modal.
-   * @param {HTMLElement} modalElement - The main modal container (which also acts as backdrop).
-   */
-  function showCustomModal(modalElement) {
-      modalElement.classList.remove('hidden'); // Make it visible and apply backdrop styles
-      // Trigger a reflow to ensure `display: flex` is applied before transition
-      void modalElement.offsetWidth;
-      // Now apply the content's initial state for transition
-      const content = modalElement.querySelector('.modal-custom-content');
-      content.style.transform = 'translateY(-20px)';
-      content.style.opacity = '0';
-      // After a tiny delay, transition to final state
-      setTimeout(() => {
-          content.style.transform = 'translateY(0)';
-          content.style.opacity = '1';
-          // Optional: focus the first input field
-          const firstInput = content.querySelector('input');
-          if (firstInput) {
-              firstInput.focus();
-          }
-      }, 10);
-  }
+    function showCustomModal(modal) {
+        modal.classList.add('show');
+        modal.classList.remove('hidden');
+    }
 
-  /**
-   * Hides a custom modal.
-   * @param {HTMLElement} modalElement - The main modal container.
-   */
-  function hideCustomModal(modalElement) {
-      const content = modalElement.querySelector('.modal-custom-content');
-      content.style.transform = 'translateY(-20px)';
-      content.style.opacity = '0';
-      // Wait for the content's transition to complete, then hide the entire modal
-      setTimeout(() => {
-          modalElement.classList.add('hidden');
-      }, 350); // Match content's transition duration (0.3s + small buffer)
-  }
+    function hideCustomModal(modal) {
+        modal.classList.remove('show');
+        setTimeout(() => { // Give time for transition to complete before hiding
+            modal.classList.add('hidden');
+        }, 300);
+    }
 
-  // --- Product Management Functions ---
+    function showMessage(message, type = 'info', duration = 3000) {
+        const alertContainer = document.getElementById('alert-container');
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `custom-alert ${type} show`; // Add 'show' class to immediately display
+        alertDiv.textContent = message;
+        alertContainer.appendChild(alertDiv);
 
-  /**
-   * Loads products from Firestore and updates the table in real-time.
-   */
-  function loadProducts() {
-    // onSnapshot provides real-time updates
-    onSnapshot(productsCollectionRef, (snapshot) => {
-      tbody.innerHTML = ''; // Clear existing rows
-      if (snapshot.empty) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">No products found. Add some new products!</td></tr>`;
-        return;
-      }
+        setTimeout(() => {
+            alertDiv.classList.remove('show');
+            alertDiv.addEventListener('transitionend', () => alertDiv.remove());
+        }, duration);
+    }
 
-      let index = 1;
-      snapshot.forEach(doc => {
-        const product = doc.data();
-        const productId = doc.id; // Get the Firestore document ID
-        tbody.innerHTML += `
-          <tr>
-            <td>${index++}</td>
-            <td class="text-start-col">${product.name}</td>
-            <td>Rs. ${parseFloat(product.costPrice || 0).toFixed(2)}</td>
-            <td>Rs. ${parseFloat(product.price || 0).toFixed(2)}</td>
-            <td>${product.stock || 0}</td>
-            <td class="flex justify-center items-center h-full gap-2">
-              <button class="btn-danger-custom" data-product-id="${productId}" data-product-name="${product.name}">Delete</button>
-            </td>
-          </tr>
-        `;
-      });
-
-      // Attach event listeners for delete buttons (delegated)
-      tbody.querySelectorAll('.btn-danger-custom').forEach(button => {
-        button.addEventListener('click', (event) => {
-          productToDeleteId = event.target.dataset.productId;
-          const productName = event.target.dataset.productName;
-          document.getElementById('confirmMessage').textContent = `Are you sure you want to delete "${productName}"?`;
-          showCustomModal(confirmModal);
-        });
-      });
-    }, (error) => {
-      console.error("Error loading products from Firestore: ", error);
-      showMessage("Failed to load products. Check console and Firebase rules.", "error");
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Error loading products.</td></tr>`;
+    // --- Firebase Authentication Listener ---
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in (anonymously or otherwise)
+            isAuthenticated = true;
+            console.log("Firebase authenticated as:", user.uid);
+            loadProducts(); // Load products once authenticated
+        } else {
+            // User is signed out, try to sign in anonymously
+            isAuthenticated = false;
+            signInAnonymously(auth).then(() => {
+                console.log("Signed in anonymously.");
+            }).catch((error) => {
+                console.error("Anonymous sign-in failed:", error);
+                showMessage("Failed to sign in. Product data may not be accessible.", "error");
+                hideLoader(); // Hide loader if sign-in fails
+            });
+        }
     });
-  }
 
-  /**
-   * Handles product deletion after confirmation.
-   */
-  async function confirmDeleteProduct() {
-    if (productToDeleteId) {
-      try {
-        await deleteDoc(doc(productsCollectionRef, productToDeleteId));
-        showMessage("Product deleted successfully!", "success");
-        productToDeleteId = null; // Clear the ID
-      } catch (err) {
-        console.error("Error deleting product: ", err);
-        showMessage('Error deleting product: ' + err.message, "error");
-      } finally {
-        hideCustomModal(confirmModal);
-      }
-    }
-  }
 
-  // --- Event Listeners ---
+    // --- Product Loading and Display ---
+    async function loadProducts() {
+        if (!isAuthenticated) {
+            productListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Waiting for authentication to load products...</p>';
+            return;
+        }
 
-  // Show Add Product Modal
-  document.getElementById('add-product-btn').addEventListener('click', () => {
-    // Reset form and validation before showing
-    addProductForm.reset();
-    addProductForm.classList.remove('was-validated');
-    showCustomModal(addProductModal);
-  });
-
-  // Close Add Product Modal
-  document.getElementById('closeAddProductModal').addEventListener('click', () => hideCustomModal(addProductModal));
-  document.getElementById('closeAddProductModal2').addEventListener('click', () => hideCustomModal(addProductModal));
-
-  // Add Product Form Submit Handler
-  addProductForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    // HTML5 validation check (controlled by `novalidate` on form and manual `checkValidity`)
-    if (!addProductForm.checkValidity()) {
-      addProductForm.classList.add('was-validated');
-      showMessage("Please fill all required fields correctly.", "error");
-      return;
+        showLoader();
+        productListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Loading products...</p>';
+        try {
+            const querySnapshot = await getDocs(productsCollection);
+            productListDiv.innerHTML = ''; // Clear existing content
+            if (querySnapshot.empty) {
+                productListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No products found. Add a new product!</p>';
+            } else {
+                querySnapshot.forEach((doc) => {
+                    renderProductCard(doc);
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching products:", error);
+            showMessage('Failed to load products: ' + error.message, "error");
+            productListDiv.innerHTML = '<p class="text-danger text-center py-4">Error loading products.</p>';
+        } finally {
+            hideLoader();
+        }
     }
 
-    const name = document.getElementById('productName').value.trim();
-    const costPrice = parseFloat(document.getElementById('productCostPrice').value);
-    const price = parseFloat(document.getElementById('productPrice').value);
-    const stock = parseInt(document.getElementById('productStock').value);
+    function renderProductCard(doc) {
+        const product = doc.data();
+        const card = document.createElement("div");
+        card.className = "product-card";
+        
+        const isLowStock = product.qty <= (product.lowStockThreshold || 5); // Default threshold 5
 
-    // Additional validation (though HTML5 `required` and `min` attributes help)
-    if (!name || isNaN(costPrice) || isNaN(price) || isNaN(stock)) {
-      showMessage('Please fill all fields correctly.', "error");
-      return;
+        card.innerHTML = `
+            <h3>${product.name}</h3>
+            ${product.code ? `<p><strong>Code:</strong> ${product.code}</p>` : ''}
+            <p><strong>Price:</strong> Rs. ${product.price.toFixed(2)}</p>
+            <p><strong>Stock:</strong> <span class="stock-qty ${isLowStock ? 'stock-low' : ''}">${product.qty}</span></p>
+            <div class="actions">
+                <button class="btn btn-secondary btn-sm edit-product-btn" data-id="${doc.id}">Edit</button>
+                <button class="btn btn-danger btn-sm delete-product-btn" data-id="${doc.id}">Delete</button>
+            </div>
+        `;
+        productListDiv.appendChild(card);
     }
 
-    try {
-      await addDoc(productsCollectionRef, { name, costPrice, price, stock });
-      showMessage("Product added successfully!", "success");
-      addProductForm.reset();
-      addProductForm.classList.remove('was-validated');
-      hideCustomModal(addProductModal);
-    } catch (error) {
-      console.error("Failed to add product: ", error);
-      showMessage('Failed to add product: ' + error.message, "error");
+    // --- Add/Edit Product Modal ---
+    addProductBtn.addEventListener("click", () => {
+        if (!isAuthenticated) {
+            showMessage("Please wait for authentication to complete before adding products.", "warning");
+            return;
+        }
+        // Reset form and title for adding new product
+        addProductForm.reset();
+        productIdInput.value = '';
+        productModalTitle.textContent = "Add New Product";
+        addProductForm.classList.remove('was-validated'); // Remove Bootstrap validation classes
+        showCustomModal(addProductModal);
+    });
+
+    closeAddModalBtn.addEventListener("click", () => hideCustomModal(addProductModal));
+
+    productListDiv.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit-product-btn')) {
+            const productId = e.target.dataset.id;
+            editProduct(productId);
+        }
+        // Check if the delete button was clicked AND if the target is actually the button
+        else if (e.target.classList.contains('delete-product-btn') && e.target.tagName === 'BUTTON') {
+            productToDeleteId = e.target.dataset.id; // Store ID for deletion
+            confirmMessage.textContent = "Are you sure you want to delete this product? This action cannot be undone.";
+            showCustomModal(confirmModal);
+        }
+    });
+
+
+    async function editProduct(id) {
+        if (!isAuthenticated) {
+            showMessage("Please wait for authentication to complete before editing products.", "warning");
+            return;
+        }
+        showLoader();
+        try {
+            const docRef = doc(db, "products", id);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const product = docSnap.data();
+                productIdInput.value = id;
+                productNameInput.value = product.name;
+                productCodeInput.value = product.code || '';
+                productQtyInput.value = product.qty;
+                productPriceInput.value = product.price;
+                productCostPriceInput.value = product.costPrice || '';
+                lowStockThresholdInput.value = product.lowStockThreshold || 5;
+
+                productModalTitle.textContent = "Edit Product";
+                showCustomModal(addProductModal);
+            } else {
+                showMessage("Product not found.", "error");
+            }
+        } catch (error) {
+            console.error("Error fetching product for edit:", error);
+            showMessage('Failed to load product for editing: ' + error.message, "error");
+        } finally {
+            hideLoader();
+        }
     }
-  });
 
-  // Confirm Delete Modal actions
-  document.getElementById('cancelConfirm').addEventListener('click', () => hideCustomModal(confirmModal));
-  document.getElementById('confirmDelete').addEventListener('click', confirmDeleteProduct);
-  document.getElementById('closeConfirmModal').addEventListener('click', () => hideCustomModal(confirmModal));
+    addProductForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        if (!isAuthenticated) {
+            showMessage("Authentication in progress. Please wait and try again.", "warning");
+            return;
+        }
 
+        // Basic form validation
+        if (!addProductForm.checkValidity()) {
+            addProductForm.classList.add('was-validated');
+            return;
+        }
+        addProductForm.classList.remove('was-validated'); // Reset validation class
 
-  // Initial load of products on DOMContentLoaded
-  document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-    // Hide loader after a short delay, assuming products will load or error will show quickly
-    setTimeout(() => {
-        document.getElementById("page-loader").classList.add('hidden');
-    }, 1000); // Give 1 second for initial Firebase fetch
-  });
+        const id = productIdInput.value;
+        const name = productNameInput.value.trim();
+        const code = productCodeInput.value.trim();
+        const qty = parseInt(productQtyInput.value);
+        const price = parseFloat(productPriceInput.value);
+        const costPrice = parseFloat(productCostPriceInput.value) || 0;
+        const lowStockThreshold = parseInt(lowStockThresholdInput.value) || 5;
 
-  // Failsafe to hide loader
-  setTimeout(() => {
-      const loader = document.getElementById("page-loader");
-      if (loader && !loader.classList.contains('hidden')) {
-          loader.classList.add('hidden');
-          console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
-      }
-  }, 10000); // Max 10 seconds load time
-</script>
+        showLoader();
+        try {
+            if (id) {
+                // Update existing product
+                const productDocRef = doc(db, "products", id);
+                await updateDoc(productDocRef, {
+                    name,
+                    code,
+                    qty,
+                    price,
+                    costPrice,
+                    lowStockThreshold
+                });
+                showMessage("Product updated successfully!", "success");
+            } else {
+                // Add new product
+                await addDoc(productsCollection, {
+                    name,
+                    code,
+                    qty,
+                    price,
+                    costPrice,
+                    lowStockThreshold,
+                    createdAt: new Date().toISOString()
+                });
+                showMessage("Product added successfully!", "success");
+            }
+            addProductForm.reset();
+            hideCustomModal(addProductModal);
+            loadProducts(); // Reload the list
+        } catch (error) {
+            console.error("Failed to save product: ", error);
+            showMessage('Failed to save product: ' + error.message, "error");
+        } finally {
+            hideLoader();
+        }
+    });
 
+    // --- Delete Product ---
+    confirmDeleteBtn.addEventListener('click', confirmDeleteProduct);
+    cancelConfirmBtn.addEventListener('click', () => hideCustomModal(confirmModal));
+    closeConfirmModalBtn.addEventListener('click', () => hideCustomModal(confirmModal));
+
+    async function confirmDeleteProduct() {
+        if (!isAuthenticated) {
+            showMessage("Authentication in progress. Please wait and try again.", "warning");
+            hideCustomModal(confirmModal);
+            return;
+        }
+        if (!productToDeleteId) {
+            showMessage("No product selected for deletion.", "error");
+            hideCustomModal(confirmModal);
+            return;
+        }
+
+        showLoader();
+        try {
+            const productDocRef = doc(db, "products", productToDeleteId);
+            await deleteDoc(productDocRef);
+            showMessage("Product deleted successfully!", "success");
+            hideCustomModal(confirmModal);
+            productToDeleteId = null; // Clear the stored ID
+            loadProducts(); // Reload the list
+        }
+        catch (error) {
+            console.error("Error deleting product:", error);
+            showMessage('Failed to delete product: ' + error.message, "error");
+        } finally {
+            hideLoader();
+        }
+    }
+
+    // --- Search Products ---
+    productSearchInput.addEventListener('input', async (e) => {
+        const queryText = e.target.value.toLowerCase().trim();
+        const productCards = productListDiv.querySelectorAll('.product-card');
+        
+        // Simple client-side filtering for immediate feedback
+        productCards.forEach(card => {
+            const name = card.querySelector('h3').textContent.toLowerCase();
+            // Get the element that holds the code, check if it exists before trying to access nextSibling
+            const codeElement = card.querySelector('p strong:first-of-type'); 
+            const code = (codeElement && codeElement.nextSibling) ? codeElement.nextSibling.textContent.toLowerCase() : ''; 
+
+            if (name.includes(queryText) || code.includes(queryText)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Initial load of products on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // loadProducts() is now called by the onAuthStateChanged listener
+        // Failsafe to hide loader
+        setTimeout(() => {
+            const loader = document.getElementById("page-loader");
+            if (loader && !loader.classList.contains('hidden')) {
+                loader.classList.add('hidden');
+                console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
+            }
+        }, 10000); // Max 10 seconds load time
+    });
+  </script>
 </body>
 </html>

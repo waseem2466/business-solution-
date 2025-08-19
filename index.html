@@ -27,293 +27,292 @@
         /* Header Styling */
         header {
             background: linear-gradient(to right, #1a202c, #2d3748); /* Darker, sophisticated gradient */
-            color: #e2e8f0; /* Lighter text for contrast */
-            padding: 3rem 1.5rem; /* More padding */
-            border-radius: 0 0 40px 40px; /* More pronounced bottom curve */
+            color: #e2e8f0;
+            padding: 1rem 2rem;
+            width: 100%;
+            max-width: 960px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        header .logo {
+            height: 50px; /* Adjust logo size */
+            width: auto;
+        }
+
+        header nav a {
+            color: #cbd5e0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        header nav a:hover, header nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Main Content Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 960px;
+            padding: 20px;
+        }
+
+        .dashboard-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
             text-align: center;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Deeper, more diffused shadow */
-            width: 100%;
-            max-width: 1000px; /* Slightly wider header */
-            margin-bottom: 30px; /* More space below header */
-            position: relative; /* For subtle background patterns if desired later */
-            overflow: hidden;
-        }
-        header h1 {
-            letter-spacing: 3px; /* Wider letter spacing for elegance */
-            font-size: 3.2rem; /* Larger, more impactful title */
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle text shadow */
-        }
-        header p {
-            font-size: 1.25rem; /* Larger subtitle */
-            font-weight: 400; /* Lighter weight for subtitle */
-            opacity: 0.9;
-            margin-top: 0.5rem;
-        }
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234a5568" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); /* Subtle geometric pattern */
-            opacity: 0.1;
-            z-index: 0;
-            pointer-events: none;
-        }
-        header img {
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); /* Stronger shadow for logo */
-            z-index: 1; /* Bring logo above pattern */
-        }
-
-
-        /* Main Content & Card Styling */
-        .main-content {
-            flex-grow: 1;
-            padding: 4rem 1.5rem; /* More generous padding */
-            max-width: 1000px; /* Matches header width */
-            width: 100%;
-            display: grid; /* Use grid for better control */
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
-            gap: 30px; /* Increased gap between cards */
-            align-items: stretch; /* Cards stretch to equal height */
-            justify-content: center;
-        }
-        .card-option {
-            background: #ffffff;
-            border-radius: 24px; /* More rounded corners */
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 3rem 2rem; /* Even more padding */
-            min-height: 250px; /* Minimum height for cards */
-            color: #2c5282; /* Deep blue for card elements */
-            text-decoration: none;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(226, 232, 240, 0.6); /* Subtle border */
+            justify-content: center;
+            min-height: 180px; /* Ensure cards have a consistent height */
         }
-        .card-option::before {
-            content: '';
-            position: absolute;
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #1a202c;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card p {
+            font-size: 1.1rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .dashboard-card .btn {
+            background: linear-gradient(90deg, #2dd4bf, #14b8a6); /* Teal gradient */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dashboard-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #14b8a6, #2dd4bf);
+        }
+
+        /* Loader Overlay */
+        .page-loader {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .card-option:hover {
-            transform: translateY(-18px) scale(1.02); /* Greater lift and slight scale */
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35); /* More prominent, wider shadow */
-            color: #2a4365; /* Slightly darker blue on hover */
-            text-decoration: none;
-            border-color: rgba(66, 153, 225, 0.7); /* Subtle blue border on hover */
-        }
-        .card-option:hover::before {
-            opacity: 1; /* Show subtle overlay on hover */
-        }
-        .card-option h3 {
-            font-size: 4rem; /* Even larger, more impactful icon */
-            margin-bottom: 1.5rem;
-            line-height: 1;
-            transition: transform 0.35s ease-out;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for icons */
-        }
-        .card-option:hover h3 {
-            transform: scale(1.15) rotate(5deg); /* More dynamic icon animation */
-            color: #4299e1; /* Pop of blue for icon on hover */
-        }
-        .card-option p {
-            font-weight: 400; /* Lighter body text for luxury */
-            font-size: 1.15rem; /* Slightly larger body text */
-            opacity: 0.8;
-            flex-grow: 1;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        /* Footer Styling */
-        footer {
-            background: linear-gradient(to right, #1a202c, #2d3748); /* Matches header gradient */
-            color: #e2e8f0;
-            text-align: center;
-            padding: 1.25rem 0; /* More padding */
-            border-radius: 40px 40px 0 0; /* More pronounced top curve */
-            font-size: 1rem; /* Slightly larger footer text */
-            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.35); /* Deeper shadow */
-            width: 100%;
-            max-width: 1000px; /* Matches header/main width */
-            margin-top: 30px;
-        }
-
-        /* Loader specific styles */
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(255, 255, 255, 0.98); /* Almost opaque white */
-            z-index: 9999;
+            background: rgba(255, 255, 255, 0.9);
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            transition: opacity 0.4s ease-in-out;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease-out;
         }
-        #page-loader.hidden {
+
+        .page-loader.hidden {
             opacity: 0;
             pointer-events: none;
         }
+
         .spinner {
-            border: 6px solid rgba(66, 153, 225, 0.2); /* Lighter, more elegant border */
-            width: 70px; /* Even larger spinner */
-            height: 70px; /* Even larger spinner */
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
             border-radius: 50%;
-            border-left-color: #4299e1; /* Tailwind blue-400 */
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
+        /* Custom Alert Styling */
+        #alert-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        .custom-alert {
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            opacity: 0; /* Start hidden */
+            transform: translateY(20px); /* Start slightly below */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: auto; /* Re-enable clicks for the alert itself */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .custom-alert.info { background-color: #3498db; } /* Blue */
+        .custom-alert.success { background-color: #28a745; } /* Green */
+        .custom-alert.error { background-color: #dc3545; } /* Red */
+        .custom-alert.warning { background-color: #ffc107; color: #333; } /* Yellow */
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fade-out-down {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(20px); }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.3s ease-out forwards;
+        }
+        .animate-fade-out-down {
+            animation: fade-out-down 0.3s ease-in forwards;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
-            header, footer {
-                border-radius: 0 0 20px 20px;
-                padding: 2rem 1rem;
+            header {
+                flex-direction: column;
+                padding: 1rem;
             }
-            header h1 {
-                font-size: 2.2rem;
+            header nav {
+                margin-top: 15px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
             }
-            header p {
-                font-size: 1rem;
+            header nav a {
+                margin: 5px;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
             }
-            .main-content {
-                padding: 2rem 1rem;
-                gap: 20px;
-                grid-template-columns: 1fr; /* Single column on smaller screens */
-            }
-            .card-option {
-                padding: 2rem 1rem;
-                min-height: 200px;
-            }
-            .card-option h3 {
-                font-size: 3rem;
-            }
-            .card-option p {
-                font-size: 1rem;
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                padding: 10px;
             }
         }
     </style>
 </head>
 <body>
+    <div id="page-loader" class="page-loader">
+        <div class="spinner"></div>
+    </div>
 
-<!-- Page Loader -->
-<div id="page-loader">
-    <div class="spinner" role="status"></div>
-    <div class="mt-6 text-2xl text-gray-700 font-semibold animate-pulse tracking-wide">Initializing Application...</div>
-</div>
-
-<!-- Main Application Content (Dashboard) -->
-<div id="app-section" class="w-full flex flex-col items-center">
     <header>
-        <img src="logo.png.webp" alt="WR Smile Logo" class="h-28 mx-auto mb-4 drop-shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/250x120/1A202C/FFFFFF?text=WR+Smile&font=Inter';"/>
-        <h1>WR Smile & Supplies</h1>
-        <p>Your Premier Business Management Solution</p>
+        <img src="logo.png.webp" alt="WR Smile Logo" class="logo">
+        <nav>
+            <a href="index.html" class="active">Dashboard</a>
+            <a href="billing.html">Billing</a>
+            <a href="stock.html">Stock</a>
+            <a href="customers.html">Customers</a>
+            <a href="loan.html">Loans</a>
+        </nav>
     </header>
 
-    <main class="main-content">
-        <a href="stock.html" class="card-option">
-            <h3>📦</h3>
-            <p>Effortlessly manage and update your product inventory.</p>
-        </a>
-        <a href="billing.html" class="card-option">
-            <h3>🧾</h3>
-            <p>Streamline sales with rapid billing and elegant receipt generation.</p>
-        </a>
-        <a href="loan.html" class="card-option">
-            <h3>💰</h3>
-            <p>Efficiently track customer loans and manage payment records.</p>
-        </a>
-        <!-- Add a reports link if script.js is to be integrated for reports -->
-        <!--
-        <a href="reports.html" class="card-option">
-            <h3>📈</h3>
-            <p>Gain valuable insights with comprehensive sales analytics and reports.</p>
-        </a>
-        -->
+    <main class="dashboard-grid">
+        <div class="dashboard-card">
+            <h3>Billing</h3>
+            <p>Process new sales, generate invoices, and manage daily transactions.</p>
+            <a href="billing.html" class="btn">Go to Billing</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Stock Management</h3>
+            <p>Keep track of product inventory, add new items, and monitor stock levels.</p>
+            <a href="stock.html" class="btn">Manage Stock</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Customer Management</h3>
+            <p>View, add, and manage customer profiles including their loan and purchase history.</p>
+            <a href="customers.html" class="btn">Manage Customers</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Loan Management</h3>
+            <p>Record and track customer loans and process payments.</p>
+            <a href="loan.html" class="btn">Manage Loans</a>
+        </div>
     </main>
 
-    <footer>
-        &copy; 2025 WR Smile & Supplies. Crafted with Precision.
-    </footer>
-</div>
+    <!-- Custom Alert Container -->
+    <div id="alert-container"></div>
 
-<!-- Firebase SDK Imports (Modular v9/v10+) -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    // Firebase Configuration - Using the exact config provided by the user
-    const firebaseConfig = {
-        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
-        authDomain: "wr-smile-shop.firebaseapp.com",
-        databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
-        projectId: "wr-smile-shop",
-        storageBucket: "wr-smile-shop.firebasestorage.app",
-        messagingSenderId: "299864260187",
-        appId: "1:299864260187:web:fa6af65ef95674aff1097e",
-        measurementId: "G-3Z38G6MCYJ"
-    };
+    <script>
+        // Utility function to show alerts
+        function showAlert(message, type = 'info', duration = 3000) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-alert ${type} animate-fade-in-up`;
+            alertDiv.textContent = message;
+            alertContainer.appendChild(alertDiv);
 
-    // Initialize Firebase App
-    const app = initializeApp(firebaseConfig);
-
-    const pageLoader = document.getElementById('page-loader');
-
-    /**
-     * Displays a temporary message.
-     * @param {string} message
-     * @param {'success' | 'error' | 'info'} type
-     */
-    function showMessage(message, type = 'info') {
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-xl text-white z-50 ${
-            (type === 'success') ? 'bg-green-600' : (type === 'error' ? 'bg-red-600' : 'bg-blue-600')
-        } transition-opacity duration-300 ease-in-out opacity-0 translate-y-4 animate-fade-in-up`; /* Added subtle animation classes */
-        alertDiv.textContent = message;
-        document.body.appendChild(alertDiv);
-        setTimeout(() => {
-            alertDiv.classList.remove('animate-fade-in-up');
-            alertDiv.classList.add('opacity-0', 'translate-y-0', 'scale-95'); /* Start fade-out effect */
-            alertDiv.addEventListener('transitionend', () => alertDiv.remove());
-        }, 3000);
-    }
-
-    // Since there's no login, the app section is shown directly.
-    // The loader can be hidden immediately or after a short delay.
-    document.addEventListener('DOMContentLoaded', () => {
-        // Optional: A small delay to show the loader initially for a brief moment
-        setTimeout(() => {
-            pageLoader.classList.add('hidden');
-            console.log("Dashboard loaded directly (no sign-in).");
-        }, 500); // 500ms delay for effect
-    });
-
-    // Failsafe to hide loader
-    setTimeout(() => {
-        if (!pageLoader.classList.contains('hidden')) {
-            pageLoader.classList.add('hidden');
-            console.warn("Loader hidden by failsafe timeout.");
+            setTimeout(() => {
+                alertDiv.classList.remove('animate-fade-in-up');
+                alertDiv.classList.add('animate-fade-out-down');
+                alertDiv.addEventListener('animationend', () => alertDiv.remove());
+            }, duration);
         }
-    }, 5000); // Max 5 seconds load time (reduced as no heavy auth logic)
-</script>
 
+        // Since there's no login, the app section is shown directly.
+        // The loader can be hidden immediately or after a short delay.
+        document.addEventListener('DOMContentLoaded', () => {
+            // Optional: A small delay to show the loader initially for a brief moment
+            setTimeout(() => {
+                const pageLoader = document.getElementById("page-loader");
+                if (pageLoader) {
+                    pageLoader.classList.add('hidden');
+                }
+                console.log("Dashboard loaded directly (no sign-in).");
+            }, 500); // 500ms delay for effect
+        });
+
+        // Failsafe to hide loader
+        setTimeout(() => {
+            const pageLoader = document.getElementById("page-loader");
+            if (pageLoader && !pageLoader.classList.contains('hidden')) {
+                pageLoader.classList.add('hidden');
+                console.warn("Loader hidden by failsafe timeout.");
+            }
+        }, 10000); // Max 10 seconds load time
+    </script>
 </body>
 </html>

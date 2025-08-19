@@ -4,1414 +4,425 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WR Smile - Loan Management</title>
-
-    <!-- Google Fonts for Luxury Feel: Inter for body, Playfair Display for headings -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
-    <style>
-        /* Base Body Styling for Luxury UI */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #e0e7ee, #c8d3e0); /* Soft, cool grey gradient */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column; /* Allow content to stack and footer to push down */
-            align-items: center;
-            justify-content: flex-start; /* Align content to top initially */
-            padding: 20px;
-            color: #334155; /* Darker default text color */
-            box-sizing: border-box; /* Include padding in element's total width and height */
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif; /* Elegant serif for headings */
-            font-weight: 700;
-            color: #2c5282; /* Deep blue for titles */
-            letter-spacing: 0.5px; /* Subtle letter spacing */
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Soft text shadow */
-        }
-
-        /* Main Container Styling */
-        .main-container {
-            max-width: 900px; /* Adjusted width for loan management */
-            width: 100%;
-            background: #ffffff;
-            padding: 2.5rem 2rem; /* More generous padding */
-            border-radius: 24px; /* More rounded corners */
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
-            margin-top: 30px; /* Space from top */
-            margin-bottom: 30px; /* Space from bottom */
-            position: relative;
-            overflow: hidden; /* For subtle background patterns if desired */
-            z-index: 1; /* Ensure content is above pseudo-element */
-            display: flex; /* Use flex for internal layout of sections */
-            flex-direction: column; /* Stack sections vertically */
-            gap: 1.5rem; /* Space between sections */
-        }
-        .main-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234a5568" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); /* Subtle geometric pattern */
-            opacity: 0.8;
-            z-index: -1; /* Place behind content */
-            pointer-events: none;
-        }
-
-        /* Section specific styles */
-        .section-box {
-            background-color: #fdfdfd;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-        }
-        .section-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: #2c5282;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 0.5rem;
-        }
-
-        /* Input and Button Focus Styles */
-        input, button, select, textarea {
-            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
-            outline: none;
-        }
-
-        /* Form elements */
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.4rem;
-            display: block;
-            font-size: 0.95rem;
-        }
-        .form-input, .form-select, .form-textarea {
-            padding: 0.75rem 1rem;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            width: 100%;
-            font-size: 1rem;
-            color: #4a5568;
-        }
-        .form-input::placeholder, .form-textarea::placeholder {
-            color: #a0aec0;
-        }
-
-        /* Customer Loans Section */
-        .loan-list-container {
-            max-height: 400px; /* Increased height for loans */
-            overflow-y: auto; /* Enable scrolling */
-            padding-right: 10px; /* Space for scrollbar */
-        }
-        .loan-card {
-            background-color: #f0f4f8; /* Light blue-gray for loan cards */
-            border: 1px solid #d0dbe6;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            font-size: 0.95rem;
-            position: relative; /* For positioning the badge */
-        }
-        .loan-card.loan-paid-in-full {
-            background-color: #e6ffed; /* Lighter green for paid loans */
-            border-color: #81e6a5; /* Green border */
-        }
-        .loan-card p {
-            margin-bottom: 0.4rem;
-            line-height: 1.4;
-        }
-        .loan-card .loan-id {
-            font-weight: 600;
-            color: #2c5282;
-            font-size: 1.1rem;
-        }
-        .loan-card .loan-balance {
-            font-weight: 700;
-            color: #ef4444; /* Red for outstanding balance */
-            font-size: 1.2rem;
-        }
-        .loan-card.loan-paid-in-full .loan-balance {
-            color: #10b981; /* Green for paid in full balance */
-        }
-        .loan-card .loan-paid {
-            color: #10b981; /* Green for paid amount */
-            font-weight: 500;
-        }
-        .loan-card .loan-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem; /* Space between buttons */
-            margin-top: 0.8rem;
-        }
-        .loan-status-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #10b981; /* Emerald green */
-            color: white;
-            padding: 0.3rem 0.6rem;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);
-        }
-
-
-        /* Custom Button Styles */
-        .btn-primary-custom {
-            background: linear-gradient(to right, #4299e1, #3182ce);
-            border: none;
-            font-weight: 600;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(66, 153, 225, 0.3);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 1.05rem;
-        }
-        .btn-primary-custom:hover {
-            background: linear-gradient(to right, #3182ce, #2b6cb0);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(66, 153, 225, 0.4);
-        }
-        .btn-primary-custom:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.2);
-        }
-
-        .btn-danger-custom {
-            background-color: #ef4444;
-            border: none;
-            font-weight: 500;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
-            cursor: pointer;
-        }
-        .btn-danger-custom:hover {
-            background-color: #dc2626;
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
-        }
-        .btn-danger-custom.small {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.8rem;
-            border-radius: 6px;
-        }
-
-        .btn-secondary-custom {
-            background-color: #6b7280;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(107, 114, 128, 0.2);
-        }
-        .btn-secondary-custom:hover {
-            background-color: #4b5563;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(107, 114, 128, 0.3);
-        }
-
-        .btn-whatsapp-custom {
-            background-color: #25D366; /* WhatsApp green */
-            border: none;
-            font-weight: 500;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .btn-whatsapp-custom:hover {
-            background-color: #1DA851;
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4);
-        }
-        .btn-whatsapp-custom.small {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.8rem;
-            border-radius: 6px;
-        }
-
-        /* Back Button Styling */
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #4a5568; /* Dark grey */
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 10; /* Ensure it's above other content */
-        }
-        .back-button:hover {
-            background-color: #2d3748; /* Darker grey on hover */
-            transform: translateX(-5px); /* Slight slide effect */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Utility for hidden elements */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Message Alert Styling */
-        .alert-message {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .alert-message.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .alert-message.info { background-color: #3b82f6; } /* blue-500 */
-        .alert-message.success { background-color: #10b981; } /* emerald-500 */
-        .alert-message.error { background-color: #ef4444; } /* red-500 */
-
-        /* Loader Styling */
-        #page-loader {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(255, 255, 255, 0.95);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease-in-out;
-        }
-        #page-loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .spinner {
-            border: 6px solid rgba(66, 153, 225, 0.2);
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border-left-color: #4299e1;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Custom Modal styles */
-        .modal-custom {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1050; /* Ensure it's on top */
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.6); /* This now acts as the backdrop */
-            display: flex; /* To center content */
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow-x: hidden;
-            overflow-y: auto;
-            outline: 0;
-            opacity: 0; /* Initial state for transition */
-            transition: opacity 0.3s ease-in-out;
-        }
-        .modal-custom:not(.hidden) {
-            opacity: 1; /* Fade in */
-        }
-        .modal-custom.hidden {
-            display: none; /* Hide completely when hidden */
-            opacity: 0;
-            pointer-events: none; /* Ensure no clicks */
-        }
-        .modal-custom-content {
-            background-color: #fff;
-            border-radius: 16px; /* Rounded corners */
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Deep shadow */
-            max-width: 600px; /* Adjusted max width */
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: translateY(-20px); /* Initial lift for animation */
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            opacity: 0; /* Start invisible for the content itself */
-            pointer-events: auto; /* Ensure content is clickable */
-        }
-        .modal-custom:not(.hidden) .modal-custom-content {
-            transform: translateY(0); /* Slide down */
-            opacity: 1; /* Fade in content */
-        }
-        .modal-custom-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0; /* Subtle border */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f0f4f8; /* Light header background */
-            border-radius: 16px 16px 0 0;
-        }
-        .modal-custom-title {
-            color: #2c5282;
-            font-weight: 700;
-            font-size: 1.8rem; /* Larger modal title */
-            letter-spacing: 0.5px;
-        }
-        .modal-custom-body {
-            padding: 1.5rem;
-        }
-        .modal-custom-footer {
-            padding: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: flex-end; /* Align buttons to end */
-            gap: 0.75rem; /* Spacing between buttons */
-        }
-        .form-label-custom {
-            font-weight: 600;
-            color: #2d3748; /* Dark grey for labels */
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        .form-input-custom {
-            padding: 0.75rem 1rem;
-            border: 1px solid #cbd5e0; /* Subtle grey border */
-            border-radius: 8px; /* Rounded input fields */
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        .form-input-custom:focus {
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
-        }
-        .invalid-feedback-custom {
-            color: #ef4444; /* Red for validation feedback */
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .main-container {
-                padding: 1.5rem;
-                border-radius: 16px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-                gap: 1rem;
-            }
-            .section-box {
-                padding: 1rem;
-            }
-            .section-title {
-                font-size: 1.4rem;
-                margin-bottom: 0.8rem;
-            }
-            .form-input, .form-select, .form-textarea {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-            }
-            .btn-primary-custom, .btn-secondary-custom, .btn-danger-custom, .btn-whatsapp-custom {
-                padding: 0.6rem 1rem;
-                font-size: 0.95rem;
-                width: 100%; /* Stack buttons on small screens */
-                margin-bottom: 0.5rem;
-            }
-            .btn-danger-custom.small, .btn-whatsapp-custom.small {
-                padding: 0.15rem 0.4rem;
-                font-size: 0.75rem;
-            }
-            .back-button {
-                top: 10px;
-                left: 10px;
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+    <!-- Your existing CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Include Firebase SDKs -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 </head>
 <body>
-
-<!-- Custom Confirmation Modal (for generic confirmations) -->
-<div id="confirmModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Confirm Action</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeConfirmModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <div class="modal-custom-body">
-            <p id="confirmMessage" class="text-gray-700 text-lg">Are you sure you want to proceed?</p>
-        </div>
-        <div class="modal-custom-footer">
-            <button type="button" class="btn-secondary-custom" id="cancelConfirm">No, Cancel</button>
-            <button type="button" class="btn-primary-custom" id="confirmProceed">Yes, Proceed</button>
-        </div>
-    </div>
-</div>
-
-<!-- Custom Add Customer Modal -->
-<div id="addCustomerModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Add New Customer</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeAddCustomerModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <form id="add-customer-form">
-            <div class="modal-custom-body">
-                <div class="form-group">
-                    <label for="customerPhoneInModal" class="form-label-custom">Phone Number</label>
-                    <input type="text" id="customerPhoneInModal" class="form-input-custom" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="customerNameInModal" class="form-label-custom">Customer Name</label>
-                    <input type="text" id="customerNameInModal" class="form-input-custom" required autocomplete="off" placeholder="Enter customer name" />
-                </div>
-            </div>
-            <div class="modal-custom-footer">
-                <button type="button" class="btn-secondary-custom" id="cancelAddCustomerModal">Cancel</button>
-                <button type="submit" class="btn-primary-custom">Add Customer</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Custom Add Payment Modal -->
-<div id="addPaymentModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Add Payment to Loan</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeAddPaymentModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <form id="add-payment-form">
-            <div class="modal-custom-body">
-                <div class="form-group">
-                    <label class="form-label-custom">Loan ID:</label>
-                    <input type="text" id="paymentLoanId" class="form-input-custom" readonly />
-                </div>
-                <div class="form-group">
-                    <label class="form-label-custom">Current Balance (Rs.):</label>
-                    <input type="text" id="paymentCurrentBalance" class="form-input-custom" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="paymentAmount" class="form-label-custom">Payment Amount (Rs.):</label>
-                    <input type="number" id="paymentAmount" class="form-input-custom" min="0.01" step="0.01" required placeholder="Enter payment amount" />
-                </div>
-                <div class="form-group">
-                    <label for="paymentNote" class="form-label-custom">Payment Note (Optional):</label>
-                    <textarea id="paymentNote" class="form-input-custom form-textarea" rows="2" placeholder="e.g., 'Cash payment', 'Bank transfer'"></textarea>
-                </div>
-            </div>
-            <div class="modal-custom-footer">
-                <button type="button" class="btn-secondary-custom" id="cancelAddPaymentModal">Cancel</button>
-                <button type="submit" class="btn-primary-custom">Record Payment</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-<!-- Page Loader -->
-<div id="page-loader" class="fixed inset-0 bg-white bg-opacity-95 z-[9999] flex flex-col items-center justify-content-center transition-opacity duration-500">
-    <div class="spinner"></div>
-    <div class="mt-6 text-2xl text-gray-700 font-semibold animate-pulse tracking-wide">Loading Loans Data...</div>
-</div>
-
-<a href="index.html" class="back-button">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-    </svg>
-    Back to Dashboard
-</a>
-
-<div class="main-container">
-    <div class="section-box">
-        <h3 class="section-title">Customer Information</h3>
-        <div class="form-group">
-            <label for="customer-phone" class="form-label">Customer Phone / Name</label>
-            <input type="text" id="customer-phone" class="form-input" placeholder="Enter phone number or name" autocomplete="off" />
-            <button id="search-customer-btn" class="btn-primary-custom mt-2" type="button">Search Customer</button>
-        </div>
-        <div class="form-group">
-            <label for="customer-name" class="form-label">Customer Name</label>
-            <input type="text" id="customer-name" class="form-input" placeholder="Customer Name" readonly />
-        </div>
-        <div id="pending-loan-info" class="text-sm text-gray-600 mt-2"></div>
+    <div id="page-loader" class="page-loader">
+        <div class="spinner"></div>
     </div>
 
-    <div class="section-box">
-        <h3 class="section-title">Customer Loans</h3>
-        <div id="customer-loans-list" class="loan-list-container">
-            <!-- Customer loans will be rendered here -->
-            <p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>
+    <header class="header">
+        <img src="logo.png.webp" alt="WR Smile Logo" class="logo">
+        <nav class="nav">
+            <a href="index.html">Dashboard</a>
+            <a href="billing.html">Billing</a>
+            <a href="stock.html">Stock</a>
+            <a href="customers.html">Customers</a>
+            <a href="loan.html" class="active">Loans</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="section-title">Loan Management</h1>
+        <div class="input-group">
+            <input type="text" id="customer-phone-input" class="form-input" placeholder="Enter customer phone number">
+            <button id="search-btn" class="btn btn-primary-custom">Search</button>
+        </div>
+        <h2 id="customer-name" class="customer-name-display">Search a customer to view their loans.</h2>
+        <div id="customer-loans-list" class="loan-list">
+            <!-- Loan cards will be loaded here -->
+        </div>
+        <div class="flex-container mt-6">
+            <button id="add-loan-btn" class="btn btn-primary-custom">Add New Loan</button>
         </div>
     </div>
-</div>
+    <!-- Add Loan Modal -->
+    <div id="add-loan-modal" class="modal-custom hidden">
+        <div class="modal-custom-content">
+            <span class="close-btn-custom" id="closeAddLoanModal">&times;</span>
+            <h5 class="modal-custom-title">Add New Loan</h5>
+            <form id="add-loan-form">
+                <div class="form-group">
+                    <label for="loan-customer-phone" class="form-label">Customer Phone</label>
+                    <input type="text" id="loan-customer-phone" class="form-input" readonly required>
+                </div>
+                <hr class="my-4">
+                <h6 class="text-lg font-semibold mb-3">Products for Loan</h6>
+                <div id="loan-products-container">
+                    <!-- Product rows will be dynamically added here -->
+                </div>
+                <button type="button" id="add-product-row-btn" class="btn btn-secondary-custom w-full mt-4">Add Product</button>
+                <div class="form-group mt-4">
+                    <label for="discount">Discount (Rs)</label>
+                    <input type="number" id="discount" class="form-input" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="loan-note">Loan Note (Optional)</label>
+                    <textarea id="loan-note" class="form-textarea" placeholder="Add any specific notes for this loan"></textarea>
+                </div>
+                <div class="modal-custom-footer">
+                    <button type="submit" class="btn btn-primary">Save Loan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Add Payment Modal -->
+    <div id="add-payment-modal" class="modal-custom hidden">
+        <div class="modal-custom-content">
+            <span class="close-btn-custom" id="closeAddPaymentModal">&times;</span>
+            <h5 class="modal-custom-title">Add Payment</h5>
+            <form id="add-payment-form">
+                <input type="hidden" id="loan-id-input">
+                <div class="form-group">
+                    <label for="payment-amount">Payment Amount (Rs)</label>
+                    <input type="number" id="payment-amount" class="form-input" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="payment-note">Note (Optional)</label>
+                    <textarea id="payment-note" class="form-input"></textarea>
+                </div>
+                <div class="modal-custom-footer">
+                    <button type="submit" class="btn btn-primary">Submit Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-<!-- Custom Message Alert Container -->
-<div id="alert-container"></div>
+    <!-- Custom Alert Container -->
+    <div id="alert-container"></div>
 
-<!-- Firebase SDK Imports -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getDatabase, ref, push, set, once, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // Firebase Configuration - Using the exact config provided by the user
-    const firebaseConfig = {
-        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
-        authDomain: "wr-smile-shop.firebaseapp.com",
-        databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
-        projectId: "wr-smile-shop",
-        storageBucket: "wr-smile-shop.firebasestorage.app",
-        messagingSenderId: "299864260187",
-        appId: "1:299864260187:web:fa6af65ef95674aff1097e",
-        measurementId: "G-3Z38G6MCYJ"
-    };
+        // Import the loadLoansForCustomer function
+        import { loadLoansForCustomer } from './loadLoansForCustomer.js';
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        // Initialize Firebase app
+        const firebaseConfig = {
+            apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
+            authDomain: "wr-smile-shop.firebaseapp.com",
+            databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
+            projectId: "wr-smile-shop",
+            storageBucket: "wr-smile-shop.firebasestorage.app",
+            messagingSenderId: "299864260187",
+            appId: "1:299864260187:web:fa6af65ef95674aff1097e",
+            measurementId: "G-3Z38G6MCYJ"
+        };
 
-    // Global variable for Canvas App ID. Assuming a consistent pattern across your pages.
-    const appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const realtimeDb = getDatabase(app);
 
-    // Firestore Collection References
-    // Data is public across the app, stored under /artifacts/${appId}/public/data/
-    const customersCollectionRef = collection(db, `artifacts/${appId}/public/data/customers`);
-    const loansCollectionRef = collection(db, `artifacts/${appId}/public/data/loans`); // For customer loans
-    const paymentsCollectionRef = collection(db, `artifacts/${appId}/public/data/payments`); // For loan payments
+        // Firestore collections and Realtime Database references
+        const customersCollection = collection(db, "customers");
+        const loansRef = ref(realtimeDb, "loans");
+        const paymentsRef = ref(realtimeDb, "payments");
 
-    // --- DOM Elements ---
-    const pageLoader = document.getElementById('page-loader');
-    const customerPhoneInput = document.getElementById('customer-phone');
-    const customerNameInput = document.getElementById('customer-name');
-    const searchCustomerBtn = document.getElementById('search-customer-btn');
-    const pendingLoanInfoDiv = document.getElementById('pending-loan-info');
-    const customerLoansListDiv = document.getElementById('customer-loans-list');
+        // DOM Elements
+        const customerPhoneInput = document.getElementById('customer-phone-input');
+        const customerNameDisplay = document.getElementById('customer-name');
+        const loanListDiv = document.getElementById('customer-loans-list');
+        const addLoanBtn = document.getElementById('add-loan-btn');
+        const addLoanModal = document.getElementById('add-loan-modal');
+        const addLoanForm = document.getElementById('add-loan-form');
+        const loanCustomerPhoneInput = document.getElementById('loan-customer-phone');
+        const loanProductsContainer = document.getElementById('loan-products-container');
+        const addProductRowBtn = document.getElementById('add-product-row-btn');
+        const discountInput = document.getElementById('discount');
+        const loanNoteInput = document.getElementById('loan-note');
 
-    // Modals
-    const confirmModal = document.getElementById('confirmModal');
-    const addCustomerModal = document.getElementById('addCustomerModal');
-    const addCustomerForm = document.getElementById('add-customer-form');
-    const customerPhoneInModal = document.getElementById('customerPhoneInModal');
-    const customerNameInModal = document.getElementById('customerNameInModal');
-    const addPaymentModal = document.getElementById('addPaymentModal');
-    const addPaymentForm = document.getElementById('add-payment-form');
-    const paymentLoanIdInput = document.getElementById('paymentLoanId');
-    const paymentCurrentBalanceInput = document.getElementById('paymentCurrentBalance');
-    const paymentAmountInput = document.getElementById('paymentAmount');
-    const paymentNoteTextarea = document.getElementById('paymentNote');
+        const addPaymentModal = document.getElementById('add-payment-modal');
+        const addPaymentForm = document.getElementById('add-payment-form');
+        const loanIdInput = document.getElementById('loan-id-input');
+        const paymentAmountInput = document.getElementById('payment-amount');
+        const paymentNoteInput = document.getElementById('payment-note');
 
-    // --- Global State Variables ---
-    let customerData = null; // Stores currently loaded customer's full data
-    let selectedCustomerId = null; // Store ID of selected customer for consistency
-    let currentLoanBeingPaid = null; // Stores the full loan object when payment modal is open
+        const pageLoader = document.getElementById("page-loader");
 
-    // --- Utility Functions ---
+        let currentCustomerFirestoreId = null; // To store the Firestore ID of the selected customer
 
-    /**
-     * Formats a number as a local currency string (LKR).
-     * @param {number} amount - The amount to format.
-     * @returns {string} The formatted currency string.
-     */
-    function formatLKR(amount) {
-        return new Intl.NumberFormat('en-LK', {
-            style: 'currency',
-            currency: 'LKR',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(amount);
-    }
 
-    /**
-     * Displays a temporary message to the user.
-     * @param {string} message - The message content.
-     * @param {'success' | 'error' | 'info' | 'warning'} type - Type of message for styling.
-     * @param {number} duration - How long the alert should be visible in milliseconds.
-     */
-    function showMessage(message, type = 'info', duration = 3000) {
-        const alertContainer = document.getElementById('alert-container');
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `alert-message ${type}`;
-        alertDiv.textContent = message;
-        alertContainer.appendChild(alertDiv);
-        setTimeout(() => {
-            alertDiv.classList.add('show');
-        }, 10); // Small delay to trigger CSS transition
-        setTimeout(() => {
-            alertDiv.classList.remove('show');
-            alertDiv.addEventListener('transitionend', () => alertDiv.remove()); // Remove after transition
-        }, duration);
-    }
-
-    /**
-     * Confirms an action with the user using a custom modal.
-     * @param {string} message - The confirmation message.
-     * @returns {Promise<boolean>} Resolves true if confirmed, false otherwise.
-     */
-    function showConfirmModal(message) {
-        return new Promise(resolve => {
-            const confirmMessageElem = confirmModal.querySelector('#confirmMessage');
-            const confirmButton = confirmModal.querySelector('#confirmProceed');
-            const cancelButton = confirmModal.querySelector('#cancelConfirm');
-            const closeModalButton = confirmModal.querySelector('#closeConfirmModal');
-
-            confirmMessageElem.textContent = message;
-            showCustomModal(confirmModal);
-
-            const handleConfirm = () => {
-                resolve(true);
-                hideCustomModal(confirmModal);
-                removeListeners();
-            };
-            const handleCancel = () => {
-                resolve(false);
-                hideCustomModal(confirmModal);
-                removeListeners();
-            };
-
-            // Add listeners
-            confirmButton.addEventListener('click', handleConfirm);
-            cancelButton.addEventListener('click', handleCancel);
-            closeModalButton.addEventListener('click', handleCancel);
-
-            // Function to remove listeners
-            const removeListeners = () => {
-                confirmButton.removeEventListener('click', handleConfirm);
-                cancelButton.removeEventListener('click', handleCancel);
-                closeModalButton.removeEventListener('click', handleCancel);
-            };
-        });
-    }
-
-    /**
-     * Generic function to show a custom modal.
-     * @param {HTMLElement} modalElement - The main modal container (e.g., #confirmModal, #addCustomerModal).
-     */
-    function showCustomModal(modalElement) {
-        modalElement.classList.remove('hidden');
-        // Force reflow to ensure transitions run
-        void modalElement.offsetWidth;
-        const content = modalElement.querySelector('.modal-custom-content');
-        content.style.transform = 'translateY(-20px)';
-        content.style.opacity = '0';
-        setTimeout(() => {
-            content.style.transform = 'translateY(0)';
-            content.style.opacity = '1';
-            const firstInput = content.querySelector('input:not([readonly]):not([type="hidden"]), textarea');
-            if (firstInput) {
-                firstInput.focus();
-            }
-        }, 10);
-    }
-
-    /**
-     * Generic function to hide a custom modal.
-     * @param {HTMLElement} modalElement - The main modal container.
-     */
-    function hideCustomModal(modalElement) {
-        const content = modalElement.querySelector('.modal-custom-content');
-        content.style.transform = 'translateY(-20px)';
-        content.style.opacity = '0';
-        setTimeout(() => {
-            modalElement.classList.add('hidden');
-        }, 350); // Match content's transition duration
-    }
-
-    // --- Customer Management ---
-
-    /**
-     * Searches for a customer by phone number or name, and then loads their loans.
-     */
-    async function searchCustomer() {
-        const searchTerm = customerPhoneInput.value.trim();
-        if (!searchTerm) {
-            resetCustomerInfo();
-            showMessage("Please enter a customer phone number or name.", "info");
-            return;
+        // Utility functions (from common patterns)
+        function showCustomModal(modal) {
+            modal.classList.add('show');
+            modal.classList.remove('hidden');
+        }
+        function hideCustomModal(modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+        function showAlert(message, type = 'info', duration = 3000) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-alert ${type} animate-fade-in-up`;
+            alertDiv.textContent = message;
+            alertContainer.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.classList.remove('animate-fade-in-up');
+                alertDiv.classList.add('animate-fade-out-down');
+                alertDiv.addEventListener('animationend', () => alertDiv.remove());
+            }, duration);
+        }
+        function showLoader() {
+            pageLoader.classList.remove('hidden');
+        }
+        function hideLoader() {
+            setTimeout(() => {
+                pageLoader.classList.add('hidden');
+            }, 300);
         }
 
-        pageLoader.classList.remove('hidden'); // Show loader at the very beginning
-        try {
-            let customerDoc = null;
 
-            // 1. Try searching by phone number (exact match)
-            const isPhoneNumber = /^\d+$/.test(searchTerm); // Simple check for digits only
-            if (isPhoneNumber) {
-                console.log(`Attempting to search by phone: ${searchTerm}`);
-                const qPhone = query(customersCollectionRef, where("phone", "==", searchTerm));
-                const snapshotPhone = await getDocs(qPhone);
-                if (!snapshotPhone.empty) {
-                    customerDoc = snapshotPhone.docs[0];
-                } else {
-                    console.log("No customer found by phone.");
-                }
-            }
+        // --- Customer Search and Load Loans ---
+        // Check for URL parameters on page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const customerPhoneFromUrl = urlParams.get('customerPhone');
 
-            // 2. If not found by phone, or if input was not purely numeric, try searching by name (prefix match)
-            if (!customerDoc) { // Only attempt name search if phone search didn't find anyone
-                console.log(`Attempting to search by name: ${searchTerm}`);
-                // Firestore queries for prefix matching: starts with `searchTerm` and ends with `searchTerm` + '\uf8ff' (a high-value unicode character)
-                const qName = query(
-                    customersCollectionRef,
-                    where("name", ">=", searchTerm),
-                    where("name", "<=", searchTerm + '\uf8ff')
-                );
-                const snapshotName = await getDocs(qName);
-                if (!snapshotName.empty) {
-                    customerDoc = snapshotName.docs[0]; // Take the first match
-                    if (snapshotName.docs.length > 1) {
-                        showMessage(`Multiple customers found for "${searchTerm}". Showing the first match.`, "info", 5000);
-                        console.warn(`Multiple customers found for "${searchTerm}". Consider showing a selection list.`);
-                    }
-                } else {
-                    console.log("No customer found by name.");
-                }
-            }
-
-
-            if (customerDoc) {
-                customerData = { id: customerDoc.id, ...customerDoc.data() };
-                selectedCustomerId = customerData.id;
-                customerNameInput.value = customerData.name || 'N/A';
-                customerPhoneInput.value = customerData.phone || searchTerm; // Update phone input field with actual phone from DB or initial search term
-                showMessage(`Customer found: "${customerData.name}".`, "success");
-                console.log("Customer found (final):", customerData);
-
-                await loadAndRenderLoans(selectedCustomerId);
-                // Loader explicitly hidden by the loadAndRenderLoans function or this block.
-            } else {
-                console.log("No customer found with the provided input.");
-                resetCustomerInfo(); // Clear previous customer data
-                const confirmed = await showConfirmModal(`Customer not found. Do you want to add "${searchTerm}" as a new customer?`);
-                if (confirmed) {
-                    // Pre-fill modal based on whether input looked like a phone or a name
-                    customerPhoneInModal.value = isPhoneNumber ? searchTerm : '';
-                    customerNameInModal.value = isPhoneNumber ? '' : searchTerm;
-                    customerNameInModal.focus();
-                    showCustomModal(addCustomerModal);
-                    // The loader will be hidden by addCustomerInModal's finally block
-                } else {
-                    showMessage("Customer not added.", "info");
-                    // If user cancels adding, ensure loader is hidden
-                    pageLoader.classList.add('hidden');
-                }
-            }
-        } catch (error) {
-            console.error("Error searching customer:", error);
-            showMessage("Error searching customer. See console for details.", "error");
-            pageLoader.classList.add('hidden'); // Hide loader on error
-        }
-    }
-
-    /**
-     * Resets customer related fields and clears loan list.
-     */
-    function resetCustomerInfo() {
-        customerNameInput.value = '';
-        customerData = null;
-        selectedCustomerId = null;
-        pendingLoanInfoDiv.textContent = 'No pending loans.';
-        pendingLoanInfoDiv.style.color = '#6b7280';
-        customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
-    }
-
-    /**
-     * Adds a new customer via the modal form.
-     */
-    async function addCustomerInModal(event) {
-        event.preventDefault();
-
-        const phone = customerPhoneInModal.value.trim();
-        const name = customerNameInModal.value.trim();
-
-        if (!name) {
-            showMessage("Customer name is required.", "warning");
-            return;
+        if (customerPhoneFromUrl) {
+            customerPhoneInput.value = customerPhoneFromUrl;
+            searchAndLoadCustomer(customerPhoneFromUrl);
         }
 
-        pageLoader.classList.remove('hidden'); // Show loader
-        try {
-            const newCustomer = {
-                phone: phone,
-                name: name,
-                createdDate: new Date() // Add creation date
-            };
-            const docRef = await addDoc(customersCollectionRef, newCustomer); // No need for docRef here if not used
-            customerData = { id: docRef.id, ...newCustomer }; // Update global customerData
-            selectedCustomerId = customerData.id; // Set selected customer ID
-            customerNameInput.value = customerData.name; // Update main form field
-            customerPhoneInput.value = customerData.phone; // Update main form field as well
-
-            hideCustomModal(addCustomerModal);
-            showMessage(`New customer "${customerData.name}" added successfully!`, "success");
-            console.log("New customer added:", customerData);
-
-            // Since it's a new customer, there are no loans yet, but we should clear any previous state
-            pendingLoanInfoDiv.textContent = 'No pending loans.';
-            pendingLoanInfoDiv.style.color = '#6b7280';
-            customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
-
-        } catch (error) {
-            console.error("Error adding new customer:", error);
-            showMessage("Failed to add new customer. Please try again.", "error");
-        } finally {
-            pageLoader.classList.add('hidden'); // Hide loader after customer addition attempt
-        }
-    }
-
-    // --- Loan Management ---
-
-    /**
-     * Helper to safely parse date from Firestore (could be Timestamp or ISO string).
-     * @param {any} firebaseDate - The date value from Firestore.
-     * @returns {Date} A JavaScript Date object.
-     */
-    function parseFirestoreDate(firebaseDate) {
-        if (firebaseDate && typeof firebaseDate.toDate === 'function') {
-            return firebaseDate.toDate(); // Firestore Timestamp
-        } else if (typeof firebaseDate === 'string') {
-            try {
-                const date = new Date(firebaseDate);
-                // Basic validation to ensure it's a valid date and not 'Invalid Date'
-                if (!isNaN(date.getTime())) {
-                    return date;
-                }
-            } catch (e) {
-                console.warn("Could not parse date string:", firebaseDate, e);
-            }
-        }
-        return new Date(); // Fallback to current date if format is unexpected or invalid
-    }
-
-    /**
-     * Loads and renders loans for the given customer ID.
-     * Includes improved parsing for numeric fields and dates.
-     * @param {string} customerId - The ID of the customer.
-     */
-    async function loadAndRenderLoans(customerId) {
-        customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Loading loans...</p>';
-        if (!customerId) {
-            customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
-            console.warn("loadAndRenderLoans called with no customerId.");
-            return;
-        }
-
-        try {
-            console.log(`Setting up real-time listener for loans for customer ID: ${customerId}`);
-            // Attach a real-time listener using onSnapshot for immediate updates
-            // This will automatically re-render loans whenever changes occur in Firestore
-            onSnapshot(query(loansCollectionRef, where("customerId", "==", customerId)), (querySnapshot) => {
-                customerLoansListDiv.innerHTML = ''; // Clear previous content
-
-                if (querySnapshot.empty) {
-                    customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
-                    console.log(`No loans found for customer ID: ${customerId}`);
-                } else {
-                    // Map and sort loans by date, most recent first
-                    const loans = querySnapshot.docs.map(doc => {
-                        const data = doc.data();
-                        console.log("Fetched raw loan document data:", { id: doc.id, ...data });
-
-                        // *** IMPORTANT: Verify these field names and ensure they are saved correctly from billing.html ***
-                        // loanAmount: The total original loan amount
-                        // paidAmount: The amount that has been paid towards the loan
-                        // balance: The remaining outstanding balance (totalAmount - paidAmount)
-                        // date / loanDate: The date the loan was issued
-                        // status: Can be 'pending' or 'paid'
-                        // customerId: The ID of the customer
-                        // invoiceId: The ID of the invoice from which the loan originated
-
-                        const totalAmt = Number(data.totalAmount || data.loanAmount || 0);
-                        const paidAmt = Number(data.paidAmount || 0);
-
-                        const loan = {
-                            id: doc.id,
-                            customerId: data.customerId,
-                            invoiceId: data.invoiceId || 'N/A',
-                            // Calculate balance explicitly to ensure consistency
-                            totalAmount: parseFloat(totalAmt.toFixed(2)),
-                            paidAmount: parseFloat(paidAmt.toFixed(2)),
-                            balance: parseFloat((totalAmt - paidAmt).toFixed(2)),
-                            loanDate: parseFirestoreDate(data.date || data.loanDate || new Date()).toISOString(),
-                            note: data.note || '',
-                            status: data.status || 'pending' // Default status
-                        };
-
-                        // Ensure balance is never negative, correct for precision issues
-                        // Now, with consistent rounding, this check is more reliable for floating point near-zero
-                        if (loan.balance < 0.01 && loan.balance > -0.01) { // Treat very small positive/negative as zero
-                           loan.balance = 0;
-                        } else if (loan.balance < 0) { // If truly negative, likely a data error, cap at 0
-                           loan.balance = 0;
-                           console.warn(`Loan ${loan.id} has negative balance: ${loan.balance}. Capping to 0.`);
-                        }
-
-                        // Sanity check: If totalAmount is non-zero, but balance is zero, and status is not 'paid', warn.
-                        if (loan.totalAmount > 0 && loan.balance === 0 && loan.status !== 'paid') {
-                            console.warn(`Loan ${loan.id} (status: ${loan.status}) has total amount ${loan.totalAmount} but zero balance. Check data consistency in Firestore.`);
-                        }
-                        
-                        console.log("[loadAndRenderLoans] Parsed loan object for rendering:", loan); // <--- NEW LOG
-                        console.log(`[loadAndRenderLoans] Loan ID: ${loan.id}, Balance: ${loan.balance}, Is Paid In Full (calculated): ${loan.balance <= 0.01}`); // <--- NEW LOG
-                        
-                        return loan;
-                    }).sort((a, b) => new Date(b.loanDate).getTime() - new Date(a.loanDate).getTime()); // Sort by ISO string or parsed Date
-
-                    let totalPendingForAllLoans = 0;
-
-                    loans.forEach(loan => {
-                        // A loan is considered 'pending' if its status is not 'paid' OR if its balance is greater than 0
-                        const isPending = (loan.status === 'pending' || loan.balance > 0.01); 
-                        const isPaidInFull = !isPending; // If it's not pending, it's paid in full
-
-                        if (isPending) {
-                            totalPendingForAllLoans += loan.balance;
-                        }
-
-                        const loanElement = document.createElement('div');
-                        // Use isPaidInFull for styling class
-                        loanElement.className = `loan-card ${isPaidInFull ? 'loan-paid-in-full' : ''}`;
-
-                        // Ensure date is formatted for display
-                        const displayDate = new Date(loan.loanDate).toLocaleDateString();
-
-                        const whatsappBtnHtml = `
-                            <button class="btn-whatsapp-custom small whatsapp-loan-btn"
-                                data-loan-id="${loan.id}"
-                                data-loan-status="${loan.status}"
-                                data-loan-balance="${loan.balance}"
-                                data-customer-name="${customerData ? customerData.name : ''}"
-                                data-customer-phone="${customerData ? customerData.phone : ''}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                  <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.542.06 7.917c0 1.254.337 2.454.924 3.541L.002 16l4.207-1.35a7.66 7.66 0 0 0 3.684.92h.001c4.364 0 7.925-3.542 7.925-7.917s-3.561-7.917-7.925-7.917M4.062 13.93c-1.426-.35-2.584-1.025-3.328-1.745A6.7 6.7 0 0 1 1 7.917C1 4.14 4.093 1 7.999 1S15 4.14 15 7.917a6.68 6.68 0 0 1-.92 3.54c-.744.72-1.902 1.395-3.328 1.745L8.98 14.93zM8 4.673c-.314 0-.57.256-.57.576v2.9c0 .319.256.576.57.576s.57-.256.57-.576v-2.9c0-.32-.256-.576-.57-.576Zm-2.858 2.89c-.314 0-.57.256-.57.576v.576c0 .319.256.576.576.57.576s.57-.256.57-.576v-.576c0-.32-.256-.576-.57-.576Zm5.716 0c-.314 0-.57.256-.57.576v.576c0 .319.256.576.576.57.576s.57-.256.57-.576v-.576c0-.32-.256-.576-.57-.576Z"/>
-                                </svg>
-                                WhatsApp
-                            </button>
-                        `;
-
-                        loanElement.innerHTML = `
-                            <p>Loan ID: <span class="loan-id">${loan.id.substring(0, 8)}...</span></p>
-                            <p>Loan Date: ${displayDate}</p>
-                            <p>Total Loan Amount: ${formatLKR(loan.totalAmount)}</p>
-                            <p class="loan-paid">Paid Amount: ${formatLKR(loan.paidAmount)}</p>
-                            <p>Outstanding Balance: <span class="loan-balance">${formatLKR(loan.balance)}</span></p>
-                            ${loan.note ? `<p>Note: ${loan.note}</p>` : ''}
-                            ${isPaidInFull ? '<span class="loan-status-badge">PAID IN FULL</span>' : ''}
-                            <div class="loan-actions">
-                                <button class="btn-primary-custom small add-payment-btn" data-loan-id="${loan.id}" ${isPaidInFull ? 'disabled' : ''}>Add Payment</button>
-                                ${customerData && (customerData.phone || customerData.name) ? whatsappBtnHtml : ''}
-                            </div>
-                        `;
-                        customerLoansListDiv.appendChild(loanElement);
-                    });
-                    attachLoanEventListeners(); // Re-attach listeners for new elements
-                    attachWhatsAppEventListeners(); // Attach listeners for new WhatsApp buttons
-
-                    // Update the small pending loan info text
-                    if (totalPendingForAllLoans > 0) {
-                        totalPendingForAllLoans = parseFloat(totalPendingForAllLoans.toFixed(2)); // Round final total for display
-                        pendingLoanInfoDiv.textContent = `Total Pending Loan: ${formatLKR(totalPendingForAllLoans)}`;
-                        pendingLoanInfoDiv.style.color = '#ef4444'; // Red for outstanding
-                    } else {
-                        pendingLoanInfoDiv.textContent = "No pending loans.";
-                        pendingLoanInfoDiv.style.color = '#10b981'; // Green for no pending
-                    }
-                }
-            }, (error) => {
-                console.error("Error listening to customer loans:", error);
-                customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4 text-red-500">Failed to load loans.</p>';
-                pendingLoanInfoDiv.textContent = "Error loading pending loans.";
-                pendingLoanInfoDiv.style.color = '#ef4444';
-            });
-
-        } catch (error) {
-            console.error("Error setting up loan listener or initial query:", error);
-            customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4 text-red-500">Failed to load loans due to an unexpected error.</p>';
-            pendingLoanInfoDiv.textContent = "Error loading pending loans.";
-            pendingLoanInfoDiv.style.color = '#ef4444';
-        } finally {
-            // Ensure loader is hidden even if listener setup fails
-            pageLoader.classList.add('hidden');
-        }
-    }
-
-    /**
-     * Attaches event listeners to dynamically added loan elements.
-     */
-    function attachLoanEventListeners() {
-        customerLoansListDiv.querySelectorAll('.add-payment-btn').forEach(button => {
-            // Remove any existing listeners to prevent duplicates (important for onSnapshot updates)
-            // This cloning ensures that when the list is refreshed, old listeners are gone and new ones are attached.
-            const newButton = button.cloneNode(true);
-            button.parentNode.replaceChild(newButton, button);
-
-            if (!newButton.disabled) {
-                newButton.addEventListener('click', (e) => {
-                    const loanId = e.target.dataset.loanId;
-                    showPaymentModal(loanId);
-                });
-            }
-        });
-    }
-
-    /**
-     * Attaches event listeners to dynamically added WhatsApp buttons.
-     */
-    function attachWhatsAppEventListeners() {
-        customerLoansListDiv.querySelectorAll('.whatsapp-loan-btn').forEach(button => {
-            // Remove any existing listeners to prevent duplicates
-            const newButton = button.cloneNode(true);
-            button.parentNode.replaceChild(newButton, button);
-
-            newButton.addEventListener('click', (e) => {
-                const loanId = e.currentTarget.dataset.loanId;
-                const loanStatus = e.currentTarget.dataset.loanStatus;
-                const loanBalance = parseFloat(e.currentTarget.dataset.loanBalance);
-                const customerName = e.currentTarget.dataset.customerName;
-                const customerPhone = e.currentTarget.dataset.customerPhone;
-
-                sendWhatsAppMessage(loanId, loanStatus, loanBalance, customerName, customerPhone);
-            });
-        });
-    }
-
-    /**
-     * Constructs and opens a WhatsApp message link.
-     * @param {string} loanId - The ID of the loan.
-     * @param {string} loanStatus - The status of the loan ('pending' or 'paid').
-     * @param {number} loanBalance - The outstanding balance of the loan.
-     * @param {string} customerName - The name of the customer.
-     * @param {string} customerPhone - The phone number of the customer.
-     */
-    function sendWhatsAppMessage(loanId, loanStatus, loanBalance, customerName, customerPhone) {
-        if (!customerPhone) {
-            showMessage("Customer phone number not available for WhatsApp message.", "warning");
-            return;
-        }
-
-        let message = "";
-        const truncatedLoanId = loanId.substring(0, 8); // Truncate loan ID for message
-
-        // Use a threshold for balance when checking status to avoid float precision issues
-        if (loanStatus === 'pending' && loanBalance > 0.01) {
-            message = `Dear ${customerName || 'customer'}, this is a friendly reminder regarding your loan with Loan ID ${truncatedLoanId}.... Your outstanding balance is ${formatLKR(loanBalance)}. Please make your payment at your earliest convenience. Thank you, WR Smile.`;
-        } else if (loanStatus === 'paid' || loanBalance <= 0.01) { // Also check balance <= 0.01 for paid status
-            message = `Dear ${customerName || 'customer'}, your loan with Loan ID ${truncatedLoanId}.... has been successfully paid in full. Thank you for your payment! - WR Smile`;
-        } else {
-            showMessage("Loan status is unclear or invalid for sending a WhatsApp message.", "warning");
-            return;
-        }
-
-        const whatsappLink = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappLink, '_blank');
-    }
-
-    /**
-     * Displays the Add Payment modal.
-     * @param {string} loanId - The ID of the loan to pay.
-     */
-    async function showPaymentModal(loanId) {
-        pageLoader.classList.remove('hidden');
-        try {
-            const loanDocRef = doc(loansCollectionRef, loanId);
-            const loanSnap = await getDoc(loanDocRef);
-            if (loanSnap.exists()) {
-                const data = loanSnap.data();
-                const totalAmt = Number(data.totalAmount || data.loanAmount || 0);
-                const paidAmt = Number(data.paidAmount || 0);
-
-                currentLoanBeingPaid = {
-                    id: loanSnap.id,
-                    customerId: data.customerId,
-                    invoiceId: data.invoiceId,
-                    // Calculate balance explicitly here too
-                    totalAmount: parseFloat(totalAmt.toFixed(2)),
-                    paidAmount: parseFloat(paidAmt.toFixed(2)),
-                    balance: parseFloat((totalAmt - paidAmt).toFixed(2)),
-                    loanDate: parseFirestoreDate(data.date || data.loanDate || new Date()).toISOString(),
-                    note: data.note || '',
-                    status: data.status || 'pending'
-                };
-                console.log("[showPaymentModal] Opening payment modal for loan:", currentLoanBeingPaid); // <--- NEW LOG
-                console.log(`[showPaymentModal] Balance calculated when opening modal: ${currentLoanBeingPaid.balance}`); // <--- NEW LOG
-                console.log(`[showPaymentModal] Attempting to set paymentCurrentBalanceInput.value to: ${formatLKR(currentLoanBeingPaid.balance)}`); // <--- NEW LOG
-
-                paymentLoanIdInput.value = currentLoanBeingPaid.id.substring(0, 8) + '...'; // Show truncated ID
-                paymentCurrentBalanceInput.value = formatLKR(currentLoanBeingPaid.balance);
-                paymentAmountInput.value = ''; // Clear previous amount
-                paymentNoteTextarea.value = ''; // Clear previous note
-                showCustomModal(addPaymentModal);
-            } else {
-                showMessage("Loan not found. Please refresh.", "error");
-            }
-        } catch (error) {
-            console.error("[showPaymentModal] Error fetching loan for payment:", error);
-            showMessage("Error loading loan details. Please try again.", "error");
-        } finally {
-            pageLoader.classList.add('hidden');
-        }
-    }
-
-    /**
-     * Processes the payment for a loan.
-     * @param {Event} event - The form submission event.
-     */
-    async function processPayment(event) {
-        event.preventDefault();
-
-        if (!currentLoanBeingPaid || !currentLoanBeingPaid.id) {
-            showMessage("No loan selected for payment.", "error");
-            return;
-        }
-
-        const paymentAmount = parseFloat(paymentAmountInput.value);
-        const paymentNote = paymentNoteTextarea.value.trim();
-
-        if (isNaN(paymentAmount) || paymentAmount <= 0) {
-            showMessage("Please enter a valid positive payment amount.", "warning");
-            return;
-        }
-
-        pageLoader.classList.remove('hidden');
-        try {
-            // Re-fetch the latest loan data right before processing the payment
-            const loanDocRef = doc(loansCollectionRef, currentLoanBeingPaid.id);
-            const latestLoanSnap = await getDoc(loanDocRef);
-
-            if (!latestLoanSnap.exists()) {
-                showMessage("Loan not found or has been deleted. Cannot process payment.", "error");
+        async function searchAndLoadCustomer(phone) {
+            if (!phone) {
+                customerNameDisplay.textContent = 'Search a customer to view their loans.';
+                loanListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
+                currentCustomerFirestoreId = null;
+                loanCustomerPhoneInput.value = ''; // Clear phone in loan modal
+                addLoanBtn.disabled = true; // Disable add loan if no customer selected
                 return;
             }
 
-            const latestLoanData = latestLoanSnap.data();
-            // Ensure the latest totalAmount and paidAmount are used for calculation, and explicitly parse/round
-            const actualTotalAmount = parseFloat((Number(latestLoanData.totalAmount || latestLoanData.loanAmount || 0)).toFixed(2));
-            const actualPaidAmount = parseFloat((Number(latestLoanData.paidAmount || 0)).toFixed(2));
+            showLoader();
+            try {
+                const q = query(customersCollection, where("phone", "==", phone));
+                const querySnapshot = await getDocs(q);
 
-            // Recalculate the actual current balance from the latest data
-            const actualCurrentBalance = parseFloat((actualTotalAmount - actualPaidAmount).toFixed(2));
+                if (!querySnapshot.empty) {
+                    const customerDoc = querySnapshot.docs[0];
+                    const customerData = customerDoc.data();
+                    currentCustomerFirestoreId = customerDoc.id; // Store Firestore ID
+                    customerNameDisplay.textContent = `Customer: ${customerData.name}`;
+                    loanCustomerPhoneInput.value = customerData.phone; // Set phone in loan modal
+                    addLoanBtn.disabled = false; // Enable add loan button
 
-
-            console.log(`[processPayment] Re-fetched latest loan data for ID ${currentLoanBeingPaid.id}:`, latestLoanData);
-            console.log(`[processPayment] Payment Amount: ${paymentAmount}, Actual Current Balance (re-fetched and calculated): ${actualCurrentBalance}`);
-
-            if (paymentAmount > actualCurrentBalance + 0.01) { // Allow for slight overpayment if it's very close to 0
-                const confirmed = await showConfirmModal(`Payment amount (${formatLKR(paymentAmount)}) exceeds outstanding balance (${formatLKR(actualCurrentBalance)}). Do you want to pay this amount?`);
-                if (!confirmed) {
-                    pageLoader.classList.add('hidden'); // Hide loader if user cancels
-                    return;
+                    // Call the function from loadLoansForCustomer.js, passing Firebase instances
+                    await loadLoansForCustomer(customerData.phone, loansRef, paymentsRef, loanListDiv);
+                } else {
+                    customerNameDisplay.textContent = 'Customer not found.';
+                    loanListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
+                    currentCustomerFirestoreId = null;
+                    loanCustomerPhoneInput.value = '';
+                    addLoanBtn.disabled = true;
                 }
+            } catch (error) {
+                console.error("Error searching for customer: ", error);
+                customerNameDisplay.textContent = 'Failed to load customer data.';
+                loanListDiv.innerHTML = '<p class="text-danger text-center py-4">Failed to load loans.</p>';
+            } finally {
+                hideLoader();
             }
-
-            // 1. Record the payment
-            await addDoc(paymentsCollectionRef, {
-                loanId: currentLoanBeingPaid.id,
-                customerId: currentLoanBeingPaid.customerId,
-                amount: paymentAmount,
-                paymentDate: new Date().toISOString(), // Consistent date format
-                note: paymentNote
-            });
-            console.log(`[processPayment] Recorded payment of ${formatLKR(paymentAmount)} for loan ID: ${currentLoanBeingPaid.id}`);
-
-            // 2. Calculate new balances based on the *latest* data
-            const newPaidAmount = parseFloat((actualPaidAmount + paymentAmount).toFixed(2));
-            let newBalance = parseFloat((actualCurrentBalance - paymentAmount).toFixed(2));
-
-            // Ensure balance doesn't go negative or remain as a tiny floating point
-            if (newBalance < 0.01 && newBalance > -0.01) { // If it's very close to zero, make it exactly zero
-                newBalance = 0;
-            } else if (newBalance < 0) { // If it becomes genuinely negative (e.g., due to overpayment), cap it at 0
-                newBalance = 0;
-            }
-
-            console.log(`[processPayment] Calculated New Paid Amount: ${newPaidAmount}, New Balance: ${newBalance}`);
-
-            await updateDoc(loanDocRef, { // Use loanDocRef which is for the latest loan
-                paidAmount: newPaidAmount,
-                balance: newBalance, // Use the adjusted newBalance
-                status: (newBalance <= 0.01) ? 'paid' : 'pending' // Update loan status based on final balance
-            });
-            console.log(`[processPayment] Updated loan ID: ${currentLoanBeingPaid.id} in Firestore. New balance: ${formatLKR(newBalance)}`);
-
-            showMessage(`Payment of ${formatLKR(paymentAmount)} recorded successfully!`, "success");
-            hideCustomModal(addPaymentModal);
-            // The onSnapshot listener in loadAndRenderLoans will automatically refresh the list.
-        } catch (error) {
-            console.error("[processPayment] Error processing payment:", error);
-            showMessage("Failed to record payment. Please try again.", "error");
-        } finally {
-            pageLoader.classList.add('hidden');
-            currentLoanBeingPaid = null; // Clear loan data after processing
         }
-    }
+        
+        document.getElementById('search-btn').addEventListener('click', () => {
+            searchAndLoadCustomer(customerPhoneInput.value.trim());
+        });
 
-
-    // --- Initialization & Event Listeners ---
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Initially hide loader, it will show again when searching customer
-        pageLoader.classList.add('hidden');
-
-        // Attach Event Listeners
-        searchCustomerBtn.addEventListener('click', searchCustomer);
         customerPhoneInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                searchCustomer();
+                searchAndLoadCustomer(customerPhoneInput.value.trim());
             }
         });
 
-        // Add customer modal listeners
-        addCustomerForm.addEventListener('submit', addCustomerInModal);
-        document.getElementById('closeAddCustomerModal').addEventListener('click', () => hideCustomModal(addCustomerModal));
-        document.getElementById('cancelAddCustomerModal').addEventListener('click', () => hideCustomModal(addCustomerModal));
+        // Initial state for add loan button
+        addLoanBtn.disabled = true;
 
-        // Add payment modal listeners
-        addPaymentForm.addEventListener('submit', processPayment);
-        document.getElementById('closeAddPaymentModal').addEventListener('click', () => hideCustomModal(addPaymentModal));
-        document.getElementById('cancelAddPaymentModal').addEventListener('click', () => hideCustomModal(addPaymentModal));
 
-        // Initial state for loan list
-        customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Search a customer to view their loans.</p>';
-    });
-
-    // Failsafe to hide loader
-    setTimeout(() => {
-        const loader = document.getElementById("page-loader");
-        if (loader && !loader.classList.contains('hidden')) {
-            loader.classList.add('hidden');
-            console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
-        }
-    }, 20000);
-	<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-    // Your Firebase config
-    const firebaseConfig = {
-        // Paste your config here
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const realtimeDb = getDatabase(app);
-
-    const customersCollection = collection(db, "customers");
-    const loansRef = ref(realtimeDb, "loans");
-    const paymentsRef = ref(realtimeDb, "payments");
-
-    const customerPhoneInput = document.getElementById('customer-phone-input');
-    const customerNameDiv = document.getElementById('customer-name');
-    const customerLoansListDiv = document.getElementById('customer-loans-list');
-    const addLoanBtn = document.getElementById('add-loan-btn');
-    const addPaymentBtn = document.getElementById('add-payment-btn');
-    const addLoanModal = document.getElementById('add-loan-modal');
-    const addPaymentModal = document.getElementById('add-payment-modal');
-
-    // Utility to get URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const customerPhoneFromUrl = urlParams.get('customerPhone');
-
-    // Load customer data and loans automatically if phone is in URL
-    if (customerPhoneFromUrl) {
-        customerPhoneInput.value = customerPhoneFromUrl;
-        searchCustomer(customerPhoneFromUrl);
-    }
-
-    // Customer search function
-    async function searchCustomer(phone) {
-        if (!phone) {
-            customerNameDiv.textContent = 'Search a customer to view their loans.';
-            customerLoansListDiv.innerHTML = '';
-            return;
-        }
-
-        try {
-            const q = query(customersCollection, where("phone", "==", phone));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                const customerDoc = querySnapshot.docs[0];
-                const customerData = customerDoc.data();
-                customerNameDiv.textContent = customerData.name;
-                // Now load loans using the customer's phone
-                loadLoansForCustomer(customerData.phone);
-            } else {
-                customerNameDiv.textContent = 'Customer not found.';
-                customerLoansListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No loans found for this customer.</p>';
+        // --- Add Loan Modal Logic ---
+        addLoanBtn.addEventListener('click', () => {
+            if (!currentCustomerFirestoreId) {
+                showAlert("Please search and select a customer first to add a loan.", "warning");
+                return;
             }
-        } catch (error) {
-            console.error("Error searching for customer: ", error);
-            customerNameDiv.textContent = 'Failed to load customer data.';
+            // Clear previous products in the form
+            loanProductsContainer.innerHTML = ''; 
+            createProductRow(); // Start with one empty product row
+            discountInput.value = '0';
+            loanNoteInput.value = '';
+            showCustomModal(addLoanModal);
+        });
+
+        document.getElementById('closeAddLoanModal').addEventListener('click', () => hideCustomModal(addLoanModal));
+
+        // Dynamically add product rows to the loan form
+        function createProductRow() {
+            const row = document.createElement('div');
+            row.className = 'product-row flex items-center gap-2 mb-2';
+            row.innerHTML = `
+                <input type="text" class="product-name form-input flex-grow" placeholder="Product Name" required>
+                <input type="number" class="product-qty form-input w-20 text-center" placeholder="Qty" value="1" min="1" required>
+                <input type="number" class="product-price form-input w-24 text-center" placeholder="Price" step="0.01" min="0" required>
+                <button type="button" class="remove-product btn btn-danger btn-sm">&times;</button>
+            `;
+            loanProductsContainer.appendChild(row);
+
+            row.querySelector(".remove-product").addEventListener("click", () => row.remove());
         }
-    }
 
-    // Your existing loadLoansForCustomer function will now use phone instead of ID
-    async function loadLoansForCustomer(customerPhone) {
-        // Your updated loadLoansForCustomer logic will go here
-    }
+        addProductRowBtn.addEventListener("click", () => createProductRow());
 
-    // Event Listeners for search bar (if user manually searches)
-    document.getElementById('search-btn').addEventListener('click', () => {
-        searchCustomer(customerPhoneInput.value);
-    });
-    customerPhoneInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            searchCustomer(customerPhoneInput.value);
-        }
-    });
 
-    // Modal listeners and other functions
-    // ... [Your existing modal and other functions]
-</script>
-</script>
+        // --- Save Loan Logic ---
+        addLoanForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
+            if (!currentCustomerFirestoreId) {
+                showAlert("No customer selected. Please search and select a customer.", "error");
+                return;
+            }
+
+            const discount = parseFloat(discountInput.value) || 0;
+
+            const products = Array.from(loanProductsContainer.querySelectorAll('.product-row')).map(row => {
+                return {
+                    name: row.querySelector('.product-name').value.trim(),
+                    qty: parseInt(row.querySelector('.product-qty').value),
+                    price: parseFloat(row.querySelector('.product-price').value)
+                };
+            }).filter(p => p.name && p.qty > 0 && p.price >= 0);
+
+            if (products.length === 0) {
+                showAlert("Add at least one valid product for the loan.", "warning");
+                return;
+            }
+
+            const total = products.reduce((sum, p) => sum + p.qty * p.price, 0);
+            const totalAmount = total - discount;
+            const loanNote = loanNoteInput.value.trim();
+
+            if (totalAmount <= 0) {
+                showAlert("Total loan amount must be greater than zero after discount.", "warning");
+                return;
+            }
+            
+            showLoader();
+            try {
+                // Generate a unique ID for the new loan in Realtime Database
+                const newLoanRef = push(loansRef); // Using the imported push function
+                await set(newLoanRef, {
+                    loanId: newLoanRef.key, // Store the generated key as loanId
+                    customerId: currentCustomerFirestoreId, // Link to Firestore customer ID
+                    customerPhone: loanCustomerPhoneInput.value, // Also store phone for direct lookup
+                    loanDate: new Date().toISOString(),
+                    products: products,
+                    discount: discount,
+                    totalAmount: totalAmount,
+                    paidAmount: 0, // Initial payment on loan is 0 for new loan
+                    balance: totalAmount,
+                    note: loanNote
+                });
+                showAlert("Loan added successfully!", "success");
+                hideCustomModal(addLoanModal);
+                addLoanForm.reset();
+                // Reload loans for the current customer to show the new loan
+                await loadLoansForCustomer(loanCustomerPhoneInput.value, loansRef, paymentsRef, loanListDiv); 
+            } catch (error) {
+                console.error("Error adding loan:", error);
+                showAlert("Failed to add loan.", "error");
+            } finally {
+                hideLoader();
+            }
+        });
+
+
+        // --- Add Payment Modal Logic ---
+        loanListDiv.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-payment-btn')) {
+                const loanId = e.target.dataset.loanId;
+                loanIdInput.value = loanId;
+                paymentAmountInput.value = '';
+                paymentNoteInput.value = '';
+                showCustomModal(addPaymentModal);
+            }
+        });
+
+        document.getElementById('closeAddPaymentModal').addEventListener('click', () => hideCustomModal(addPaymentModal));
+
+        addPaymentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const loanId = loanIdInput.value;
+            const paymentAmount = parseFloat(paymentAmountInput.value);
+            const paymentNote = paymentNoteInput.value.trim();
+
+            if (isNaN(paymentAmount) || paymentAmount <= 0) {
+                showAlert("Please enter a valid payment amount.", "warning");
+                return;
+            }
+
+            showLoader();
+            try {
+                const loanSnapshot = await once(ref(realtimeDb, `loans/${loanId}`)); // Use ref and once with realtimeDb
+                if (loanSnapshot.exists()) {
+                    const loan = loanSnapshot.val();
+                    const currentBalance = Number(loan.balance) || loan.totalAmount;
+
+                    if (paymentAmount > currentBalance) {
+                        showAlert(`Payment amount exceeds outstanding balance of ${currentBalance.toFixed(2)}.`, "warning");
+                        return;
+                    }
+
+                    const newPaidAmount = (Number(loan.paidAmount) || 0) + paymentAmount;
+                    const newBalance = currentBalance - paymentAmount;
+
+                    // Update loan in Realtime Database
+                    await set(ref(realtimeDb, `loans/${loanId}`), {
+                        ...loan, // Keep existing loan data
+                        paidAmount: newPaidAmount,
+                        balance: newBalance
+                    });
+
+                    // Add payment record to Realtime Database
+                    const newPaymentRef = push(paymentsRef); // Use push with paymentsRef
+                    await set(newPaymentRef, {
+                        paymentId: newPaymentRef.key,
+                        loanId: loanId,
+                        amount: paymentAmount,
+                        date: new Date().toISOString(),
+                        note: paymentNote
+                    });
+
+                    showAlert("Payment added successfully!", "success");
+                    hideCustomModal(addPaymentModal);
+                    // Reload loans for the current customer
+                    await loadLoansForCustomer(customerPhoneInput.value, loansRef, paymentsRef, loanListDiv);
+                } else {
+                    showAlert("Loan not found.", "error");
+                }
+            } catch (error) {
+                console.error("Error processing payment:", error);
+                showAlert("Failed to process payment.", "error");
+            } finally {
+                hideLoader();
+            }
+        });
+
+        // Failsafe to hide loader
+        setTimeout(() => {
+            const loader = document.getElementById("page-loader");
+            if (loader && !loader.classList.contains('hidden')) {
+                loader.classList.add('hidden');
+                console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
+            }
+        }, 20000);
+    </script>
 </body>
 </html>

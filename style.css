@@ -26,56 +26,72 @@ body {
   align-items: center;
   justify-content: flex-start;
   color: var(--text-dark);
-  line-height: 1.6;
-  font-size: 16px;
-  margin: 0;
   padding: 20px;
   box-sizing: border-box;
 }
 
-/* --- 3. Typography --- */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
-  color: var(--dark-blue);
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-top: 0;
+  color: #1a202c;
+}
+
+/* --- 3. Header/Navigation --- */
+.header {
+    background: linear-gradient(to right, #1a202c, #2d3748);
+    color: var(--text-light);
+    padding: 1rem 2rem;
+    width: 100%;
+    max-width: 960px; /* Consistent max-width for main container */
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.header .logo {
+    height: 50px;
+    width: auto;
+}
+
+.header .nav a {
+    color: #cbd5e0;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.header .nav a:hover, .header .nav a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- 4. Main Container & Section Titles --- */
+.container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  width: 100%;
+  max-width: 900px; /* Wider for more content */
+  margin: 40px 0;
+  position: relative; /* For absolutely positioned elements inside */
 }
 
 .section-title {
-  font-size: 1.6rem;
-  border-bottom: 1px solid var(--border-light);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
-  color: var(--accent-color);
-}
-
-/* --- 4. Container & Layout --- */
-.container {
-  max-width: 1200px;
-  width: 100%;
-  background: #ffffff;
-  padding: 2.5rem;
-  border-radius: 24px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-  margin: 30px auto;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border-light);
-}
-
-.container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234a5568" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
-  opacity: 0.8;
-  z-index: 0;
-  pointer-events: none;
+  text-align: center;
+  color: #1a202c;
+  font-size: 2.5rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.05rem;
 }
 
 /* --- 5. Form Elements --- */
@@ -84,146 +100,512 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-label {
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 0.5rem;
   display: block;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.6rem;
   font-size: 0.95rem;
 }
 
-.form-input, .form-select {
+.form-input, .form-textarea, .form-select {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 1rem;
   border: 1px solid #cbd5e0;
   border-radius: 8px;
   font-size: 1rem;
   color: var(--text-dark);
-  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  background-color: #f7fafc;
 }
 
-.form-input:focus, .form-select:focus {
+.form-input:focus, .form-textarea:focus, .form-select:focus {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3);
   outline: none;
+  background-color: #ffffff;
+}
+
+.form-input.is-invalid {
+    border-color: var(--danger-red);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
 }
 
 /* --- 6. Buttons --- */
 .btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
+  display: inline-block;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
   font-weight: 600;
+  text-align: center;
+  border-radius: 8px;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 1.05rem;
-  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
 }
 
 .btn-primary {
-  background: linear-gradient(to right, var(--accent-color), var(--accent-hover));
-  color: var(--text-light);
-  box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3);
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+  color: white;
+  box-shadow: 0 4px 10px rgba(45, 212, 191, 0.3);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(to right, var(--accent-hover), #118e82);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(45, 212, 191, 0.4);
-  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(45, 212, 191, 0.4);
+  background: linear-gradient(90deg, var(--accent-hover), var(--accent-color));
 }
 
+.btn-primary-custom { /* Used for specific buttons like Search Loan */
+    background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+    color: white;
+    box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3);
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(66, 153, 225, 0.4);
+    background: linear-gradient(90deg, var(--dark-blue), var(--primary-blue));
+}
+
+
 .btn-secondary {
-  background-color: var(--gray-500);
-  color: var(--text-light);
-  box-shadow: 0 8px 20px rgba(107, 114, 128, 0.2);
+  background-color: #edf2f7;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .btn-secondary:hover {
-  background-color: #4b5563;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(107, 114, 128, 0.3);
-  border-color: rgba(255, 255, 255, 0.2);
+  background-color: #e2e8f0;
+  color: #2d3748;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary-custom { /* For special secondary buttons like add product row in loan */
+  background-color: #cbd5e0;
+  color: #334155;
+  border: 1px solid #a0aec0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary-custom:hover {
+  background-color: #a0aec0;
+  color: #1a202c;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-danger {
   background-color: var(--danger-red);
-  color: var(--text-light);
-  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
-  padding: 0.5rem 1rem;
+  color: white;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
 }
 
 .btn-danger:hover {
   background-color: #dc2626;
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
-  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4);
 }
 
-/* --- 7. Cart & Receipt Items --- */
-.cart-item, .receipt-item {
+.btn-block {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* --- 7. Flexbox & Layout Utilities --- */
+.flex-container {
   display: flex;
   justify-content: space-between;
-  padding: 0.75rem 0;
-  border-bottom: 1px dashed rgba(203, 213, 224, 0.6);
-}
-
-.cart-item-details {
-  flex-grow: 1;
-  font-size: 1.05rem;
-  color: #4a5568;
-}
-
-.cart-item-details span {
-  font-weight: 600;
-  color: var(--text-dark);
-}
-
-.cart-item-actions {
-  display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+.flex-container > * {
+    flex-grow: 1;
+}
+.flex-container .form-input {
+    flex-grow: 2; /* Search input takes more space */
 }
 
-.qty-input {
-  width: 60px;
-  padding: 0.4rem;
-  border-radius: 6px;
-  border: 1px solid #cbd5e0;
-  text-align: center;
-}
-
-/* --- 8. Summary & Totals --- */
-.summary-line {
+.input-group {
   display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  font-size: 1.1rem;
-  color: #4a5568;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+.input-group .form-input {
+  flex-grow: 1;
 }
 
-.summary-line strong {
-  color: var(--text-dark);
+.customer-name-display {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-top: 1rem;
+    text-align: center;
 }
 
-.total-line {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--dark-blue);
-  padding-top: 1rem;
-  border-top: 2px solid #a0aec0;
-  margin-top: 1rem;
+/* --- 8. Product & Customer Lists (Common Styles) --- */
+.product-list, .customer-list, .loan-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
 }
 
-/* --- 9. Loading Spinner --- */
+.product-card, .customer-card, .loan-card {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex; /* For loan card header alignment */
+    flex-direction: column; /* For stacking content in cards */
+}
+.product-card:hover, .customer-card:hover, .loan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.product-card h3, .customer-card h3, .loan-card h3 {
+    font-size: 1.6rem;
+    margin-top: 0;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+.product-card p, .customer-card p, .loan-card p {
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
+/* Specific product card styles */
+.product-card .stock-qty {
+    font-weight: 600;
+    color: var(--primary-blue);
+}
+.product-card .stock-low {
+    color: var(--danger-red);
+    font-weight: 700;
+}
+.product-card .actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.8rem;
+}
+
+/* Specific Customer Card Styles */
+.customer-card {
+    cursor: pointer; /* Indicate clickable */
+}
+.customer-card .loan-info {
+    font-weight: bold;
+    color: var(--danger-red);
+    margin-top: 10px;
+}
+.customer-card .purchase-info {
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+
+/* Specific Loan Card Styles */
+.loan-card {
+    border: 1px solid #e2e8e0;
+}
+.loan-card .loan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.loan-card .loan-id {
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+.loan-card .loan-status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 9999px; /* Pill shape */
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+}
+.loan-card .loan-status-badge.pending {
+    background-color: var(--danger-red);
+}
+.loan-card .loan-status-badge.paid {
+    background-color: #28a745; /* Green */
+}
+.loan-card .loan-details ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 0.5rem;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+.loan-card .loan-summary {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8e0;
+}
+.loan-card .loan-summary p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+}
+.loan-card .loan-summary strong {
+    color: #1a202c;
+}
+.loan-card .loan-balance {
+    font-weight: 700;
+}
+.loan-card .text-red-500 { color: #ef4444; }
+.loan-card .text-green-500 { color: #28a745; }
+
+.loan-card .payments-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8e0;
+}
+.loan-card .payments-section h5 {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
+.loan-card .payments-list {
+    margin-top: 0.5rem;
+    background-color: #f7fafc;
+    border-radius: 8px;
+    padding: 1rem;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #e2e8e0;
+}
+.loan-card .payments-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.loan-card .payments-list li {
+    padding: 0.3rem 0;
+    border-bottom: 1px dotted #cbd5e0;
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+.loan-card .payments-list li:last-child {
+    border-bottom: none;
+}
+.loan-card .loan-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+}
+.loan-card .loan-actions .btn-sm {
+    padding: 0.6rem 1.2rem;
+}
+
+/* Add Loan/Product Row styling */
+.product-row {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    align-items: center;
+}
+.product-row .product-name {
+    flex-grow: 3;
+}
+.product-row .product-qty, .product-row .product-price {
+    flex-grow: 1;
+    max-width: 80px; /* Limit width */
+    text-align: center;
+}
+.product-row .remove-product {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--danger-red);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 5px;
+}
+.product-row .remove-product:hover {
+    color: #dc2626;
+}
+
+/* --- 9. Modals (Common Styles) --- */
+.modal-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-custom.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-custom-content {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-custom.show .modal-custom-content {
+    transform: translateY(0);
+}
+
+.close-btn-custom {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #a0aec0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-btn-custom:hover {
+    color: #2d3748;
+}
+
+.modal-custom-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #1a202c;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.modal-custom-footer {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Specific for Confirm Modal */
+#confirmModal .modal-custom-content {
+    max-width: 450px;
+    text-align: center;
+}
+#confirmModal .modal-custom-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+#confirmModal #confirmMessage {
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+}
+#confirmModal .modal-custom-footer {
+    justify-content: center;
+}
+
+/* Custom Alert Styling */
+#alert-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none; /* Allows clicks to pass through */
+}
+
+.custom-alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    opacity: 0; /* Start hidden */
+    transform: translateY(20px); /* Start slightly below */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    pointer-events: auto; /* Re-enable clicks for the alert itself */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-alert.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.custom-alert.info { background-color: #3498db; } /* Blue */
+.custom-alert.success { background-color: #28a745; } /* Green */
+.custom-alert.error { background-color: #dc3545; } /* Red */
+.custom-alert.warning { background-color: #ffc107; color: #333; } /* Yellow */
+
+/* Animation for alerts */
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out-down {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.3s ease-out forwards;
+}
+.animate-fade-out-down {
+    animation: fade-out-down 0.3s ease-in forwards;
+}
+
+/* --- 10. Loader --- */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease-out;
+}
+
+.page-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .spinner {
-  border: 6px solid rgba(66, 153, 225, 0.2);
-  width: 70px;
-  height: 70px;
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
   border-radius: 50%;
-  border-left-color: var(--primary-blue);
+  width: 60px;
+  height: 60px;
   animation: spin 1s linear infinite;
 }
 
@@ -232,7 +614,8 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: rotate(360deg); }
 }
 
-/* --- 10. Responsive Design --- */
+
+/* --- 11. Responsive Design --- */
 @media (max-width: 1024px) {
   .container {
     padding: 2rem;
@@ -244,6 +627,22 @@ h1, h2, h3, h4, h5, h6 {
     padding: 10px;
   }
   
+  .header {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .header .nav {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  .header .nav a {
+      margin: 5px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+  }
+
   .container {
     padding: 1.5rem;
     border-radius: 16px;
@@ -259,6 +658,33 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.95rem;
   }
   
+  .flex-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .input-group {
+      flex-direction: column;
+      gap: 1rem;
+  }
+  .input-group .form-input {
+      width: 100%;
+  }
+
+  .product-list, .customer-list, .loan-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .modal-custom-content {
+      padding: 1.5rem;
+      max-width: 95%;
+  }
+  .modal-custom-title {
+      font-size: 1.5rem;
+  }
+
+  /* Billing specific responsive */
   .cart-item {
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -274,122 +700,22 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .total-line {
-    font-size: 1.4rem;
+    font-size: 0.95rem;
   }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 1rem;
+  .total-line:last-child {
+      font-size: 1.1rem;
   }
-  
-  .btn {
-    width: 100%;
-    margin-bottom: 0.5rem;
+  .product-row {
+      flex-wrap: wrap;
   }
-}
-
-/* --- 11. Print Styles --- */
-@media print {
-  body * {
-    visibility: hidden;
+  .product-row .product-name {
+      width: 100%;
   }
-  
-  #receipt-content, #receipt-content * {
-    visibility: visible;
-    font-family: 'Inter', sans-serif;
-    color: #000;
+  .product-row .product-qty, .product-row .product-price {
+      max-width: unset;
+      width: calc(50% - 0.4rem);
   }
-  
-  #receipt-content {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    padding: 20px;
-    background: white;
+  .product-row .remove-product {
+      width: 100%;
+      text-align: right;
   }
-  
-  .receipt-item {
-    padding: 4px 0;
-    font-size: 0.9rem;
-    border-bottom: 1px dotted #ccc;
-  }
-  
-  #receipt-content h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-  }
-}/* Add to your existing style.css */
-.customer-card {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1.5rem;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    cursor: pointer;
-}
-.customer-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
-.customer-card h3 {
-    margin-top: 0;
-    color: var(--text-dark);
-}
-.customer-card p {
-    margin: 0.5rem 0;
-    color: var(--gray-500);
-}
-.loan-info {
-    font-weight: bold;
-    color: var(--danger-red);
-}
-.purchase-info {
-    font-weight: bold;
-    color: var(--primary-blue);
-}
-.flex-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}/* Add to your existing style.css */
-.customer-card {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1.5rem;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    cursor: pointer;
-}
-.customer-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
-.customer-card h3 {
-    margin-top: 0;
-    color: var(--text-dark);
-}
-.customer-card p {
-    margin: 0.5rem 0;
-    color: var(--gray-500);
-}
-.loan-info {
-    font-weight: bold;
-    color: var(--danger-red);
-}
-.purchase-info {
-    font-weight: bold;
-    color: var(--primary-blue);
-}
-.flex-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
