@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WR Smile | Sales Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for a luxury feel */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #e0e7ee, #c8d3e0); /* Subtle, cool grey gradient */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            color: #334155; /* Darker default text color */
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif; /* Elegant serif for headings */
+            font-weight: 700;
+        }
+        .header {
+            background: linear-gradient(to right, #1a202c, #2d3748); /* Darker, sophisticated gradient */
+            color: #e2e8f0;
+            width: 100%;
+            max-width: 1200px;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+        .nav a {
+            color: #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .nav a:hover, .nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        .nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .input-group label, .input-group input {
+            flex-grow: 1;
+        }
+        .input-group input[type="date"] {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .input-group button {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background-color: #3b82f6;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .input-group button:hover {
+            background-color: #2563eb;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f8fafc;
+        }
+        /* Custom Alert Styling */
+        #alert-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        .custom-alert {
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            opacity: 0; /* Start hidden */
+            transform: translateY(20px); /* Start slightly below */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: auto; /* Re-enable clicks for the alert itself */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .custom-alert.info { background-color: #3498db; } /* Blue */
+        .custom-alert.success { background-color: #28a745; } /* Green */
+        .custom-alert.error { background-color: #dc3545; } /* Red */
+        .custom-alert.warning { background-color: #ffc107; color: #333; } /* Yellow */
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fade-out-down {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(20px); }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.3s ease-out forwards;
+        }
+        .animate-fade-out-down {
+            animation: fade-out-down 0.3s ease-in forwards;
+        }
+
+        /* Page Loader */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #e0e7ee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #334155;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="page-loader" class="page-loader">
+        <div class="spinner"></div>
+    </div>
+
+    <header class="header">
+        <img src="logo.png.webp" alt="WR Smile Logo" class="logo">
+        <nav class="nav">
+            <a href="index.html">Dashboard</a>
+            <a href="billing.html">Billing</a>
+            <a href="stock.html">Stock</a>
+            <a href="customers.html">Customers</a>
+            <a href="loan.html">Loans</a>
+            <a href="sales.html" class="active">Sales</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1 class="text-4xl text-center mb-8">Sales Report</h1>
+
+        <div class="card">
+            <h2 class="text-2xl mb-4">Filters</h2>
+            <div class="input-group">
+                <label for="startDate">From Date:</label>
+                <input type="date" id="startDate">
+                <label for="endDate">To Date:</label>
+                <input type="date" id="endDate">
+                <button id="filterBtn">Filter</button>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4">
+             <div class="card text-center">
+                <h3 class="text-lg">Total Sales</h3>
+                <p id="totalSales" class="text-4xl font-bold text-blue-600 mt-2">Rs. 0.00</p>
+            </div>
+            <div class="card text-center">
+                <h3 class="text-lg">Total Transactions</h3>
+                <p id="totalTransactions" class="text-4xl font-bold text-purple-600 mt-2">0</p>
+            </div>
+            <div class="card text-center">
+                <h3 class="text-lg">Average Sale</h3>
+                <p id="averageSale" class="text-4xl font-bold text-green-600 mt-2">Rs. 0.00</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="text-2xl mb-4">Sales Chart</h2>
+            <canvas id="salesChart"></canvas>
+        </div>
+        
+        <div class="card">
+            <h2 class="text-2xl mb-4">Sales Transactions</h2>
+            <div class="overflow-x-auto">
+                 <table id="salesTable" class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Invoice #</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="salesTableBody">
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-center">Loading sales data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Alert Container -->
+    <div id="alert-container"></div>
+    <script>
+        // Utility function to show alerts
+        function showAlert(message, type = 'info', duration = 3000) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-alert ${type} animate-fade-in-up`;
+            alertDiv.textContent = message;
+            alertContainer.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.classList.remove('animate-fade-in-up');
+                alertDiv.classList.add('animate-fade-out-down');
+                alertDiv.addEventListener('animationend', () => alertDiv.remove());
+            }, duration);
+        }
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, query, where, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // Set log level to debug for detailed console output
+        setLogLevel('debug');
+
+        // Global variables for Firebase auth and DB
+        let app, db, auth, salesCollection;
+        let salesChart;
+
+        // Firebase configuration and app ID are provided by the canvas environment
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        const pageLoader = document.getElementById("page-loader");
+        const salesTableBody = document.getElementById("salesTableBody");
+        const totalSalesEl = document.getElementById("totalSales");
+        const totalTransactionsEl = document.getElementById("totalTransactions");
+        const averageSaleEl = document.getElementById("averageSale");
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+        const filterBtn = document.getElementById("filterBtn");
+        
+        if (Object.keys(firebaseConfig).length > 0) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // Listen for auth state changes and handle authentication
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    console.log("User is authenticated:", user.uid);
+                    salesCollection = collection(db, `/artifacts/${appId}/public/data/sales`);
+                    loadSalesData();
+                } else {
+                    console.log("User is not authenticated, attempting sign-in...");
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Authentication failed:", error);
+                        showAlert("Authentication failed. Please check the console for details.", 'error');
+                    }
+                }
+            });
+        } else {
+            console.error("Firebase config not found.");
+            showAlert("Firebase configuration is missing.", 'error');
+            pageLoader.classList.add('hidden');
+        }
+
+        async function loadSalesData(startDate, endDate) {
+            if (!salesCollection) {
+                console.error("Sales collection reference is not yet available.");
+                salesTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center">Authentication in progress. Please wait...</td></tr>';
+                return;
+            }
+
+            salesTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center">Loading sales data...</td></tr>';
+            
+            let q = salesCollection;
+            if (startDate && endDate) {
+                const startTimestamp = new Date(startDate);
+                const endTimestamp = new Date(endDate);
+                endTimestamp.setHours(23, 59, 59, 999);
+                q = query(salesCollection, where('date', '>=', startTimestamp), where('date', '<=', endTimestamp));
+            }
+
+            try {
+                // Use onSnapshot for real-time updates
+                onSnapshot(q, (querySnapshot) => {
+                    const salesData = [];
+                    querySnapshot.forEach((doc) => {
+                        salesData.push(doc.data());
+                    });
+                    // Sort sales by date ascending before rendering
+                    salesData.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    renderSales(salesData);
+                    pageLoader.classList.add('hidden');
+                }, (error) => {
+                    console.error("Error loading sales data:", error);
+                    salesTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-red-500">Failed to load data. It may be a permission issue.</td></tr>';
+                    showAlert("Failed to load sales data. Please check your Firestore security rules.", 'error');
+                    pageLoader.classList.add('hidden');
+                });
+            } catch (error) {
+                console.error("Error fetching sales data:", error);
+                salesTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-red-500">Failed to load data. Check console for errors.</td></tr>';
+                 showAlert("Failed to load sales data.", 'error');
+                 pageLoader.classList.add('hidden');
+            }
+        }
+        
+        function renderSales(sales) {
+            salesTableBody.innerHTML = '';
+            
+            if (sales.length === 0) {
+                salesTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center">No sales found for this period.</td></tr>';
+                totalSalesEl.textContent = 'Rs. 0.00';
+                totalTransactionsEl.textContent = '0';
+                averageSaleEl.textContent = 'Rs. 0.00';
+                if (salesChart) {
+                    salesChart.data.labels = [];
+                    salesChart.data.datasets[0].data = [];
+                    salesChart.update();
+                }
+                return;
+            }
+            
+            let totalSalesAmount = 0;
+            const dailySales = {};
+
+            sales.forEach(sale => {
+                totalSalesAmount += sale.totalAmount;
+                const date = new Date(sale.date).toISOString().split('T')[0];
+                if (!dailySales[date]) {
+                    dailySales[date] = 0;
+                }
+                dailySales[date] += sale.totalAmount;
+                
+                const row = document.createElement('tr');
+                row.className = 'bg-white';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${sale.invoiceNumber}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${new Date(sale.date).toLocaleDateString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">Rs. ${sale.totalAmount.toFixed(2)}</td>
+                `;
+                salesTableBody.appendChild(row);
+            });
+            
+            // Update summary stats
+            totalSalesEl.textContent = `Rs. ${totalSalesAmount.toFixed(2)}`;
+            totalTransactionsEl.textContent = sales.length;
+            averageSaleEl.textContent = `Rs. ${(totalSalesAmount / sales.length).toFixed(2)}`;
+            
+            // Prepare data for the chart
+            const sortedDates = Object.keys(dailySales).sort();
+            const chartData = {
+                labels: sortedDates,
+                datasets: [{
+                    label: 'Daily Sales (Rs.)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1,
+                    data: sortedDates.map(date => dailySales[date]),
+                }]
+            };
+
+            // Render/update the chart
+            if (salesChart) {
+                salesChart.data = chartData;
+                salesChart.update();
+            } else {
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                salesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        filterBtn.addEventListener('click', () => {
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+            
+            if (startDate && endDate) {
+                loadSalesData(startDate, endDate);
+            } else {
+                loadSalesData();
+            }
+        });
+        
+        // Failsafe to hide loader
+        setTimeout(() => {
+            const loader = document.getElementById("page-loader");
+            if (loader && !loader.classList.contains('hidden')) {
+                loader.classList.add('hidden');
+                console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

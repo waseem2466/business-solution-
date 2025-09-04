@@ -1,9 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-// Correct imports for Realtime Database modular SDK: 'get' for fetching, 'query' as 'dbQuery' for building queries
-import { getDatabase, ref, query as dbQuery, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+import { getDatabase, ref, orderByChild, equalTo, once } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 // YOUR FIREBASE CONFIG
 const firebaseConfig = {
@@ -20,7 +17,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const realtimeDb = getDatabase(app);
-const auth = getAuth(app); // Initialize Auth
 
 const customersCollection = collection(db, "customers");
 const loansRef = ref(realtimeDb, "loans");
@@ -32,8 +28,6 @@ const addCustomerModal = document.getElementById("add-customer-modal");
 const addCustomerForm = document.getElementById("add-customer-form");
 const customerSearchInput = document.getElementById("customer-search");
 const pageLoader = document.getElementById("page-loader");
-
-let isAuthenticated = false; // Track authentication state
 
 
 // Utility functions (copied from other files for consistency)
@@ -55,43 +49,8 @@ function showLoader() {
 function hideLoader() {
     setTimeout(() => {
         pageLoader.classList.add('hidden');
-    }, 300);
+    }, 300); 
 }
-
-function showAlert(message, type = 'info', duration = 3000) {
-    const alertContainer = document.getElementById('alert-container');
-    const alertDiv = document.createElement('div');
-    alertDiv.className = `custom-alert ${type} animate-fade-in-up`;
-    alertDiv.textContent = message;
-    alertContainer.appendChild(alertDiv);
-
-    setTimeout(() => {
-        alertDiv.classList.remove('animate-fade-in-up');
-        alertDiv.classList.add('animate-fade-out-down');
-        alertDiv.addEventListener('animationend', () => alertDiv.remove());
-    }, duration);
-}
-
-
-// --- Firebase Authentication Listener ---
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // User is signed in (anonymously or otherwise)
-        isAuthenticated = true;
-        console.log("Firebase authenticated as:", user.uid);
-        loadCustomers(); // Load customers once authenticated
-    } else {
-        // User is signed out, try to sign in anonymously
-        isAuthenticated = false;
-        signInAnonymously(auth).then(() => {
-            console.log("Signed in anonymously.");
-        }).catch((error) => {
-            console.error("Anonymous sign-in failed:", error);
-            showAlert("Failed to sign in. Customer data may not be accessible.", "error");
-            hideLoader(); // Hide loader if sign-in fails
-        });
-    }
-});
 
 
 async function renderCustomerCard(customer) {
@@ -101,8 +60,7 @@ async function renderCustomerCard(customer) {
     // Get total outstanding loans from Realtime Database
     let totalPendingLoan = 0;
     try {
-        // Use dbQuery for Realtime Database queries and get() to fetch
-        const loansSnapshot = await get(dbQuery(loansRef, orderByChild("customerPhone"), equalTo(customer.phone)));
+        const loansSnapshot = await once(query(loansRef, orderByChild("customerPhone"), equalTo(customer.phone)));
         if (loansSnapshot.exists()) {
             const loans = loansSnapshot.val();
             for (const loan of Object.values(loans)) {
@@ -116,8 +74,7 @@ async function renderCustomerCard(customer) {
     // Get total purchases from Realtime Database
     let totalPurchases = 0;
     try {
-        // Use dbQuery for Realtime Database queries and get() to fetch
-        const salesSnapshot = await get(dbQuery(salesRef, orderByChild("customerPhone"), equalTo(customer.phone)));
+        const salesSnapshot = await once(query(salesRef, orderByChild("customerPhone"), equalTo(customer.phone)));
         if (salesSnapshot.exists()) {
             const sales = salesSnapshot.val();
             for (const sale of Object.values(sales)) {
@@ -144,16 +101,10 @@ async function renderCustomerCard(customer) {
 }
 
 async function loadCustomers() {
-    if (!isAuthenticated) {
-        customersListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Waiting for authentication to load customers...</p>';
-        return;
-    }
     showLoader();
     customersListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Loading customers...</p>';
     try {
-        // Firestore query for customers
-        const q = query(customersCollection); // No where clause needed for all customers
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(customersCollection);
         customersListDiv.innerHTML = '';
         if (querySnapshot.empty) {
             customersListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No customers found.</p>';
@@ -167,36 +118,23 @@ async function loadCustomers() {
         }
     } catch (error) {
         console.error("Error fetching customers: ", error);
-        showAlert('Failed to load customers: ' + error.message, "error");
         customersListDiv.innerHTML = '<p class="text-danger">Failed to load customers.</p>';
     } finally {
         hideLoader();
     }
 }
 
-addCustomerBtn.addEventListener("click", () => {
-    if (!isAuthenticated) {
-        showAlert("Please wait for authentication to complete before adding customers.", "warning");
-        return;
-    }
-    showCustomModal(addCustomerModal);
-});
+addCustomerBtn.addEventListener("click", () => showCustomModal(addCustomerModal));
 document.getElementById("close-add-modal").addEventListener("click", () => hideCustomModal(addCustomerModal));
 
 addCustomerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    if (!isAuthenticated) {
-        showAlert("Authentication in progress. Please wait and try again.", "warning");
-        return;
-    }
-
     const name = document.getElementById("customer-name").value.trim();
     const phone = document.getElementById("customer-phone").value.trim();
     const email = document.getElementById("customer-email").value.trim();
 
     if (!name || !phone) {
-        showAlert("Name and Phone are required.", "warning");
+        alert("Name and Phone are required.");
         return;
     }
 
@@ -206,18 +144,18 @@ addCustomerForm.addEventListener("submit", async (e) => {
         const q = query(customersCollection, where("phone", "==", phone));
         const existingCustomers = await getDocs(q);
         if (!existingCustomers.empty) {
-            showAlert("A customer with this phone number already exists.", "warning");
+            alert("A customer with this phone number already exists.");
             return;
         }
 
         await addDoc(customersCollection, { name, phone, email });
-        showAlert("Customer added successfully!", "success");
+        alert("Customer added successfully!");
         hideCustomModal(addCustomerModal);
         addCustomerForm.reset();
         loadCustomers(); // Reload the list
     } catch (error) {
         console.error("Error adding customer: ", error);
-        showAlert("Failed to add customer: " + error.message, "error");
+        alert("Failed to add customer.");
     } finally {
         hideLoader();
     }
@@ -228,10 +166,7 @@ customerSearchInput.addEventListener('input', async (e) => {
     const customerCards = customersListDiv.querySelectorAll('.customer-card');
     customerCards.forEach(card => {
         const name = card.querySelector('h3').textContent.toLowerCase();
-        // Assuming phone is within a <p> tag directly containing "Phone: "
-        const phoneElement = card.querySelector('p');
-        const phone = phoneElement ? phoneElement.textContent.toLowerCase() : '';
-
+        const phone = card.querySelector('p').textContent.toLowerCase(); // Assuming phone is in a <p> tag
         if (name.includes(queryText) || phone.includes(queryText)) {
             card.style.display = '';
         } else {
@@ -241,7 +176,7 @@ customerSearchInput.addEventListener('input', async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    // loadCustomers() is now called by the onAuthStateChanged listener
+    loadCustomers();
     // Failsafe to hide loader
     setTimeout(() => {
         if (!pageLoader.classList.contains('hidden')) {

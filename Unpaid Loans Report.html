@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unpaid Loans Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Body Styling to match other pages */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #e0e7ee, #c8d3e0);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #334155;
+            box-sizing: border-box;
+        }
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+        .report-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 bg-white bg-opacity-75 z-50 flex justify-center items-center transition-opacity duration-500">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+
+    <div class="container max-w-7xl mx-auto p-8 pt-10">
+        <header class="flex flex-col items-center mb-8 text-center">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-800 tracking-tight">Unpaid Loans Report</h1>
+            <p class="mt-2 text-lg text-slate-600 max-w-2xl">
+                This report lists all loans with a remaining balance, representing sales that are not yet fully paid.
+            </p>
+        </header>
+
+        <main class="w-full">
+            <div id="report-container" class="report-card">
+                <p id="status-message" class="text-gray-500 text-center py-4">Loading report...</p>
+                <div id="report-table" class="hidden">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Customer Phone</th>
+                                <th>Total Amount</th>
+                                <th>Paid Amount</th>
+                                <th>Balance</th>
+                                <th>Loan Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loans-tbody">
+                            <!-- Loan data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-8 text-center text-slate-500">
+            &copy; 2024 WR Smile. All rights reserved.
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Global variables for Firebase configuration
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loader = document.getElementById("page-loader");
+            const statusMessage = document.getElementById("status-message");
+            const reportTable = document.getElementById("report-table");
+            const loansTbody = document.getElementById("loans-tbody");
+
+            try {
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // Authenticate the user
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Use the same public path as the loan management page
+                const loansCollection = collection(db, `artifacts/${appId}/public/data/loans`);
+
+                // Fetch data from Firestore
+                const querySnapshot = await getDocs(loansCollection);
+
+                if (querySnapshot.empty) {
+                    statusMessage.textContent = "No loans found in the database.";
+                    hideLoader();
+                    return;
+                }
+
+                const unpaidLoans = [];
+                querySnapshot.forEach(doc => {
+                    const loan = doc.data();
+                    if (loan.balance > 0) {
+                        unpaidLoans.push({ id: doc.id, ...loan });
+                    }
+                });
+
+                if (unpaidLoans.length === 0) {
+                    statusMessage.textContent = "All loans have been fully paid. No report to display.";
+                    hideLoader();
+                    return;
+                }
+
+                // Populate the table with unpaid loans
+                loansTbody.innerHTML = '';
+                unpaidLoans.forEach(loan => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${loan.id || 'N/A'}</td>
+                        <td>${loan.customerPhone || 'N/A'}</td>
+                        <td>Rs. ${Number(loan.totalAmount).toFixed(2)}</td>
+                        <td>Rs. ${Number(loan.paidAmount).toFixed(2)}</td>
+                        <td>Rs. ${Number(loan.balance).toFixed(2)}</td>
+                        <td>${new Date(loan.loanDate).toLocaleDateString()}</td>
+                    `;
+                    loansTbody.appendChild(row);
+                });
+
+                statusMessage.classList.add('hidden');
+                reportTable.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error generating report:", error);
+                statusMessage.textContent = `Failed to load report. Check the console for details.`;
+                statusMessage.classList.remove('hidden');
+                reportTable.classList.add('hidden');
+            } finally {
+                hideLoader();
+            }
+        });
+
+        function hideLoader() {
+            const loader = document.getElementById("page-loader");
+            if (loader) {
+                loader.classList.add('opacity-0');
+                setTimeout(() => loader.classList.add('hidden'), 500);
+            }
+        }
+    </script>
+
+</body>
+</html>
