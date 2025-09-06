@@ -218,13 +218,22 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global variables for Firebase configuration, provided by the environment
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // IMPORTANT: Replace these with your own Firebase project credentials.
+        // You can find them in your Firebase console under Project Settings > General.
+        const firebaseConfig = {
+            apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
+            authDomain: "wr-smile-shop.firebaseapp.com",
+            projectId: "wr-smile-shop",
+            storageBucket: "wr-smile-shop.firebasestorage.app",
+            messagingSenderId: "299864260187",
+            appId: "1:299864260187:web:fa6af65ef95674aff1097e"
+        };
+
+        // You can choose a custom app ID here.
+        const appId = "wr-smile-billing-app";
 
         let db;
         let auth;
@@ -264,9 +273,10 @@
         // Initialize Firebase
         const initFirebase = async () => {
             try {
-                if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
-                    console.error("Firebase config is missing. Skipping Firebase initialization.");
-                    showAlert("Firebase config is missing.", "error");
+                // Check if the user has replaced the placeholder values
+                if (firebaseConfig.apiKey === "YOUR_API_KEY" || !firebaseConfig.projectId) {
+                    showAlert("Please add your Firebase config to the code.", "error");
+                    console.error("Firebase config is not set. Please replace the placeholder values.");
                     return;
                 }
 
@@ -274,12 +284,8 @@
                 auth = getAuth(app);
                 db = getFirestore(app);
 
-                // Use the initial auth token if available, otherwise sign in anonymously
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                // Sign in anonymously since the initial auth token is not available on GitHub
+                await signInAnonymously(auth);
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
