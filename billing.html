@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WR Smile | Billing</title>
+    <title>WR Smile & Supplies | Billing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -34,450 +34,381 @@
             transform: translateY(-5px);
             box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.07), -15px -15px 30px rgba(255, 255, 255, 0.7);
         }
-        .input-group {
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        .input-style {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background-color: #f0f4f8;
+            border-radius: 9999px;
+            box-shadow: inset 2px 2px 5px #c8d3e0, inset -2px -2px 5px #ffffff;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .input-style:focus {
+            outline: none;
+            box-shadow: inset 3px 3px 8px #b9c7d8, inset -3px -3px 8px #ffffff;
+        }
+        .btn-style {
+            padding: 0.75rem 2rem;
+            border: none;
+            font-weight: 600;
+            border-radius: 9999px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-style:hover {
+            transform: translateY(-2px);
+            box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.6);
+        }
+        .btn-style:active {
+            transform: translateY(0);
+            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.4);
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            color: #ffffff;
+        }
+        .btn-danger {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+        .btn-checkout {
+            background-color: #10b981;
+            color: #ffffff;
+        }
+        .btn-remove-item {
+            background-color: transparent;
+            color: #dc2626;
+            box-shadow: none;
+        }
+        .custom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.6);
+            max-width: 500px;
+            width: 90%;
             position: relative;
         }
-        .input-group input {
-            padding-right: 2.5rem;
-            box-shadow: inset 2px 2px 5px #d9e2ec, inset -2px -2px 5px #ffffff;
-        }
-        .input-group .icon {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-        .modal {
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-        }
         .custom-alert {
-            animation: fadeInOut 3s forwards;
-            font-weight: 500;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            animation: fade-in-up 0.5s ease-out forwards;
         }
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(-20px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-20px); }
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col items-center p-4">
-
-    <!-- Custom Alert Container -->
-    <div id="alert-container" class="fixed top-5 right-5 z-50"></div>
-
-    <!-- Main Container -->
-    <div class="container mx-auto p-4 space-y-12">
-        <h1 class="text-5xl font-extrabold text-center text-gray-800 font-playfair-display">Billing Dashboard</h1>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <!-- Left Side: Customer & Product Input -->
-            <div class="space-y-12">
-                <!-- Customer Details Card -->
-                <div class="card p-8">
-                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Customer Details</h2>
-                    <div class="space-y-6">
-                        <div class="input-group">
-                            <input type="text" id="customer-search" placeholder="Search by name or phone..." class="w-full px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all duration-300">
-                            <i class="fas fa-search icon"></i>
-                        </div>
-                        <div id="customer-details-box" class="p-6 bg-gray-100 rounded-2xl hidden transition-all duration-300 shadow-inner">
-                            <p class="text-lg"><strong>Name:</strong> <span id="customer-name" class="font-medium"></span></p>
-                            <p class="text-lg"><strong>Phone:</strong> <span id="customer-phone" class="font-medium"></span></p>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <hr class="flex-grow border-gray-300">
-                            <span class="text-sm text-gray-500 font-medium">OR</span>
-                            <hr class="flex-grow border-gray-300">
-                        </div>
-                        <button id="add-customer-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
-                            Add New Customer
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Manual Product Entry Card -->
-                <div class="card p-8">
-                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Manual Product Entry</h2>
-                    <div class="space-y-6">
-                        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-                            <input type="text" id="manual-product-name" placeholder="Product Name" class="flex-1 w-full px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-purple-200 shadow-inner transition-all duration-300">
-                            <input type="number" id="manual-product-price" placeholder="Price" class="w-full md:w-36 px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-purple-200 shadow-inner transition-all duration-300">
-                        </div>
-                        <button id="add-manual-product-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
-                            Add Product
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Add from Stock Card -->
-                <div class="card p-8">
-                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Add from Stock</h2>
-                    <div class="space-y-6">
-                        <div class="relative">
-                            <input type="text" id="stock-product-search" placeholder="Search product in stock..." class="w-full px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-sky-200 shadow-inner transition-all duration-300">
-                            <div id="stock-results" class="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto hidden"></div>
-                        </div>
-                        <button id="seed-stock-btn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
-                            Add Sample Products
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Side: Bill & Payment -->
-            <div class="space-y-12">
-                <!-- Bill Details Card -->
-                <div class="card p-8">
-                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Bill Details</h2>
-                    <div class="space-y-6">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bill-items" class="bg-white divide-y divide-gray-200">
-                                    <!-- Bill items will be added here dynamically -->
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="flex flex-col space-y-4 items-end pr-4">
-                            <div class="flex justify-end items-center gap-4 text-sm font-semibold w-full">
-                                <span class="text-gray-700">Subtotal:</span>
-                                <span id="subtotal-amount" class="text-gray-900 font-bold">Rs 0.00</span>
-                            </div>
-                            <div class="flex justify-end items-center gap-4 text-sm font-semibold w-full">
-                                <span class="text-gray-700">Discount Amount:</span>
-                                <input type="number" id="discount-amount" value="0" class="w-32 px-4 py-2 border-none rounded-xl focus:outline-none text-right shadow-inner">
-                            </div>
-                            <div class="flex justify-end items-center gap-4 text-lg font-extrabold w-full">
-                                <span class="text-gray-700">Total:</span>
-                                <span id="total-amount" class="text-indigo-600">Rs 0.00</span>
-                            </div>
-                            <div class="flex justify-end items-center gap-4 text-lg font-extrabold w-full">
-                                <span class="text-gray-700">Amount Paid:</span>
-                                <input type="number" id="amount-paid" class="w-32 px-4 py-2 border-none rounded-xl focus:outline-none text-right shadow-inner">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Finalize Bill Card -->
-                <div class="card p-8">
-                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Finalize Bill</h2>
-                    <div class="flex flex-col space-y-6">
-                        <button id="finalize-bill-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
-                            Finalize Bill
-                        </button>
-                        <p id="bill-status" class="text-center font-bold"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals -->
-    <!-- New Customer Modal -->
-    <div id="new-customer-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl p-10 shadow-2xl max-w-lg w-full space-y-8">
-            <h3 class="text-3xl font-semibold text-gray-800 font-playfair-display text-center">Add New Customer</h3>
-            <input type="text" id="new-customer-name-input" placeholder="Customer Name" class="w-full px-6 py-4 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-200 shadow-inner">
-            <input type="tel" id="new-customer-phone-input" placeholder="Phone Number" class="w-full px-6 py-4 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-200 shadow-inner">
-            <div class="flex justify-between space-x-4">
-                <button id="save-new-customer-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
-                    Save
-                </button>
-                <button id="cancel-new-customer-btn" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
-                    Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Finalize Modal -->
-    <div id="finalize-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl p-10 shadow-2xl max-w-lg w-full text-center space-y-8">
-            <h3 id="finalize-modal-title" class="text-3xl font-semibold text-gray-800 font-playfair-display">Bill Finalized!</h3>
-            <p id="finalize-modal-text" class="text-gray-600 text-lg"></p>
+<body>
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl text-center mb-8">WR Smile & Supplies | Billing</h1>
+        <p id="userIdDisplay" class="text-xs text-center text-gray-400 mb-4"></p>
+        <div class="card p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="flex flex-col space-y-4">
-                <button id="send-whatsapp-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg flex items-center justify-center">
-                    <i class="fab fa-whatsapp mr-2"></i> Send on WhatsApp
-                </button>
-                <button id="new-bill-btn" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-4 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
-                    New Bill
-                </button>
+                <h2 class="text-3xl font-playfair mb-4">New Bill</h2>
+                <!-- Customer Section -->
+                <div id="customerSearchSection">
+                    <div class="relative mb-6">
+                        <label for="customerSearch" class="block text-sm font-medium text-gray-700 mb-1">Customer Details</label>
+                        <input type="text" id="customerSearch" placeholder="Search or add a customer..." class="input-style pr-12">
+                        <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 mt-2"></i>
+                        <ul id="customerSearchResults" class="absolute w-full mt-2 bg-white rounded-lg shadow-lg z-10 hidden"></ul>
+                    </div>
+                    <button id="manualCustomerToggleBtn" class="btn-style btn-primary w-full mt-4">Or, Manual Add Customer</button>
+                </div>
+                
+                <!-- Manual Customer Add Section (Initially Hidden) -->
+                <div id="manualCustomerSection" class="hidden">
+                    <h3 class="text-xl font-playfair mb-2">Manually Add Customer</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="manualCustomerNameInput" placeholder="Customer Name" class="input-style">
+                        <input type="tel" id="manualCustomerPhoneInput" placeholder="Customer Phone (Ex: 712345678)" class="input-style">
+                        <div class="flex items-center space-x-4">
+                            <button id="addManualCustomerBtn" class="btn-style btn-primary flex-grow">Add Customer</button>
+                            <button id="manualCustomerCancelBtn" class="btn-style btn-danger">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Add Section -->
+                <div id="productSearchSection">
+                    <div class="relative">
+                        <input type="text" id="productSearch" placeholder="Search products..." class="input-style pr-12">
+                        <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <ul id="searchResults" class="absolute w-full mt-2 bg-white rounded-lg shadow-lg z-10 hidden"></ul>
+                    </div>
+                    <div id="selectedProductDetails" class="hidden flex flex-col space-y-4 p-4 rounded-lg bg-gray-50 border border-gray-200 mt-4">
+                        <p class="font-bold text-lg"><span id="productName"></span></p>
+                        <p class="text-sm text-gray-600">Price: Rs <span id="productPrice"></span></p>
+                        <p class="text-sm text-gray-600">Stock: <span id="productStock"></span></p>
+                        <div class="flex items-center space-x-4">
+                            <input type="number" id="quantityInput" value="1" min="1" class="input-style w-24">
+                            <button id="addItemBtn" class="btn-style btn-primary flex-grow">Add to Bill</button>
+                        </div>
+                    </div>
+                    <button id="manualAddToggleBtn" class="btn-style btn-primary w-full mt-4">Or, Manual Add Product</button>
+                </div>
+                
+                <!-- Manual Product Add Section (Initially Hidden) -->
+                <div id="manualAddSection" class="hidden">
+                    <h3 class="text-xl font-playfair mb-2">Manually Add Item</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="manualProductName" placeholder="Product Name" class="input-style">
+                        <input type="number" id="manualProductPrice" placeholder="Price" class="input-style">
+                        <input type="number" id="manualQuantity" placeholder="Quantity" value="1" min="1" class="input-style">
+                        <div class="flex items-center space-x-4">
+                            <button id="addManualItemBtn" class="btn-style btn-primary flex-grow">Add to Bill</button>
+                            <button id="manualAddCancelBtn" class="btn-style btn-danger">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-3xl font-playfair mb-4">Bill Summary</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-auto">
+                        <thead>
+                            <tr class="text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6">Item</th>
+                                <th class="py-3 px-6">Qty</th>
+                                <th class="py-3 px-6">Price</th>
+                                <th class="py-3 px-6 text-right">Subtotal</th>
+                                <th class="py-3 px-6"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="billItemsContainer" class="text-gray-600 text-sm font-light">
+                            <!-- Bill items will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex justify-between items-center text-md font-bold text-gray-700">
+                        <span>Subtotal:</span>
+                        <span id="subtotalAmount">Rs 0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-md font-bold text-gray-700">
+                        <span>Discount:</span>
+                        <input type="number" id="discountAmountInput" value="0" min="0" class="input-style w-24 text-right">
+                    </div>
+                    <div class="flex justify-between items-center text-xl font-bold border-t pt-4 border-gray-200">
+                        <span>Total:</span>
+                        <span id="totalAmount" class="text-2xl text-primary-600">Rs 0.00</span>
+                    </div>
+                    <div class="flex justify-end space-x-4 mt-4">
+                        <button id="clearBillBtn" class="btn-style btn-danger">Clear Bill</button>
+                        <button id="checkoutBtn" class="btn-style btn-checkout">Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Finalize Modal -->
+    <div id="finalizeModal" class="custom-modal hidden">
+        <div class="modal-content">
+            <h3 class="text-2xl mb-4 font-playfair">Finalize Sale</h3>
+            <div class="space-y-4">
+                <div class="flex justify-between">
+                    <span class="text-lg">Final Total:</span>
+                    <span id="modalTotal" class="text-lg font-bold">Rs 0.00</span>
+                </div>
+                <div>
+                    <label for="customerNameInput" class="block text-gray-700">Customer Name</label>
+                    <input type="text" id="customerNameInput" class="input-style mt-1" placeholder="Enter customer name">
+                </div>
+                <div>
+                    <label for="customerPhoneInput" class="block text-gray-700">Customer Phone (WhatsApp)</label>
+                    <input type="tel" id="customerPhoneInput" class="input-style mt-1" placeholder="Ex: 712345678">
+                </div>
+                <div>
+                    <label for="amountPaidInput" class="block text-gray-700">Amount Paid</label>
+                    <input type="number" id="amountPaidInput" class="input-style mt-1" placeholder="Enter amount paid">
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-lg">Balance / Loan:</span>
+                    <span id="loanAmount" class="text-lg font-bold text-red-600">Rs 0.00</span>
+                </div>
+                <div class="flex justify-end space-x-4 mt-6">
+                    <button id="newBillBtn" class="btn-style btn-primary">Start New Bill</button>
+                    <button id="sendWhatsappBtn" class="btn-style btn-checkout">
+                        <i class="fab fa-whatsapp mr-2"></i>Send on WhatsApp
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
+    <div id="alert-container" class="alert-container"></div>
+    
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, query, where, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, runTransaction, doc, addDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-        // Global variables provided by the environment
+        // Global variables and Firebase setup
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'wr-smile-billing-app';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         let db;
         let auth;
-        let userId = 'anonymous';
-        let currentCustomer = null;
+        let userId = null;
+        let isAuthReady = false;
+        let allProducts = [];
+        let allCustomers = [];
         let billItems = [];
-        let stockItems = [];
 
-        // UI elements
-        const customerSearchInput = document.getElementById('customer-search');
-        const customerDetailsBox = document.getElementById('customer-details-box');
-        const customerNameSpan = document.getElementById('customer-name');
-        const customerPhoneSpan = document.getElementById('customer-phone');
-        const addCustomerBtn = document.getElementById('add-customer-btn');
-        const newCustomerModal = document.getElementById('new-customer-modal');
-        const newCustomerNameInput = document.getElementById('new-customer-name-input');
-        const newCustomerPhoneInput = document.getElementById('new-customer-phone-input');
-        const saveNewCustomerBtn = document.getElementById('save-new-customer-btn');
-        const cancelNewCustomerBtn = document.getElementById('cancel-new-customer-btn');
-        const stockProductSearchInput = document.getElementById('stock-product-search');
-        const stockResultsDiv = document.getElementById('stock-results');
-        const seedStockBtn = document.getElementById('seed-stock-btn');
-        const manualProductNameInput = document.getElementById('manual-product-name');
-        const manualProductPriceInput = document.getElementById('manual-product-price');
-        const addManualProductBtn = document.getElementById('add-manual-product-btn');
-        const billItemsTable = document.getElementById('bill-items');
-        const subtotalAmountSpan = document.getElementById('subtotal-amount');
-        const discountAmountInput = document.getElementById('discount-amount');
-        const totalAmountSpan = document.getElementById('total-amount');
-        const amountPaidInput = document.getElementById('amount-paid');
-        const finalizeBillBtn = document.getElementById('finalize-bill-btn');
-        const finalizeModal = document.getElementById('finalize-modal');
-        const finalizeModalTitle = document.getElementById('finalize-modal-title');
-        const finalizeModalText = document.getElementById('finalize-modal-text');
-        const sendWhatsAppBtn = document.getElementById('send-whatsapp-btn');
-        const newBillBtn = document.getElementById('new-bill-btn');
+        // UI Element References
+        const productSearchInput = document.getElementById('productSearch');
+        const searchResultsList = document.getElementById('searchResults');
+        const selectedProductDetailsDiv = document.getElementById('selectedProductDetails');
+        const productNameSpan = document.getElementById('productName');
+        const productPriceSpan = document.getElementById('productPrice');
+        const productStockSpan = document.getElementById('productStock');
+        const quantityInput = document.getElementById('quantityInput');
+        const addItemBtn = document.getElementById('addItemBtn');
+        const billItemsContainer = document.getElementById('billItemsContainer');
+        const subtotalAmountSpan = document.getElementById('subtotalAmount');
+        const discountAmountInput = document.getElementById('discountAmountInput');
+        const totalAmountSpan = document.getElementById('totalAmount');
+        const clearBillBtn = document.getElementById('clearBillBtn');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const finalizeModal = document.getElementById('finalizeModal');
+        const modalTotalSpan = document.getElementById('modalTotal');
+        const amountPaidInput = document.getElementById('amountPaidInput');
+        const newBillBtn = document.getElementById('newBillBtn');
+        const loanAmountSpan = document.getElementById('loanAmount');
+        const customerNameInput = document.getElementById('customerNameInput');
+        const customerPhoneInput = document.getElementById('customerPhoneInput');
+        const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
+        const userIdDisplay = document.getElementById('userIdDisplay');
 
-        // Initialize Firebase
-        const initFirebase = async () => {
-            try {
-                if (!firebaseConfig.projectId) {
-                    showAlert("Firebase config is missing projectId.", "error");
-                    console.error("Firebase config is not set. Please ensure __firebase_config is correctly provided.");
-                    return;
-                }
+        // Customer UI references
+        const customerSearchSection = document.getElementById('customerSearchSection');
+        const customerSearchInput = document.getElementById('customerSearch');
+        const customerSearchResultsList = document.getElementById('customerSearchResults');
+        const manualCustomerToggleBtn = document.getElementById('manualCustomerToggleBtn');
+        const manualCustomerSection = document.getElementById('manualCustomerSection');
+        const manualCustomerNameInput = document.getElementById('manualCustomerNameInput');
+        const manualCustomerPhoneInput = document.getElementById('manualCustomerPhoneInput');
+        const addManualCustomerBtn = document.getElementById('addManualCustomerBtn');
+        const manualCustomerCancelBtn = document.getElementById('manualCustomerCancelBtn');
 
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                setLogLevel('debug'); // Enable debug logging for troubleshooting
+        // Product UI references
+        const manualAddToggleBtn = document.getElementById('manualAddToggleBtn');
+        const manualAddSection = document.getElementById('manualAddSection');
+        const productSearchSection = document.getElementById('productSearchSection');
+        const manualProductNameInput = document.getElementById('manualProductName');
+        const manualProductPriceInput = document.getElementById('manualProductPrice');
+        const manualQuantityInput = document.getElementById('manualQuantity');
+        const addManualItemBtn = document.getElementById('addManualItemBtn');
+        const manualAddCancelBtn = document.getElementById('manualAddCancelBtn');
 
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        console.log(`User signed in with ID: ${userId}`);
-                        showAlert("Firebase initialized successfully!", "success");
-                        fetchStockItems();
-                    } else {
-                        console.log("No user is signed in. Attempting to authenticate...");
-                        if (initialAuthToken) {
-                            try {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } catch (e) {
-                                console.error("Error signing in with custom token:", e);
-                                await signInAnonymously(auth);
-                            }
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    }
-                });
-
-            } catch (error) {
-                showAlert(`Firebase initialization failed: ${error.message}`, "error");
-                console.error("Firebase initialization failed:", error);
-            }
-        };
-
-        // Customer Functions
-        const searchCustomer = async (queryText) => {
-            if (!db) {
-                showAlert("Database not ready.", "error");
-                return;
-            }
-
-            const customersCol = collection(db, `artifacts/${appId}/users/${userId}/customers`);
-            let q;
-            if (/\d/.test(queryText)) {
-                // Search by phone number
-                q = query(customersCol, where("phone", "==", queryText));
-            } else {
-                // Search by name
-                q = query(customersCol, where("name", "==", queryText));
-            }
-
-            try {
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    const customerData = querySnapshot.docs[0].data();
-                    currentCustomer = customerData;
-                    customerNameSpan.textContent = customerData.name;
-                    customerPhoneSpan.textContent = customerData.phone;
-                    customerDetailsBox.classList.remove('hidden');
-                } else {
-                    currentCustomer = null;
-                    customerDetailsBox.classList.add('hidden');
-                    showAlert("Customer not found.", "error");
-                }
-            } catch (e) {
-                showAlert(`Error searching customer: ${e.message}`, "error");
-                console.error("Error searching customer: ", e);
-            }
-        };
-
-        const addNewCustomer = async (name, phone) => {
-            if (!db) {
-                showAlert("Database not ready.", "error");
-                return;
-            }
-
-            try {
-                const customersCol = collection(db, `artifacts/${appId}/users/${userId}/customers`);
-                const docRef = await addDoc(customersCol, {
-                    name: name,
-                    phone: phone,
-                    createdAt: new Date()
-                });
-                currentCustomer = { name, phone, id: docRef.id };
-                customerNameSpan.textContent = name;
-                customerPhoneSpan.textContent = phone;
-                customerDetailsBox.classList.remove('hidden');
-                showAlert("New customer added successfully!", "success");
-                newCustomerModal.classList.add('hidden');
-            } catch (e) {
-                showAlert(`Error adding customer: ${e.message}`, "error");
-                console.error("Error adding customer: ", e);
-            }
-        };
-
-        // Product and Bill Functions
-        const fetchStockItems = () => {
-            if (!db) return;
-            const stockCol = collection(db, `artifacts/${appId}/users/${userId}/stock`);
-            onSnapshot(stockCol, (snapshot) => {
-                stockItems = [];
-                snapshot.forEach(doc => {
-                    stockItems.push({ id: doc.id, ...doc.data() });
-                });
-                console.log("Stock items fetched:", stockItems);
-            }, (error) => {
-                showAlert(`Error fetching stock: ${error.message}`, "error");
-                console.error("Error fetching stock:", error);
-            });
-        };
-
-        // Function to seed sample data into the stock collection
-        const seedStockData = async () => {
-            if (!db) {
-                showAlert("Database not ready.", "error");
-                return;
-            }
-
-            // Sample products to add
-            const sampleProducts = [
-                { name: 'WR T-Shirt', price: 2500, stock: 100 },
-                { name: 'WR Notebook', price: 500, stock: 200 },
-                { name: 'WR Pen', price: 100, stock: 500 },
-                { name: 'WR Cap', price: 1200, stock: 75 },
-                { name: 'WR Backpack', price: 4500, stock: 50 },
-            ];
-
-            try {
-                const stockCol = collection(db, `artifacts/${appId}/users/${userId}/stock`);
-                for (const product of sampleProducts) {
-                    await addDoc(stockCol, product);
-                }
-                showAlert("Sample products added to stock!", "success");
-            } catch (e) {
-                showAlert(`Error adding sample products: ${e.message}`, "error");
-                console.error("Error adding sample products:", e);
-            }
-        };
-
-        const addProductToBill = (product) => {
-            const existingItem = billItems.find(item => item.name === product.name);
-            if (existingItem) {
-                existingItem.qty += 1;
-            } else {
-                billItems.push({ ...product, qty: 1 });
-            }
-            renderBill();
-        };
-
-        const renderBill = () => {
-            billItemsTable.innerHTML = '';
-            billItems.forEach((item, index) => {
-                const row = document.createElement('tr');
-                row.className = "hover:bg-gray-50";
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap">${item.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Rs ${item.price.toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <input type="number" class="w-16 px-2 py-1 border rounded-md text-center shadow-inner" value="${item.qty}" data-index="${index}">
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">Rs ${(item.price * item.qty).toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right">
-                        <button class="remove-item-btn text-red-500 hover:text-red-700 transition-colors duration-200" data-index="${index}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                billItemsTable.appendChild(row);
-            });
-
-            calculateTotals();
-        };
-
+        // Functions for UI rendering and logic
         const calculateTotals = () => {
-            const subtotal = billItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+            const subtotal = billItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const discount = parseFloat(discountAmountInput.value) || 0;
-            const total = subtotal - discount;
+            const total = Math.max(0, subtotal - discount);
 
             subtotalAmountSpan.textContent = `Rs ${subtotal.toFixed(2)}`;
             totalAmountSpan.textContent = `Rs ${total.toFixed(2)}`;
-            amountPaidInput.value = total.toFixed(2);
+            modalTotalSpan.textContent = `Rs ${total.toFixed(2)}`;
+            updateLoanAmount();
+        };
+
+        const renderBill = () => {
+            billItemsContainer.innerHTML = '';
+            if (billItems.length === 0) {
+                billItemsContainer.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-gray-500">No items added to the bill.</td></tr>`;
+            } else {
+                billItems.forEach((item, index) => {
+                    const subtotal = item.price * item.quantity;
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-gray-200 hover:bg-gray-100';
+                    tr.innerHTML = `
+                        <td class="py-3 px-6">${item.name}</td>
+                        <td class="py-3 px-6">${item.quantity}</td>
+                        <td class="py-3 px-6">Rs ${item.price.toFixed(2)}</td>
+                        <td class="py-3 px-6 text-right font-semibold">Rs ${subtotal.toFixed(2)}</td>
+                        <td class="py-3 px-6 text-right">
+                            <button class="btn-remove-item text-red-500" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    `;
+                    billItemsContainer.appendChild(tr);
+                });
+            }
+            calculateTotals();
+        };
+
+        const updateLoanAmount = () => {
+            const total = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
+            const paid = parseFloat(amountPaidInput.value) || 0;
+            const loan = total - paid;
+            loanAmountSpan.textContent = `Rs ${loan.toFixed(2)}`;
+            loanAmountSpan.className = `text-lg font-bold ${loan > 0 ? 'text-red-600' : 'text-green-600'}`;
+        };
+
+        const resetBill = () => {
+            billItems = [];
+            productSearchInput.value = '';
+            customerSearchInput.value = '';
+            selectedProductDetailsDiv.classList.add('hidden');
+            manualAddSection.classList.add('hidden');
+            productSearchSection.classList.remove('hidden');
+            manualCustomerSection.classList.add('hidden');
+            customerSearchSection.classList.remove('hidden');
+            amountPaidInput.value = '';
+            customerNameInput.value = '';
+            customerPhoneInput.value = '';
+            discountAmountInput.value = 0;
+            renderBill();
         };
 
         const finalizeBill = async () => {
-            if (!db) {
-                showAlert("Database not ready.", "error");
-                return;
-            }
-            if (!currentCustomer) {
-                showAlert("Please select or add a customer first.", "error");
-                return;
-            }
             if (billItems.length === 0) {
-                showAlert("Bill is empty.", "error");
+                showAlert("Please add items to the bill before checking out.", 'error');
                 return;
             }
-            
-            const totalAmount = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
-            const amountPaid = parseFloat(amountPaidInput.value);
 
-            let transactionType = 'sale';
+            const totalAmount = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
+            const subtotalAmount = parseFloat(subtotalAmountSpan.textContent.replace('Rs ', ''));
+            const discountAmount = parseFloat(discountAmountInput.value) || 0;
+            const amountPaid = parseFloat(amountPaidInput.value) || 0;
+            const customerName = customerNameInput.value.trim() || 'Guest';
+            const customerPhone = customerPhoneInput.value.trim();
+            const timestamp = new Date();
+
             let loanAmount = 0;
             let status = 'Paid';
 
             if (amountPaid < totalAmount) {
-                transactionType = 'loan';
                 loanAmount = totalAmount - amountPaid;
                 status = 'Partially Paid';
             } else if (amountPaid === totalAmount) {
@@ -485,44 +416,74 @@
             } else {
                 status = 'Overpaid';
             }
-
-            const transactionData = {
-                customerId: currentCustomer.id,
-                customerName: currentCustomer.name,
-                customerPhone: currentCustomer.phone,
-                items: billItems,
-                subtotal: billItems.reduce((sum, item) => sum + item.price * item.qty, 0),
-                discount: parseFloat(discountAmountInput.value) || 0,
-                total: totalAmount,
-                amountPaid: amountPaid,
-                loanAmount: loanAmount,
-                status: status,
-                timestamp: new Date()
-            };
-
+            
             try {
-                const billsCol = collection(db, `artifacts/${appId}/users/${userId}/bills`);
-                await addDoc(billsCol, transactionData);
-                showAlert("Bill finalized successfully!", "success");
+                // Use a Firestore transaction to ensure atomic operations
+                await runTransaction(db, async (transaction) => {
+                    const salesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/sales`);
+                    const stockCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
+                    const customersCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/customers`);
 
-                let modalText = "";
-                if (transactionType === 'loan') {
-                    modalText = `A loan of Rs ${loanAmount.toFixed(2)} has been created for ${currentCustomer.name}.`;
-                    finalizeModalTitle.textContent = "Loan Created";
-                } else {
-                    modalText = `The bill for Rs ${totalAmount.toFixed(2)} has been finalized for ${currentCustomer.name}.`;
-                    finalizeModalTitle.textContent = "Bill Finalized!";
+                    // Check if customer exists and add if not
+                    if (customerName && customerPhone) {
+                        const existingCustomer = allCustomers.find(c => c.phone === customerPhone);
+                        if (!existingCustomer) {
+                            await addDoc(customersCollectionRef, {
+                                name: customerName,
+                                phone: customerPhone
+                            });
+                        }
+                    }
+
+                    // Add the sale record
+                    await addDoc(salesCollectionRef, {
+                        items: billItems,
+                        subtotal: subtotalAmount,
+                        discount: discountAmount,
+                        total: totalAmount,
+                        amountPaid: amountPaid,
+                        loanAmount: loanAmount,
+                        customerName: customerName,
+                        customerPhone: customerPhone,
+                        status: status,
+                        timestamp: timestamp
+                    });
+
+                    // Update product stock within the same transaction
+                    for (const item of billItems) {
+                        // Only update stock for items that have a product ID (not manually added)
+                        if (item.id) {
+                            const productRef = doc(stockCollectionRef, item.id);
+                            const productDoc = await transaction.get(productRef);
+                            if (!productDoc.exists()) {
+                                throw new Error(`Product with ID ${item.id} not found.`);
+                            }
+                            const newStock = productDoc.data().stock - item.quantity;
+                            if (newStock < 0) {
+                                throw new Error(`Not enough stock for ${item.name}. Available: ${productDoc.data().stock}`);
+                            }
+                            transaction.update(productRef, { stock: newStock });
+                        }
+                    }
+                });
+
+                showAlert("Bill finalized and stock updated successfully!", 'success');
+                finalizeModal.classList.add('hidden');
+                
+                // If a phone number is provided, send the WhatsApp message
+                if (customerPhone) {
+                    sendWhatsAppMessage({
+                        customerName,
+                        customerPhone,
+                        total: totalAmount,
+                        amountPaid: amountPaid,
+                        loanAmount: loanAmount
+                    });
                 }
-
-                finalizeModalText.textContent = modalText;
-                finalizeModal.classList.remove('hidden');
-
-                // Set up WhatsApp button link
-                sendWhatsAppBtn.onclick = () => sendWhatsAppMessage(transactionData);
-
-            } catch (e) {
-                showAlert(`Error finalizing bill: ${e.message}`, "error");
-                console.error("Error finalizing bill: ", e);
+                resetBill();
+            } catch (error) {
+                console.error("Transaction failed: ", error);
+                showAlert(`Transaction failed: ${error.message}`, 'error');
             }
         };
 
@@ -530,146 +491,23 @@
             const total = data.total.toFixed(2);
             const paid = data.amountPaid.toFixed(2);
             const loan = data.loanAmount.toFixed(2);
-            let message = `Hello ${data.customerName}, here is your bill summary:\n\nTotal: Rs ${total}\nAmount Paid: Rs ${paid}`;
+            
+            // Add Sri Lankan country code if not present
+            let phoneNumber = data.customerPhone.replace(/^0/, ''); // Remove leading 0 if present
+            if (!phoneNumber.startsWith('94')) {
+                phoneNumber = '94' + phoneNumber;
+            }
+
+            let message = `Welcome to Smile & Supplies!🛒\n\nWe offer a variety of online products, including kitchen accessories, home essentials, kids' items, and stationery.\n\nHello ${data.customerName}, here is your bill summary:\n\nTotal: Rs ${total}\nAmount Paid: Rs ${paid}`;
             if (data.loanAmount > 0) {
                 message += `\nRemaining Loan: Rs ${loan}`;
             }
-            message += `\n\nThank you for your business!`;
+            message += `\n\nThank you for your business!\n\n📞 Contact: 0764950844\n📧 Email: smileandsupplier@outlook.com\n\nExplore, shop, and enjoy quality products at affordable prices. Feel free to reach out for inquiries or orders!"\n\n**Follow this link to join my WhatsApp group: https://chat.whatsapp.com/K7ALigMk9ad4SBlcRUqoxX`;
+
             const encodedMessage = encodeURIComponent(message);
-            // Prepend the country code '94' (for Sri Lanka) to the phone number.
-            const whatsappUrl = `https://wa.me/94${data.customerPhone}?text=${encodedMessage}`;
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
             window.open(whatsappUrl, '_blank');
         };
-
-        const resetBill = () => {
-            currentCustomer = null;
-            billItems = [];
-            customerDetailsBox.classList.add('hidden');
-            customerSearchInput.value = '';
-            discountAmountInput.value = '0';
-            stockProductSearchInput.value = '';
-            manualProductNameInput.value = '';
-            manualProductPriceInput.value = '';
-            renderBill();
-        };
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            initFirebase();
-
-            // Customer search
-            customerSearchInput.addEventListener('change', (e) => {
-                if (e.target.value.trim() !== '') {
-                    searchCustomer(e.target.value.trim());
-                }
-            });
-
-            // Add new customer via modal
-            addCustomerBtn.addEventListener('click', () => {
-                newCustomerModal.classList.remove('hidden');
-            });
-            saveNewCustomerBtn.addEventListener('click', () => {
-                const name = newCustomerNameInput.value.trim();
-                const phone = newCustomerPhoneInput.value.trim();
-                if (name && phone) {
-                    addNewCustomer(name, phone);
-                } else {
-                    showAlert("Please enter both name and phone number.", "error");
-                }
-            });
-            cancelNewCustomerBtn.addEventListener('click', () => {
-                newCustomerModal.classList.add('hidden');
-                newCustomerNameInput.value = '';
-                newCustomerPhoneInput.value = '';
-            });
-
-            // Product search from stock
-            stockProductSearchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                stockResultsDiv.innerHTML = '';
-                if (query.length > 0) {
-                    const filteredItems = stockItems.filter(item => 
-                        item.name.toLowerCase().includes(query)
-                    );
-                    if (filteredItems.length > 0) {
-                        filteredItems.forEach(item => {
-                            const resultItem = document.createElement('div');
-                            resultItem.className = "px-4 py-2 cursor-pointer hover:bg-gray-200 transition-colors duration-150";
-                            resultItem.textContent = `${item.name} (Rs ${item.price.toFixed(2)})`;
-                            resultItem.onclick = () => {
-                                addProductToBill(item);
-                                stockProductSearchInput.value = '';
-                                stockResultsDiv.classList.add('hidden');
-                            };
-                            stockResultsDiv.appendChild(resultItem);
-                        });
-                        stockResultsDiv.classList.remove('hidden');
-                    } else {
-                        stockResultsDiv.innerHTML = '<div class="px-4 py-2 text-gray-500">No products found.</div>';
-                        stockResultsDiv.classList.remove('hidden');
-                    }
-                } else {
-                    stockResultsDiv.classList.add('hidden');
-                }
-            });
-
-            // Manual product add
-            addManualProductBtn.addEventListener('click', () => {
-                const name = manualProductNameInput.value.trim();
-                const price = parseFloat(manualProductPriceInput.value);
-                if (name && !isNaN(price) && price > 0) {
-                    addProductToBill({ name, price });
-                    manualProductNameInput.value = '';
-                    manualProductPriceInput.value = '';
-                } else {
-                    showAlert("Please enter a valid product name and price.", "error");
-                }
-            });
-            
-            // Seed stock button
-            seedStockBtn.addEventListener('click', seedStockData);
-
-            // Bill item quantity and remove button
-            billItemsTable.addEventListener('input', (e) => {
-                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
-                    const index = e.target.closest('input').dataset.index;
-                    const newQty = parseInt(e.target.value);
-                    if (!isNaN(newQty) && newQty > 0) {
-                        billItems[index].qty = newQty;
-                        renderBill();
-                    } else {
-                        // Reset to previous value if input is invalid
-                        e.target.value = billItems[index].qty;
-                    }
-                }
-            });
-            billItemsTable.addEventListener('click', (e) => {
-                if (e.target.closest('.remove-item-btn')) {
-                    const index = e.target.closest('.remove-item-btn').dataset.index;
-                    billItems.splice(index, 1);
-                    renderBill();
-                }
-            });
-
-            // Discount and amount paid input
-            discountAmountInput.addEventListener('input', calculateTotals);
-            amountPaidInput.addEventListener('input', () => {
-                // This is a user-controlled field, so we don't recalculate totals based on it
-                // It only impacts the loan calculation on finalization
-            });
-
-            // Finalize bill button
-            finalizeBillBtn.addEventListener('click', finalizeBill);
-
-            // Modal buttons
-            newBillBtn.addEventListener('click', () => {
-                finalizeModal.classList.add('hidden');
-                resetBill();
-            });
-
-            // Initial render
-            renderBill();
-        });
 
         // Utility functions for UI alerts
         function showAlert(message, type = 'success', duration = 3000) {
@@ -682,6 +520,252 @@
                 alertDiv.remove();
             }, duration);
         }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Firebase Initialization
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    userIdDisplay.textContent = `User ID: ${userId}`;
+                    isAuthReady = true;
+                    // Listen for real-time stock changes
+                    const productsCollectionPath = `artifacts/${appId}/users/${userId}/stock`;
+                    onSnapshot(collection(db, productsCollectionPath), (snapshot) => {
+                        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    });
+                    // Listen for real-time customer changes
+                    const customersCollectionPath = `artifacts/${appId}/users/${userId}/customers`;
+                    onSnapshot(collection(db, customersCollectionPath), (snapshot) => {
+                        allCustomers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    });
+                } else {
+                    userId = null;
+                    userIdDisplay.textContent = `User ID: Not authenticated`;
+                    isAuthReady = false;
+                    await signInAnonymously(auth);
+                }
+            });
+
+            // Customer search and selection logic
+            customerSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                customerSearchResultsList.innerHTML = '';
+                if (query.length > 0) {
+                    const filtered = allCustomers.filter(c => 
+                        c.name.toLowerCase().includes(query) || c.phone.includes(query)
+                    );
+                    if (filtered.length > 0) {
+                        customerSearchResultsList.classList.remove('hidden');
+                        filtered.forEach(customer => {
+                            const li = document.createElement('li');
+                            li.className = 'p-2 hover:bg-gray-100 cursor-pointer';
+                            li.textContent = `${customer.name} (${customer.phone})`;
+                            li.addEventListener('click', () => {
+                                customerNameInput.value = customer.name;
+                                customerPhoneInput.value = customer.phone;
+                                customerSearchResultsList.classList.add('hidden');
+                                customerSearchInput.value = customer.name;
+                            });
+                            customerSearchResultsList.appendChild(li);
+                        });
+                    } else {
+                        customerSearchResultsList.classList.add('hidden');
+                    }
+                } else {
+                    customerSearchResultsList.classList.add('hidden');
+                }
+            });
+
+            // Toggle between customer search and manual add modes
+            manualCustomerToggleBtn.addEventListener('click', () => {
+                customerSearchSection.classList.add('hidden');
+                manualCustomerSection.classList.remove('hidden');
+            });
+            manualCustomerCancelBtn.addEventListener('click', () => {
+                manualCustomerSection.classList.add('hidden');
+                customerSearchSection.classList.remove('hidden');
+                manualCustomerNameInput.value = '';
+                manualCustomerPhoneInput.value = '';
+            });
+
+            // Add new customer manually
+            addManualCustomerBtn.addEventListener('click', async () => {
+                const name = manualCustomerNameInput.value.trim();
+                const phone = manualCustomerPhoneInput.value.trim();
+
+                if (!name || !phone) {
+                    showAlert('Please enter both customer name and phone number.', 'error');
+                    return;
+                }
+                
+                // Add Sri Lankan country code if not present
+                let formattedPhone = phone.replace(/^0/, ''); // Remove leading 0 if present
+                if (!formattedPhone.startsWith('94')) {
+                    formattedPhone = '94' + formattedPhone;
+                }
+
+                try {
+                    const customersCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/customers`);
+                    await addDoc(customersCollectionRef, {
+                        name: name,
+                        phone: formattedPhone
+                    });
+                    showAlert("Customer added successfully!", 'success');
+                    
+                    // Auto-fill the customer details on the bill
+                    customerNameInput.value = name;
+                    customerPhoneInput.value = formattedPhone;
+
+                    manualCustomerSection.classList.add('hidden');
+                    customerSearchSection.classList.remove('hidden');
+                    manualCustomerNameInput.value = '';
+                    manualCustomerPhoneInput.value = '';
+                } catch (error) {
+                    console.error("Error adding customer:", error);
+                    showAlert("Failed to add customer. Please try again.", 'error');
+                }
+            });
+
+            // Toggle between product search and manual add modes
+            manualAddToggleBtn.addEventListener('click', () => {
+                productSearchSection.classList.add('hidden');
+                manualAddSection.classList.remove('hidden');
+                selectedProductDetailsDiv.classList.add('hidden');
+            });
+            manualAddCancelBtn.addEventListener('click', () => {
+                manualAddSection.classList.add('hidden');
+                productSearchSection.classList.remove('hidden');
+                manualProductNameInput.value = '';
+                manualProductPriceInput.value = '';
+                manualQuantityInput.value = 1;
+            });
+
+            // Product search and add logic
+            productSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                searchResultsList.innerHTML = '';
+                if (query.length > 0) {
+                    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query) && p.stock > 0);
+                    if (filtered.length > 0) {
+                        searchResultsList.classList.remove('hidden');
+                        filtered.forEach(product => {
+                            const li = document.createElement('li');
+                            li.className = 'p-2 hover:bg-gray-100 cursor-pointer';
+                            li.textContent = `${product.name} (Rs ${product.price.toFixed(2)}) - ${product.stock} in stock`;
+                            li.addEventListener('click', () => {
+                                productNameSpan.textContent = product.name;
+                                productPriceSpan.textContent = product.price.toFixed(2);
+                                productStockSpan.textContent = product.stock;
+                                quantityInput.value = 1;
+                                selectedProductDetailsDiv.classList.remove('hidden');
+                                searchResultsList.classList.add('hidden');
+                                productSearchInput.value = '';
+                                selectedProductDetailsDiv.dataset.productId = product.id;
+                            });
+                            searchResultsList.appendChild(li);
+                        });
+                    } else {
+                        searchResultsList.classList.add('hidden');
+                    }
+                } else {
+                    searchResultsList.classList.add('hidden');
+                }
+            });
+
+            addItemBtn.addEventListener('click', () => {
+                const productId = selectedProductDetailsDiv.dataset.productId;
+                const quantity = parseInt(quantityInput.value);
+                const product = allProducts.find(p => p.id === productId);
+
+                if (!product || quantity <= 0) {
+                    showAlert('Please select a product and enter a valid quantity.', 'error');
+                    return;
+                }
+
+                if (quantity > product.stock) {
+                    showAlert(`Not enough stock. Only ${product.stock} available.`, 'error');
+                    return;
+                }
+                
+                const existingItemIndex = billItems.findIndex(item => item.id === productId);
+                if (existingItemIndex !== -1) {
+                    billItems[existingItemIndex].quantity += quantity;
+                } else {
+                    billItems.push({
+                        id: productId,
+                        name: product.name,
+                        price: product.price,
+                        quantity: quantity
+                    });
+                }
+                showAlert(`${quantity} x ${product.name} added to bill.`, 'success');
+                selectedProductDetailsDiv.classList.add('hidden');
+                renderBill();
+            });
+
+            addManualItemBtn.addEventListener('click', () => {
+                const name = manualProductNameInput.value.trim();
+                const price = parseFloat(manualProductPriceInput.value);
+                const quantity = parseInt(manualQuantityInput.value);
+
+                if (!name || isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
+                    showAlert('Please enter a valid name, price, and quantity.', 'error');
+                    return;
+                }
+
+                billItems.push({
+                    name: name,
+                    price: price,
+                    quantity: quantity
+                });
+
+                showAlert(`${quantity} x ${name} added to bill.`, 'success');
+                manualProductNameInput.value = '';
+                manualProductPriceInput.value = '';
+                manualQuantityInput.value = 1;
+                renderBill();
+            });
+
+            // Bill item removal
+            billItemsContainer.addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('.btn-remove-item');
+                if (removeBtn) {
+                    const index = removeBtn.dataset.index;
+                    billItems.splice(index, 1);
+                    showAlert('Item removed from bill.', 'success');
+                    renderBill();
+                }
+            });
+
+            clearBillBtn.addEventListener('click', () => {
+                resetBill();
+                showAlert('Bill cleared.', 'success');
+            });
+
+            checkoutBtn.addEventListener('click', () => {
+                if (billItems.length === 0) {
+                    showAlert('Please add items to checkout.', 'error');
+                    return;
+                }
+                finalizeModal.classList.remove('hidden');
+                amountPaidInput.value = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
+                updateLoanAmount();
+            });
+
+            // Modal logic
+            amountPaidInput.addEventListener('input', updateLoanAmount);
+            discountAmountInput.addEventListener('input', calculateTotals);
+            newBillBtn.addEventListener('click', () => {
+                finalizeModal.classList.add('hidden');
+                resetBill();
+            });
+            sendWhatsappBtn.addEventListener('click', finalizeBill);
+        });
     </script>
 </body>
 </html>
