@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Manage Stock - WR Smile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts for Luxury Feel: Inter for body, Playfair Display for headings -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -32,155 +33,99 @@
             font-weight: 700;
         }
 
+        /* Card and container styling */
         .container {
             width: 100%;
-            max-width: 900px;
-            margin-top: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         .card {
             background-color: #ffffff;
             border-radius: 1.5rem;
             padding: 2.5rem;
-            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.05), -10px -10px 20px rgba(255, 255, 255, 0.5);
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.07), -15px -15px 30px rgba(255, 255, 255, 0.7);
-        }
-
-        .input-style {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            background-color: #f0f4f8;
-            border-radius: 9999px; /* full rounded */
-            box-shadow: inset 2px 2px 5px #c8d3e0, inset -2px -2px 5px #ffffff;
-            transition: all 0.3s ease;
-        }
-        .input-style:focus {
-            outline: none;
-            box-shadow: inset 3px 3px 8px #b9c7d8, inset -3px -3px 8px #ffffff;
-        }
-
-        .btn-style {
-            padding: 0.75rem 2rem;
-            border: none;
-            font-weight: 600;
-            border-radius: 9999px; /* full rounded */
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .btn-style:hover {
-            transform: translateY(-2px);
-            box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.6);
-        }
-
-        .btn-style:active {
-            transform: translateY(0);
-            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.4);
+            box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.1);
         }
         
-        /* Specific button colors */
-        .btn-primary {
-            background-color: #4f46e5;
-            color: #ffffff;
+        /* Button styling */
+        .btn {
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .btn-secondary {
-            background-color: #94a3b8;
-            color: #ffffff;
-        }
-        .btn-danger {
-            background-color: #ef4444;
-            color: #ffffff;
-        }
-        .btn-edit {
-            color: #2563eb;
-        }
-        .btn-delete {
-            color: #dc2626;
+        .btn:hover {
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
         }
 
-        /* Modal Styles */
+        /* Custom Modal Styling */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            display: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
         .modal-content {
-            background-color: #f0f4f8;
-            padding: 2rem;
+            background: white;
+            padding: 2.5rem;
             border-radius: 1.5rem;
-            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.6);
-            width: 90%;
             max-width: 500px;
-        }
-        .modal-content input {
-            width: 100%;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: modal-fade-in 0.3s forwards;
         }
 
-        /* Message/Alerts */
-        .message-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1001;
-            display: flex;
-            flex-direction: column-reverse;
-            gap: 10px;
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: color 0.2s;
         }
-        .message {
-            padding: 1rem 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
-            animation: fadeInOut 4s forwards;
-            min-width: 250px;
-            text-align: center;
+        .modal-close-btn:hover {
+            color: #4b5563;
         }
-        .message.success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        .message.error {
-            background-color: #fee2e2;
-            color: #991b1b;
+
+        @keyframes modal-fade-in {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(20px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(20px); }
-        }
-
-        /* Loader styles */
-        .loader-overlay {
+        /* Custom Loader */
+        .loader-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            display: none;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1002;
+            z-index: 2000;
         }
         .loader {
             border: 8px solid #f3f3f3;
-            border-top: 8px solid #4f46e5;
+            border-top: 8px solid #3b82f6;
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -190,380 +135,375 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Custom Alerts */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .custom-alert {
+            animation: fade-in-up 0.5s ease-out forwards;
+        }
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .text-shadow-sm {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table responsiveness */
+        .table-container {
+            overflow-x: auto;
+        }
     </style>
 </head>
-<body>
-    <!-- Main Content Container -->
-    <div class="container mx-auto p-4">
-        <h1 class="text-4xl text-center mb-8">Stock Management</h1>
-        <p id="userIdDisplay" class="text-xs text-center text-gray-400 mb-4"></p>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <div id="alert-container"></div>
+    <div id="page-loader" class="loader-container hidden">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="container mx-auto mt-10">
+        <div class="card p-8 md:p-12 mb-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-center mb-4 text-gray-800">
+                Stock Management
+            </h1>
+            <p class="text-center text-lg md:text-xl text-gray-600 mb-8">
+                Your products, your way. Manage your inventory effortlessly.
+            </p>
 
-        <!-- Form for Adding New Products Directly -->
-        <div class="card p-6 mb-8">
-            <h2 class="text-2xl mb-4">Add New Product</h2>
-            <form id="addProductForm" class="space-y-4">
-                <input type="text" id="addProductName" placeholder="Product Name" required class="input-style">
-                <input type="number" id="addProductPrice" placeholder="Price (Rs)" required class="input-style">
-                <input type="number" id="addProductStock" placeholder="Stock" required class="input-style">
-                <div class="flex justify-center mt-6">
-                    <button type="submit" class="btn-style btn-primary">Add Product</button>
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <button id="addProductBtn" class="btn bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 px-6 py-3 mb-4 md:mb-0">
+                    <i class="fas fa-plus mr-2"></i> Add New Product
+                </button>
+                <div class="bg-gray-100 px-4 py-2 rounded-full font-medium text-gray-500 text-sm">
+                    User ID: <span id="userIdDisplay" class="font-mono text-gray-700">Loading...</span>
                 </div>
-            </form>
-        </div>
+            </div>
 
-        <!-- Stock List Card -->
-        <div class="card p-6">
-            <h2 class="text-2xl mb-4">Current Stock</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left table-auto">
-                    <thead>
-                        <tr class="text-gray-600 uppercase text-sm leading-normal">
-                            <th class="py-3 px-6">Product</th>
-                            <th class="py-3 px-6">Price</th>
-                            <th class="py-3 px-6">Stock</th>
-                            <th class="py-3 px-6 text-right">Actions</th>
+            <!-- Product List Table -->
+            <div id="stockList" class="bg-white rounded-xl shadow overflow-hidden table-container">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price (LKR)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Cost (LKR)</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="stockTableBody" class="text-gray-600 text-sm font-light">
-                        <!-- Product rows will be injected here -->
+                    <tbody id="productTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Product rows will be dynamically inserted here -->
                     </tbody>
                 </table>
             </div>
-            <p id="noProductsMessage" class="text-center text-gray-500 mt-4 hidden">No products in stock. Add some above!</p>
+            
+            <p id="noProductsMessage" class="text-center text-gray-500 mt-8 hidden">No products found. Add a new product to get started!</p>
         </div>
     </div>
-
-    <!-- Modals -->
-    <!-- Edit Product Modal -->
-    <div id="editProductModal" class="modal-overlay">
+    
+    <!-- Custom Modals -->
+    
+    <!-- Add/Edit Product Modal -->
+    <div id="addProductModal" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3 class="text-2xl mb-4 text-center">Edit Product</h3>
-            <form id="editProductForm" class="space-y-4">
-                <input type="hidden" id="editProductId">
-                <input type="text" id="editProductName" placeholder="Product Name" required class="input-style">
-                <input type="number" id="editProductPrice" placeholder="Price (Rs)" required class="input-style">
-                <input type="number" id="editProductStock" placeholder="Stock" required class="input-style">
-                <div class="flex justify-center space-x-4 mt-6">
-                    <button type="submit" class="btn-style btn-primary">Update</button>
-                    <button type="button" id="cancelEditBtn" class="btn-style btn-secondary">Cancel</button>
+            <button id="closeAddProductModalBtn" class="modal-close-btn text-xl"><i class="fas fa-times-circle"></i></button>
+            <h3 id="modalTitle" class="text-2xl font-bold mb-6 text-center text-gray-800">Add New Product</h3>
+            <form id="addProductForm">
+                <input type="hidden" id="productId" />
+                <div class="mb-4">
+                    <label for="productName" class="block text-gray-700 font-medium mb-2">Product Name</label>
+                    <input type="text" id="productName" required class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
                 </div>
+                <div class="mb-4">
+                    <label for="quantity" class="block text-gray-700 font-medium mb-2">Quantity</label>
+                    <input type="number" id="quantity" required class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                </div>
+                <div class="mb-4">
+                    <label for="unitPrice" class="block text-gray-700 font-medium mb-2">Unit Price (LKR)</label>
+                    <input type="number" step="0.01" id="unitPrice" required class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                </div>
+                <div class="mb-6">
+                    <label for="unitCost" class="block text-gray-700 font-medium mb-2">Unit Cost (LKR)</label>
+                    <input type="number" step="0.01" id="unitCost" required class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                </div>
+                <button type="submit" id="saveProductBtn" class="w-full btn bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 px-6 py-3">
+                    Save Product
+                </button>
             </form>
         </div>
     </div>
-
-    <!-- Confirmation Modal for Deletion -->
-    <div id="confirmModal" class="modal-overlay">
+    
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal-overlay hidden">
         <div class="modal-content text-center">
-            <h3 class="text-2xl mb-4 text-center">Confirm Deletion</h3>
-            <p class="text-gray-700 mb-6">Are you sure you want to delete this product?</p>
-            <div class="flex justify-center space-x-4">
-                <button id="confirmDeleteBtn" class="btn-style btn-danger">Delete</button>
-                <button id="cancelConfirmBtn" class="btn-style btn-secondary">Cancel</button>
+            <button id="closeConfirmModalBtn" class="modal-close-btn text-xl"><i class="fas fa-times-circle"></i></button>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">Are you sure?</h3>
+            <p class="text-gray-600 mb-6">Do you really want to delete this product? This action cannot be undone.</p>
+            <div class="flex justify-center gap-4">
+                <button id="cancelConfirmBtn" class="btn bg-gray-300 text-gray-800 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 px-6 py-3">Cancel</button>
+                <button id="confirmDeleteBtn" class="btn bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 px-6 py-3">Delete</button>
             </div>
         </div>
     </div>
-
-    <!-- Message Container -->
-    <div id="messageContainer" class="message-container"></div>
-
-    <!-- Loader Overlay -->
-    <div id="loaderOverlay" class="loader-overlay">
-        <div class="loader"></div>
-    </div>
-
+    
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
-            authDomain: "wr-smile-shop.firebaseapp.com",
-            databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
-            projectId: "wr-smile-shop",
-            storageBucket: "wr-smile-shop.firebasestorage.app",
-            messagingSenderId: "299864260187",
-            appId: "1:299864260187:web:fa6af65ef95674aff1097e",
-            measurementId: "G-3Z38G6MCYJ"
-        };
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // Use the globally provided variables
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
         let db;
         let auth;
-        let userId = null;
+        let userId;
+        let productsCollectionRef;
+        let productsCollectionPath;
+
+        // --- UI Element References ---
+        const addProductBtn = document.getElementById('addProductBtn');
+        const addProductModal = document.getElementById('addProductModal');
+        const closeAddProductModalBtn = document.getElementById('closeAddProductModalBtn');
+        const addProductForm = document.getElementById('addProductForm');
+        const modalTitle = document.getElementById('modalTitle');
+        const productIdInput = document.getElementById('productId');
+        const productTableBody = document.getElementById('productTableBody');
+        const confirmModal = document.getElementById('confirmModal');
+        const closeConfirmModalBtn = document.getElementById('closeConfirmModalBtn');
+        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const noProductsMessage = document.getElementById('noProductsMessage');
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        const loader = document.getElementById('page-loader');
 
         let productToDeleteId = null;
 
-        // UI Element References
-        const stockTableBody = document.getElementById('stockTableBody');
-        const noProductsMessage = document.getElementById('noProductsMessage');
-        const editProductModal = document.getElementById('editProductModal');
-        const addProductForm = document.getElementById('addProductForm');
-        const addProductNameInput = document.getElementById('addProductName');
-        const addProductPriceInput = document.getElementById('addProductPrice');
-        const addProductStockInput = document.getElementById('addProductStock');
-        const editProductForm = document.getElementById('editProductForm');
-        const editProductIdInput = document.getElementById('editProductId');
-        const editProductNameInput = document.getElementById('editProductName');
-        const editProductPriceInput = document.getElementById('editProductPrice');
-        const editProductStockInput = document.getElementById('editProductStock');
-        const cancelEditBtn = document.getElementById('cancelEditBtn');
-        const confirmModal = document.getElementById('confirmModal');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
-        const messageContainer = document.getElementById('messageContainer');
-        const loaderOverlay = document.getElementById('loaderOverlay');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-
-        // Functions for Modals
-        const showCustomModal = (modal) => modal.style.display = 'flex';
-        const hideCustomModal = (modal) => modal.style.display = 'none';
-
-        // Functions for Messages and Loader
-        const showMessage = (message, type) => {
-            const messageDiv = document.createElement('div');
-            messageDiv.textContent = message;
-            messageDiv.className = `message ${type}`;
-            messageContainer.appendChild(messageDiv);
+        // --- Utility Functions ---
+        function showMessage(message, type = 'success', duration = 3000) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-alert p-4 rounded-lg shadow-md mb-2 text-white font-bold animate-fade-in-up ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+            alertDiv.textContent = message;
+            alertContainer.appendChild(alertDiv);
             setTimeout(() => {
-                messageDiv.remove();
-            }, 3000);
-        };
-        const showLoader = () => { loaderOverlay.style.display = 'flex'; };
-        const hideLoader = () => { loaderOverlay.style.display = 'none'; };
+                alertDiv.remove();
+            }, duration);
+        }
 
-        // Helper to disable/enable forms
-        const setFormState = (disabled) => {
-            const forms = [addProductForm, editProductForm];
-            forms.forEach(form => {
-                const inputs = form.querySelectorAll('input, button');
-                inputs.forEach(input => {
-                    input.disabled = disabled;
-                    input.readOnly = disabled;
-                });
-            });
-        };
+        function showCustomModal(modal) {
+            modal.classList.remove('hidden');
+        }
 
-        // Firebase Authentication and Initialization
-        const authenticate = async () => {
-            showLoader();
+        function hideCustomModal(modal) {
+            modal.classList.add('hidden');
+        }
+
+        function showLoader() {
+            loader.classList.remove('hidden');
+        }
+
+        function hideLoader() {
+            loader.classList.add('hidden');
+        }
+        
+        // --- Firebase Authentication ---
+        async function authenticate() {
             try {
                 const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
                 auth = getAuth(app);
+                db = getFirestore(app);
                 
-                // Listen for authentication state changes
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        userIdDisplay.textContent = `User ID: ${userId}`;
-                        setFormState(false);
-                        const productsCollectionPath = `artifacts/${appId}/users/${userId}/stock`;
-                        setupRealtimeListener(productsCollectionPath);
-                        showMessage("Authentication successful!", 'success');
-                    } else {
-                        userId = null;
-                        userIdDisplay.textContent = `User ID: Not authenticated`;
-                        setFormState(true);
-                        stockTableBody.innerHTML = '';
-                        noProductsMessage.classList.remove('hidden');
-                        showMessage("Please wait, authenticating...", "error");
-                    }
-                    hideLoader();
-                });
+                setLogLevel('debug'); // Enable Firestore debug logging
+                
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
 
-                // Directly sign in anonymously to ensure the app works for all users.
-                await signInAnonymously(auth);
+                userId = auth.currentUser.uid;
+                userIdDisplay.textContent = userId;
+                productsCollectionPath = `artifacts/${appId}/users/${userId}/products`;
+                productsCollectionRef = collection(db, productsCollectionPath);
+
+                console.log("Firebase authenticated. User ID:", userId);
+                console.log("Products Collection Path:", productsCollectionPath);
+
+                startRealtimeListener();
 
             } catch (error) {
-                console.error("Authentication or Firebase initialization error:", error);
-                showMessage("Authentication failed. Check the console for more details.", "error");
-                setFormState(true);
-                hideLoader();
+                console.error("Authentication Error:", error);
+                showMessage('Failed to authenticate: ' + error.message, 'error');
             }
-        };
-
-        // Real-time listener for stock data
-        const setupRealtimeListener = (collectionPath) => {
-            if (!db) {
-                console.error("Firestore instance (db) is not initialized.");
-                return;
-            }
-            onSnapshot(collection(db, collectionPath), (snapshot) => {
-                stockTableBody.innerHTML = '';
-                if (snapshot.empty) {
-                    noProductsMessage.classList.remove('hidden');
-                } else {
-                    noProductsMessage.classList.add('hidden');
-                    snapshot.forEach(doc => {
-                        renderProductRow({ id: doc.id, ...doc.data() });
-                    });
-                }
+        }
+        
+        // --- Real-time Data Listener ---
+        function startRealtimeListener() {
+            onSnapshot(productsCollectionRef, (snapshot) => {
+                const products = [];
+                snapshot.forEach((doc) => {
+                    products.push({ id: doc.id, ...doc.data() });
+                });
+                renderProducts(products);
             }, (error) => {
                 console.error("Error fetching documents:", error);
-                showMessage("Failed to load stock data.", "error");
+                showMessage('Failed to load products: ' + error.message, 'error');
             });
-        };
+        }
+        
+        // --- Render Products ---
+        function renderProducts(products) {
+            productTableBody.innerHTML = '';
+            if (products.length === 0) {
+                noProductsMessage.classList.remove('hidden');
+                return;
+            } else {
+                noProductsMessage.classList.add('hidden');
+            }
 
-        // Render a single product row in the table
-        const renderProductRow = (product) => {
-            const row = document.createElement('tr');
-            row.className = "hover:bg-gray-100 transition-colors duration-150 border-b border-gray-200 last:border-0";
-            row.innerHTML = `
-                <td class="py-4 px-6">${product.name}</td>
-                <td class="py-4 px-6">Rs ${product.price.toFixed(2)}</td>
-                <td class="py-4 px-6">${product.stock}</td>
-                <td class="py-4 px-6 text-right space-x-2">
-                    <button class="btn-edit text-sm" data-id="${product.id}"><i class="fas fa-edit"></i></button>
-                    <button class="btn-delete text-sm" data-id="${product.id}"><i class="fas fa-trash"></i></button>
-                </td>
-            `;
-            stockTableBody.appendChild(row);
-        };
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            authenticate();
-
-            // Handle Add Product Form Submission
-            addProductForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!db || !userId) {
-                    showMessage("Database not ready. Please wait.", "error");
-                    return;
-                }
-                showLoader();
-
-                const name = addProductNameInput.value.trim();
-                const price = parseFloat(addProductPriceInput.value);
-                const stock = parseInt(addProductStockInput.value);
-
-                if (name && !isNaN(price) && !isNaN(stock) && stock >= 0) {
-                    const productData = { name, price, stock };
-                    const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
-
-                    try {
-                        await addDoc(productsCollectionRef, productData);
-                        showMessage("Product saved successfully!", "success");
-                        addProductForm.reset();
-                    } catch (error) {
-                        console.error("Error saving product:", error);
-                        showMessage('Failed to save product: ' + error.message, "error");
-                    } finally {
-                        hideLoader();
-                    }
-                } else {
-                    showMessage("Please fill all fields with valid data.", "error");
-                    hideLoader();
-                }
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${product.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${product.quantity}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LKR ${product.unitPrice ? product.unitPrice.toFixed(2) : '0.00'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LKR ${product.unitCost ? product.unitCost.toFixed(2) : '0.00'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-center">
+                        <button class="text-blue-600 hover:text-blue-900 mx-2 edit-btn" data-id="${product.id}" data-name="${product.name}" data-quantity="${product.quantity}" data-price="${product.unitPrice}" data-cost="${product.unitCost}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-900 mx-2 delete-btn" data-id="${product.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                productTableBody.appendChild(row);
             });
 
-            // Handle Edit Product Form Submission
-            editProductForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!db || !userId) {
-                    showMessage("Database not ready. Please wait.", "error");
-                    return;
-                }
-                showLoader();
-
-                const id = editProductIdInput.value;
-                const name = editProductNameInput.value.trim();
-                const price = parseFloat(editProductPriceInput.value);
-                const stock = parseInt(editProductStockInput.value);
-
-                if (name && !isNaN(price) && !isNaN(stock) && stock >= 0) {
-                    const productData = { name, price, stock };
-                    const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
-
-                    try {
-                        const productRef = doc(productsCollectionRef, id);
-                        await updateDoc(productRef, productData);
-                        showMessage("Product updated successfully!", "success");
-                        hideCustomModal(editProductModal);
-                    } catch (error) {
-                        console.error("Error updating product:", error);
-                        showMessage('Failed to update product: ' + error.message, "error");
-                    } finally {
-                        hideLoader();
-                    }
-                } else {
-                    showMessage("Please fill all fields with valid data.", "error");
-                    hideLoader();
-                }
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const { id, name, quantity, price, cost } = e.currentTarget.dataset;
+                    modalTitle.textContent = "Edit Product";
+                    productIdInput.value = id;
+                    document.getElementById('productName').value = name;
+                    document.getElementById('quantity').value = quantity;
+                    document.getElementById('unitPrice').value = price;
+                    document.getElementById('unitCost').value = cost;
+                    showCustomModal(addProductModal);
+                });
             });
 
-
-            // Handle Clicks on Edit/Delete Buttons using event delegation
-            stockTableBody.addEventListener('click', async (e) => {
-                const targetBtn = e.target.closest('button');
-                if (!targetBtn || !db || !userId) return;
-
-                const productId = targetBtn.dataset.id;
-                
-                if (targetBtn.classList.contains('btn-delete')) {
-                    // Handle Delete
-                    productToDeleteId = productId;
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    productToDeleteId = e.currentTarget.dataset.id;
                     showCustomModal(confirmModal);
-                } else if (targetBtn.classList.contains('btn-edit')) {
-                    // Handle Edit
-                    showLoader();
-                    try {
-                        const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
-                        const docRef = doc(productsCollectionRef, productId);
-                        const docSnap = await getDoc(docRef);
-
-                        if (docSnap.exists()) {
-                            const data = docSnap.data();
-                            editProductIdInput.value = productId;
-                            editProductNameInput.value = data.name;
-                            editProductPriceInput.value = data.price;
-                            editProductStockInput.value = data.stock;
-                            showCustomModal(editProductModal);
-                        } else {
-                            showMessage("Product not found.", "error");
-                        }
-                    } catch (error) {
-                        console.error("Error fetching product for edit:", error);
-                        showMessage('Failed to load product details for editing: ' + error.message, "error");
-                    } finally {
-                        hideLoader();
-                    }
-                }
+                });
             });
-
-            // Cancel button for Edit Modal
-            cancelEditBtn.addEventListener('click', () => {
-                hideCustomModal(editProductModal);
-                editProductForm.reset();
-            });
-
-            // Confirmation Modal Buttons
-            cancelConfirmBtn.addEventListener('click', () => {
-                hideCustomModal(confirmModal);
-                productToDeleteId = null;
-            });
-            confirmDeleteBtn.addEventListener('click', async () => {
-                if (!productToDeleteId || !db || !userId) return;
-                showLoader();
-                try {
-                    const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
-                    await deleteDoc(doc(productsCollectionRef, productToDeleteId));
-                    showMessage("Product deleted successfully!", "success");
-                } catch (error) {
-                    console.error("Error deleting product:", error);
-                    showMessage('Failed to delete product: ' + error.message, "error");
-                } finally {
-                    hideCustomModal(confirmModal);
-                    hideLoader();
-                    productToDeleteId = null;
-                }
-            });
+        }
+        
+        // --- Event Listeners ---
+        
+        // Add Product Button
+        addProductBtn.addEventListener('click', () => {
+            addProductForm.reset();
+            productIdInput.value = '';
+            modalTitle.textContent = "Add New Product";
+            showCustomModal(addProductModal);
         });
+
+        // Close Modal Buttons
+        closeAddProductModalBtn.addEventListener('click', () => {
+            hideCustomModal(addProductModal);
+        });
+
+        // Add/Edit Form Submission
+        addProductForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            showLoader();
+            
+            const id = productIdInput.value;
+            const name = document.getElementById('productName').value;
+            const quantity = parseInt(document.getElementById('quantity').value, 10);
+            const unitPrice = parseFloat(document.getElementById('unitPrice').value);
+            const unitCost = parseFloat(document.getElementById('unitCost').value);
+            
+            if (isNaN(quantity) || isNaN(unitPrice) || isNaN(unitCost)) {
+                showMessage("Quantity, Unit Price, and Unit Cost must be valid numbers.", "error");
+                hideLoader();
+                return;
+            }
+
+            const productData = { name, quantity, unitPrice, unitCost, created: new Date().toISOString() };
+
+            try {
+                if (id) {
+                    // Update existing product
+                    const docRef = doc(db, productsCollectionPath, id);
+                    await updateDoc(docRef, productData);
+                    showMessage("Product updated successfully!", "success");
+                } else {
+                    // Add new product
+                    await addDoc(productsCollectionRef, productData);
+                    showMessage("Product added successfully!", "success");
+                }
+                hideCustomModal(addProductModal);
+                addProductForm.reset();
+            } catch (error) {
+                console.error("Error saving product:", error);
+                showMessage('Failed to save product: ' + error.message, "error");
+            } finally {
+                hideLoader();
+            }
+        });
+
+        // --- Delete Product Confirmation ---
+        cancelConfirmBtn.addEventListener('click', () => {
+            hideCustomModal(confirmModal);
+        });
+
+        closeConfirmModalBtn.addEventListener('click', () => {
+            hideCustomModal(confirmModal);
+        });
+
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!productToDeleteId) return;
+
+            showLoader();
+            try {
+                await deleteDoc(doc(db, productsCollectionPath, productToDeleteId));
+                showMessage("Product deleted successfully!", "success");
+                productToDeleteId = null; // Clear the ID
+            } catch (error) {
+                console.error("Error deleting product:", error);
+                showMessage('Failed to delete product: ' + error.message, "error");
+            } finally {
+                hideCustomModal(confirmModal);
+                hideLoader();
+            }
+        });
+
+        // Start authentication process on page load
+        authenticate();
     </script>
 </body>
 </html>
