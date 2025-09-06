@@ -1,1152 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Manage Stock - WR Smile</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Google Fonts for Luxury Feel: Inter for body, Playfair Display for headings -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* Base Body Styling for Luxury UI */
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(145deg, #e0e7ee, #c8d3e0); /* Soft, cool grey gradient */
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column; /* Allow content to stack and footer to push down */
-      align-items: center;
-      justify-content: flex-start; /* Align content to top initially */
-      padding: 20px;
-      color: #334155; /* Darker default text color */
-      box-sizing: border-box; /* Include padding in element's total width and height */
-    }
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Playfair Display', serif; /* Elegant serif for headings */
-      font-weight: 700;
-    }
-
-    /* Accent Color (Teal Example) */
-    :root {
-      --accent-color: #2dd4bf; /* Example Teal */
-      --accent-hover-color: #14b8a6;
-      --danger-red: #ef4444;
-      --primary-blue: #4299e1;
-    }
-
-    /* Header Styling */
-    .header {
-        background: linear-gradient(to right, #1a202c, #2d3748); /* Darker, sophisticated gradient */
-        color: #e2e8f0;
-        padding: 1rem 2rem;
-        width: 100%;
-        max-width: 960px; /* Consistent max-width for main container */
-        border-radius: 12px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 40px;
-    }
-
-    .header .logo {
-        height: 50px;
-        width: auto;
-    }
-
-    .header .nav a {
-        color: #cbd5e0;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        font-weight: 500;
-        margin-left: 10px;
-    }
-
-    .header .nav a:hover, .header .nav a.active {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-
-    /* --- 4. Main Container & Section Titles --- */
-    .container {
-      background-color: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-      padding: 3rem;
-      width: 100%;
-      max-width: 900px; /* Wider for more content */
-      margin: 40px 0;
-      position: relative; /* For absolutely positioned elements inside */
-    }
-
-    .section-title {
-      text-align: center;
-      color: #1a202c;
-      font-size: 2.5rem;
-      margin-bottom: 2.5rem;
-      letter-spacing: -0.05rem;
-    }
-
-    /* --- 5. Form Elements --- */
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-      display: block;
-      font-weight: 600;
-      color: #4a5568;
-      margin-bottom: 0.6rem;
-      font-size: 0.95rem;
-    }
-
-    .form-input, .form-textarea, .form-select {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 1px solid #cbd5e0;
-      border-radius: 8px;
-      font-size: 1rem;
-      color: var(--text-dark);
-      transition: all 0.3s ease;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
-      background-color: #f7fafc;
-    }
-
-    .form-input:focus, .form-textarea:focus, .form-select:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3);
-      outline: none;
-      background-color: #ffffff;
-    }
-    .form-input.is-invalid {
-        border-color: var(--danger-red);
-        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
-    }
-
-    /* --- 6. Buttons --- */
-    .btn {
-      display: inline-block;
-      padding: 0.8rem 1.8rem;
-      font-size: 1rem;
-      font-weight: 600;
-      text-align: center;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-      text-decoration: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
-      color: white;
-      box-shadow: 0 4px 10px rgba(45, 212, 191, 0.3);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(45, 212, 191, 0.4);
-      background: linear-gradient(90deg, var(--accent-hover), var(--accent-color));
-    }
-
-    .btn-primary-custom { /* Used for specific buttons like Search Loan */
-        background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
-        color: white;
-        box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3);
-    }
-
-    .btn-primary-custom:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(66, 153, 225, 0.4);
-        background: linear-gradient(90deg, var(--dark-blue), var(--primary-blue));
-    }
-
-
-    .btn-secondary {
-      background-color: #edf2f7;
-      color: #4a5568;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .btn-secondary:hover {
-      background-color: #e2e8f0;
-      color: #2d3748;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-secondary-custom { /* For special secondary buttons like add product row in loan */
-      background-color: #cbd5e0;
-      color: #334155;
-      border: 1px solid #a0aec0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .btn-secondary-custom:hover {
-      background-color: #a0aec0;
-      color: #1a202c;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-danger {
-      background-color: var(--danger-red);
-      color: white;
-      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
-    }
-
-    .btn-danger:hover {
-      background-color: #dc2626;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4);
-    }
-
-    .btn-block {
-      display: block;
-      width: 100%;
-      margin-top: 1.5rem;
-    }
-
-    .btn-sm {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-    }
-
-    /* --- 7. Flexbox & Layout Utilities --- */
-    .flex-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap; /* Allow wrapping on small screens */
-    }
-    .flex-container > * {
-        flex-grow: 1;
-    }
-    .flex-container .form-input {
-        flex-grow: 2; /* Search input takes more space */
-    }
-
-    .input-group {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      align-items: center;
-    }
-    .input-group .form-input {
-      flex-grow: 1;
-    }
-
-    .customer-name-display {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1a202c;
-        margin-top: 1rem;
-        text-align: center;
-    }
-
-    /* --- 8. Product & Customer Lists (Common Styles) --- */
-    .product-list, .customer-list, .loan-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-
-    .product-card, .customer-card, .loan-card {
-        background-color: #ffffff;
-        padding: 2rem;
-        border-radius: 16px;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        position: relative;
-        display: flex; /* For loan card header alignment */
-        flex-direction: column; /* For stacking content in cards */
-    }
-    .product-card:hover, .customer-card:hover, .loan-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    .product-card h3, .customer-card h3, .loan-card h3 {
-        font-size: 1.6rem;
-        margin-top: 0;
-        color: #1a202c;
-        margin-bottom: 0.5rem;
-    }
-    .product-card p, .customer-card p, .loan-card p {
-        color: #4a5568;
-        margin-bottom: 0.5rem;
-    }
-
-    /* Specific product card styles */
-    .product-card .stock-qty {
-        font-weight: 600;
-        color: var(--primary-blue);
-    }
-    .product-card .stock-low {
-        color: var(--danger-red);
-        font-weight: 700;
-    }
-    .product-card .actions {
-        margin-top: 1.5rem;
-        display: flex;
-        gap: 0.8rem;
-    }
-
-    /* Specific Customer Card Styles */
-    .customer-card {
-        cursor: pointer; /* Indicate clickable */
-    }
-    .customer-card .loan-info {
-        font-weight: bold;
-        color: var(--danger-red);
-        margin-top: 10px;
-    }
-    .customer-card .purchase-info {
-        font-weight: bold;
-        color: var(--primary-blue);
-    }
-
-    /* Specific Loan Card Styles */
-    .loan-card {
-        border: 1px solid #e2e8e0;
-    }
-    .loan-card .loan-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    .loan-card .loan-id {
-        font-weight: 600;
-        color: #4a5568;
-        font-size: 0.9rem;
-    }
-    .loan-card .loan-status-badge {
-        padding: 0.3rem 0.8rem;
-        border-radius: 9999px; /* Pill shape */
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: white;
-    }
-    .loan-card .loan-status-badge.pending {
-        background-color: var(--danger-red);
-    }
-    .loan-card .loan-status-badge.paid {
-        background-color: #28a745; /* Green */
-    }
-    .loan-card .loan-details ul {
-        list-style: disc;
-        padding-left: 20px;
-        margin-top: 0.5rem;
-        color: #4a5568;
-        font-size: 0.95rem;
-    }
-    .loan-card .loan-summary {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px dashed #e2e8e0;
-    }
-    .loan-card .loan-summary p {
-        display: flex;
-        justify-content: space-between;
-        font-size: 1rem;
-        margin-bottom: 0.4rem;
-    }
-    .loan-card .loan-summary strong {
-        color: #1a202c;
-    }
-    .loan-card .loan-balance {
-        font-weight: 700;
-    }
-    .loan-card .text-red-500 { color: #ef4444; }
-    .loan-card .text-green-500 { color: #28a745; }
-
-    .loan-card .payments-section {
-        margin-top: 1.5rem;
-        padding-top: 1rem;
-        border-top: 1px dashed #e2e8e0;
-    }
-    .loan-card .payments-section h5 {
-        font-size: 1.1rem;
-        margin-bottom: 0.8rem;
-    }
-    .loan-card .payments-list {
-        margin-top: 0.5rem;
-        background-color: #f7fafc;
-        border-radius: 8px;
-        padding: 1rem;
-        max-height: 150px;
-        overflow-y: auto;
-        border: 1px solid #e2e8e0;
-    }
-    .loan-card .payments-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .loan-card .payments-list li {
-        padding: 0.3rem 0;
-        border-bottom: 1px dotted #cbd5e0;
-        font-size: 0.9rem;
-        color: #4a5568;
-    }
-    .loan-card .payments-list li:last-child {
-        border-bottom: none;
-    }
-    .loan-card .loan-actions {
-        margin-top: 1.5rem;
-        display: flex;
-        justify-content: flex-end;
-        gap: 0.8rem;
-    }
-    .loan-card .loan-actions .btn-sm {
-        padding: 0.6rem 1.2rem;
-    }
-
-    /* Add Loan/Product Row styling */
-    .product-row {
-        display: flex;
-        gap: 0.8rem;
-        margin-bottom: 0.8rem;
-        align-items: center;
-    }
-    .product-row .product-name {
-        flex-grow: 3;
-    }
-    .product-row .product-qty, .product-row .product-price {
-        flex-grow: 1;
-        max-width: 80px; /* Limit width */
-        text-align: center;
-    }
-    .product-row .remove-product {
-        flex-shrink: 0;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: var(--danger-red);
-        cursor: pointer;
-        line-height: 1;
-        padding: 0 5px;
-    }
-    .product-row .remove-product:hover {
-        color: #dc2626;
-    }
-
-    /* --- 9. Modals (Common Styles) --- */
-    .modal-custom {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
-    .modal-custom.show {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .modal-custom-content {
-        background-color: #ffffff;
-        padding: 2.5rem;
-        border-radius: 16px;
-        width: 90%;
-        max-width: 600px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-        position: relative;
-        transform: translateY(-20px);
-        transition: transform 0.3s ease;
-    }
-
-    .modal-custom.show .modal-custom-content {
-        transform: translateY(0);
-    }
-
-    .close-btn-custom {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        font-size: 2rem;
-        font-weight: bold;
-        color: #a0aec0;
-        cursor: pointer;
-        transition: color 0.2s ease;
-    }
-
-    .close-btn-custom:hover {
-        color: #2d3748;
-    }
-
-    .modal-custom-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 2rem;
-        color: #1a202c;
-        margin-bottom: 1.5rem;
-        text-align: center;
-    }
-
-    .modal-custom-footer {
-        margin-top: 2rem;
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
-    }
-
-    /* Specific for Confirm Modal */
-    #confirmModal .modal-custom-content {
-        max-width: 450px;
-        text-align: center;
-    }
-    #confirmModal .modal-custom-title {
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-    }
-    #confirmModal #confirmMessage {
-        font-size: 1.1rem;
-        color: #4a5568;
-        margin-bottom: 1.5rem;
-    }
-    #confirmModal .modal-custom-footer {
-        justify-content: center;
-    }
-
-    /* Custom Alert Styling */
-    #alert-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 999;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        pointer-events: none; /* Allows clicks to pass through */
-    }
-
-    .custom-alert {
-        padding: 12px 20px;
-        border-radius: 8px;
-        color: white;
-        opacity: 0; /* Start hidden */
-        transform: translateY(20px); /* Start slightly below */
-        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-        pointer-events: auto; /* Re-enable clicks for the alert itself */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .custom-alert.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .custom-alert.info { background-color: #3498db; } /* Blue */
-    .custom-alert.success { background-color: #28a745; } /* Green */
-    .custom-alert.error { background-color: #dc3545; } /* Red */
-    .custom-alert.warning { background-color: #ffc107; color: #333; } /* Yellow */
-
-    /* Animation for alerts */
-    @keyframes fade-in-up {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fade-out-down {
-        from { opacity: 1; transform: translateY(0); }
-        to { opacity: 0; transform: translateY(20px); }
-    }
-
-    .animate-fade-in-up {
-        animation: fade-in-up 0.3s ease-out forwards;
-    }
-    .animate-fade-out-down {
-        animation: fade-out-down 0.3s ease-in forwards;
-    }
-
-    /* --- 10. Loader --- */
-    .page-loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      transition: opacity 0.5s ease-out;
-    }
-
-    .page-loader.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .spinner {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #3498db;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-
-    /* --- 11. Responsive Design --- */
-    @media (max-width: 1024px) {
-      .container {
-        padding: 2rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      
-      .header {
-        flex-direction: column;
-        padding: 1rem;
-      }
-      .header .nav {
-          margin-top: 15px;
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-      }
-      .header .nav a {
-          margin: 5px;
-          padding: 0.4rem 0.8rem;
-          font-size: 0.9rem;
-      }
-
-      .container {
-        padding: 1.5rem;
-        border-radius: 16px;
-        margin: 20px 0;
-      }
-      
-      .section-title {
-        font-size: 1.4rem;
-      }
-      
-      .btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.95rem;
-      }
-      
-      .flex-container {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .input-group {
-          flex-direction: column;
-          gap: 1rem;
-      }
-      .input-group .form-input {
-          width: 100%;
-      }
-
-      .product-list, .customer-list, .loan-list {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .modal-custom-content {
-          padding: 1.5rem;
-          max-width: 95%;
-      }
-      .modal-custom-title {
-          font-size: 1.5rem;
-      }
-
-      /* Billing specific responsive */
-      .cart-item {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-      
-      .cart-item-actions {
-        width: 100%;
-        justify-content: flex-end;
-      }
-      
-      .qty-input {
-        width: 50px;
-      }
-      
-      .total-line {
-        font-size: 0.95rem;
-      }
-      .total-line:last-child {
-          font-size: 1.1rem;
-      }
-      .product-row {
-          flex-wrap: wrap;
-      }
-      .product-row .product-name {
-          width: 100%;
-      }
-      .product-row .product-qty, .product-row .product-price {
-          max-width: unset;
-          width: calc(50% - 0.4rem);
-      }
-      .product-row .remove-product {
-          width: 100%;
-          text-align: right;
-      }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <title>Manage Stock - WR Smile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Google Fonts for Luxury Feel: Inter for body, Playfair Display for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base Body Styling for Luxury UI */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #e0e7ee, #c8d3e0);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            color: #334155;
+            box-sizing: border-box;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.05), -10px -10px 20px rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.07), -15px -15px 30px rgba(255, 255, 255, 0.7);
+        }
+
+        .input-style {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background-color: #f0f4f8;
+            border-radius: 9999px; /* full rounded */
+            box-shadow: inset 2px 2px 5px #c8d3e0, inset -2px -2px 5px #ffffff;
+            transition: all 0.3s ease;
+        }
+        .input-style:focus {
+            outline: none;
+            box-shadow: inset 3px 3px 8px #b9c7d8, inset -3px -3px 8px #ffffff;
+        }
+
+        .btn-style {
+            padding: 0.75rem 2rem;
+            border: none;
+            font-weight: 600;
+            border-radius: 9999px; /* full rounded */
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-style:hover {
+            transform: translateY(-2px);
+            box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-style:active {
+            transform: translateY(0);
+            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Specific button colors */
+        .btn-primary {
+            background-color: #4f46e5;
+            color: #ffffff;
+        }
+        .btn-secondary {
+            background-color: #94a3b8;
+            color: #ffffff;
+        }
+        .btn-danger {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+        .btn-edit {
+            color: #2563eb;
+        }
+        .btn-delete {
+            color: #dc2626;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #f0f4f8;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.6);
+            width: 90%;
+            max-width: 500px;
+        }
+        .modal-content input {
+            width: 100%;
+        }
+
+        /* Message/Alerts */
+        .message-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 10px;
+        }
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+            animation: fadeInOut 4s forwards;
+            min-width: 250px;
+            text-align: center;
+        }
+        .message.success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .message.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+
+        /* Loader styles */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #4f46e5;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-  <div id="page-loader" class="page-loader">
-      <div class="spinner"></div>
-  </div>
+    <!-- Main Content Container -->
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl text-center mb-8">Stock Management</h1>
 
-  <header class="header">
-        <img src="logo.png.webp" alt="WR Smile Logo" class="logo">
-        <nav class="nav">
-            <a href="index.html">Dashboard</a>
-            <a href="billing.html">Billing</a>
-            <a href="stock.html" class="active">Stock</a>
-            <a href="customers.html">Customers</a>
-            <a href="loan.html">Loans</a>
-        </nav>
-  </header>
-
-  <div class="container">
-    <h1 class="section-title">Manage Stock</h1>
-
-    <div class="flex-container">
-      <input type="text" id="product-search" class="form-input" placeholder="Search products by name or code">
-      <button id="add-product-btn" class="btn btn-primary">Add New Product</button>
-    </div>
-
-    <div id="product-list" class="product-list">
-      <p class="text-gray-500 text-center py-4">Loading products...</p>
-      <!-- Products will be dynamically loaded here -->
-    </div>
-  </div>
-
-  <!-- Add/Edit Product Modal -->
-  <div id="add-product-modal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-      <span class="close-btn-custom" id="close-add-modal">&times;</span>
-      <h5 class="modal-custom-title" id="product-modal-title">Add New Product</h5>
-      <form id="add-product-form">
-        <input type="hidden" id="product-id">
-        <div class="form-group">
-          <label for="product-name" class="form-label">Product Name</label>
-          <input type="text" id="product-name" class="form-input" required>
+        <!-- Add/Edit Product Card -->
+        <div class="card p-6 mb-8">
+            <h2 class="text-2xl mb-4">Add a New Product</h2>
+            <form id="addProductForm" class="space-y-4">
+                <input type="hidden" id="productId">
+                <input type="text" id="productName" placeholder="Product Name" required class="input-style w-full">
+                <input type="number" id="productPrice" placeholder="Price (Rs)" required class="input-style w-full">
+                <input type="number" id="productStock" placeholder="Stock" required class="input-style w-full">
+                <div class="flex justify-end space-x-4">
+                    <button type="submit" id="saveProductBtn" class="btn-style btn-primary">Save Product</button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-          <label for="product-code" class="form-label">Product Code (Optional)</label>
-          <input type="text" id="product-code" class="form-input">
-        </div>
-        <div class="form-group">
-          <label for="product-qty" class="form-label">Quantity</label>
-          <input type="number" id="product-qty" class="form-input" min="0" required>
-        </div>
-        <div class="form-group">
-          <label for="product-price" class="form-label">Selling Price (Rs)</label>
-          <input type="number" id="product-price" class="form-input" step="0.01" min="0" required>
-        </div>
-        <div class="form-group">
-          <label for="product-cost-price" class="form-label">Cost Price (Rs) (Optional)</label>
-          <input type="number" id="product-cost-price" class="form-input" step="0.01" min="0">
-        </div>
-        <div class="form-group">
-          <label for="low-stock-threshold" class="form-label">Low Stock Threshold</label>
-          <input type="number" id="low-stock-threshold" class="form-input" min="0" value="5">
-        </div>
-        <div class="modal-custom-footer">
-          <button type="submit" class="btn btn-primary">Save Product</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- Confirmation Modal -->
-  <div id="confirmModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-      <span class="close-btn-custom" id="closeConfirmModal">&times;</span>
-      <h5 class="modal-custom-title">Confirm Action</h5>
-      <p id="confirmMessage">Are you sure you want to delete this product?</p>
-      <div class="modal-custom-footer">
-        <button class="btn btn-secondary" id="cancelConfirm">Cancel</button>
-        <button class="btn btn-danger" id="confirmDelete">Delete</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Custom Alert Container -->
-  <div id="alert-container"></div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
-    // Firebase configuration (REPLACE WITH YOUR ACTUAL CONFIG)
-    const firebaseConfig = {
-        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
-        authDomain: "wr-smile-shop.firebaseapp.com",
-        databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
-        projectId: "wr-smile-shop",
-        storageBucket: "wr-smile-shop.firebasestorage.app",
-        messagingSenderId: "299864260187",
-        appId: "1:299864260187:web:fa6af65ef95674aff1097e",
-        measurementId: "G-3Z38G6MCYJ"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app); // Initialize Auth
-    const productsCollection = collection(db, "products");
-
-    // DOM Elements
-    const productListDiv = document.getElementById("product-list");
-    const addProductBtn = document.getElementById("add-product-btn");
-    const addProductModal = document.getElementById("add-product-modal");
-    const closeAddModalBtn = document.getElementById("close-add-modal");
-    const addProductForm = document.getElementById("add-product-form");
-    const productIdInput = document.getElementById("product-id");
-    const productNameInput = document.getElementById("product-name");
-    const productCodeInput = document.getElementById("product-code");
-    const productQtyInput = document.getElementById("product-qty");
-    const productPriceInput = document.getElementById("product-price");
-    const productCostPriceInput = document.getElementById("product-cost-price");
-    const lowStockThresholdInput = document.getElementById("low-stock-threshold");
-    const productModalTitle = document.getElementById("product-modal-title");
-    const productSearchInput = document.getElementById("product-search");
-
-    const confirmModal = document.getElementById('confirmModal');
-    const confirmMessage = document.getElementById('confirmMessage');
-    const cancelConfirmBtn = document.getElementById('cancelConfirm');
-    const confirmDeleteBtn = document.getElementById('confirmDelete');
-    const closeConfirmModalBtn = document.getElementById('closeConfirmModal');
-
-    const pageLoader = document.getElementById("page-loader");
-
-    let productToDeleteId = null; // Store ID of product to be deleted
-    let isAuthenticated = false; // Track authentication state
-
-    // --- Utility Functions ---
-    function showLoader() {
-        pageLoader.classList.remove('hidden');
-    }
-
-    function hideLoader() {
-        setTimeout(() => { // Small delay for smoother transition
-            pageLoader.classList.add('hidden');
-        }, 300);
-    }
-
-    function showCustomModal(modal) {
-        modal.classList.add('show');
-        modal.classList.remove('hidden');
-    }
-
-    function hideCustomModal(modal) {
-        modal.classList.remove('show');
-        setTimeout(() => { // Give time for transition to complete before hiding
-            modal.classList.add('hidden');
-        }, 300);
-    }
-
-    function showMessage(message, type = 'info', duration = 3000) {
-        const alertContainer = document.getElementById('alert-container');
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `custom-alert ${type} show`; // Add 'show' class to immediately display
-        alertDiv.textContent = message;
-        alertContainer.appendChild(alertDiv);
-
-        setTimeout(() => {
-            alertDiv.classList.remove('show');
-            alertDiv.addEventListener('transitionend', () => alertDiv.remove());
-        }, duration);
-    }
-
-    // --- Firebase Authentication Listener ---
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in (anonymously or otherwise)
-            isAuthenticated = true;
-            console.log("Firebase authenticated as:", user.uid);
-            loadProducts(); // Load products once authenticated
-        } else {
-            // User is signed out, try to sign in anonymously
-            isAuthenticated = false;
-            signInAnonymously(auth).then(() => {
-                console.log("Signed in anonymously.");
-            }).catch((error) => {
-                console.error("Anonymous sign-in failed:", error);
-                showMessage("Failed to sign in. Product data may not be accessible.", "error");
-                hideLoader(); // Hide loader if sign-in fails
-            });
-        }
-    });
-
-
-    // --- Product Loading and Display ---
-    async function loadProducts() {
-        if (!isAuthenticated) {
-            productListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Waiting for authentication to load products...</p>';
-            return;
-        }
-
-        showLoader();
-        productListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">Loading products...</p>';
-        try {
-            const querySnapshot = await getDocs(productsCollection);
-            productListDiv.innerHTML = ''; // Clear existing content
-            if (querySnapshot.empty) {
-                productListDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No products found. Add a new product!</p>';
-            } else {
-                querySnapshot.forEach((doc) => {
-                    renderProductCard(doc);
-                });
-            }
-        } catch (error) {
-            console.error("Error fetching products:", error);
-            showMessage('Failed to load products: ' + error.message, "error");
-            productListDiv.innerHTML = '<p class="text-danger text-center py-4">Error loading products.</p>';
-        } finally {
-            hideLoader();
-        }
-    }
-
-    function renderProductCard(doc) {
-        const product = doc.data();
-        const card = document.createElement("div");
-        card.className = "product-card";
-        
-        const isLowStock = product.qty <= (product.lowStockThreshold || 5); // Default threshold 5
-
-        card.innerHTML = `
-            <h3>${product.name}</h3>
-            ${product.code ? `<p><strong>Code:</strong> ${product.code}</p>` : ''}
-            <p><strong>Price:</strong> Rs. ${product.price.toFixed(2)}</p>
-            <p><strong>Stock:</strong> <span class="stock-qty ${isLowStock ? 'stock-low' : ''}">${product.qty}</span></p>
-            <div class="actions">
-                <button class="btn btn-secondary btn-sm edit-product-btn" data-id="${doc.id}">Edit</button>
-                <button class="btn btn-danger btn-sm delete-product-btn" data-id="${doc.id}">Delete</button>
+        <!-- Stock List Card -->
+        <div class="card p-6">
+            <h2 class="text-2xl mb-4">Current Stock</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left table-auto">
+                    <thead>
+                        <tr class="text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6">Product</th>
+                            <th class="py-3 px-6">Price</th>
+                            <th class="py-3 px-6">Stock</th>
+                            <th class="py-3 px-6 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockTableBody" class="text-gray-600 text-sm font-light">
+                        <!-- Product rows will be injected here -->
+                    </tbody>
+                </table>
             </div>
-        `;
-        productListDiv.appendChild(card);
-    }
+            <p id="noProductsMessage" class="text-center text-gray-500 mt-4 hidden">No products in stock. Add some above!</p>
+        </div>
+    </div>
 
-    // --- Add/Edit Product Modal ---
-    addProductBtn.addEventListener("click", () => {
-        if (!isAuthenticated) {
-            showMessage("Please wait for authentication to complete before adding products.", "warning");
-            return;
-        }
-        // Reset form and title for adding new product
-        addProductForm.reset();
-        productIdInput.value = '';
-        productModalTitle.textContent = "Add New Product";
-        addProductForm.classList.remove('was-validated'); // Remove Bootstrap validation classes
-        showCustomModal(addProductModal);
-    });
+    <!-- Modals -->
+    <!-- Add/Edit Product Modal -->
+    <div id="addProductModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl mb-4 text-center" id="modalTitle">Add Product</h3>
+            <form id="modalAddProductForm" class="space-y-4">
+                <input type="hidden" id="modalProductId">
+                <input type="text" id="modalProductName" placeholder="Product Name" required class="input-style">
+                <input type="number" id="modalProductPrice" placeholder="Price (Rs)" required class="input-style">
+                <input type="number" id="modalProductStock" placeholder="Stock" required class="input-style">
+                <div class="flex justify-center space-x-4 mt-6">
+                    <button type="submit" id="modalSaveProductBtn" class="btn-style btn-primary">Save</button>
+                    <button type="button" id="modalCancelBtn" class="btn-style btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    closeAddModalBtn.addEventListener("click", () => hideCustomModal(addProductModal));
+    <!-- Confirmation Modal for Deletion -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3 class="text-2xl mb-4 text-center">Confirm Deletion</h3>
+            <p class="text-gray-700 mb-6">Are you sure you want to delete this product?</p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirmDeleteBtn" class="btn-style btn-danger">Delete</button>
+                <button id="cancelConfirmBtn" class="btn-style btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
 
-    productListDiv.addEventListener('click', (e) => {
-        if (e.target.classList.contains('edit-product-btn')) {
-            const productId = e.target.dataset.id;
-            editProduct(productId);
-        }
-        // Check if the delete button was clicked AND if the target is actually the button
-        else if (e.target.classList.contains('delete-product-btn') && e.target.tagName === 'BUTTON') {
-            productToDeleteId = e.target.dataset.id; // Store ID for deletion
-            confirmMessage.textContent = "Are you sure you want to delete this product? This action cannot be undone.";
-            showCustomModal(confirmModal);
-        }
-    });
+    <!-- Message Container -->
+    <div id="messageContainer" class="message-container"></div>
 
+    <!-- Loader Overlay -->
+    <div id="loaderOverlay" class="loader-overlay">
+        <div class="loader"></div>
+    </div>
 
-    async function editProduct(id) {
-        if (!isAuthenticated) {
-            showMessage("Please wait for authentication to complete before editing products.", "warning");
-            return;
-        }
-        showLoader();
-        try {
-            const docRef = doc(db, "products", id);
-            const docSnap = await getDoc(docRef);
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-            if (docSnap.exists()) {
-                const product = docSnap.data();
-                productIdInput.value = id;
-                productNameInput.value = product.name;
-                productCodeInput.value = product.code || '';
-                productQtyInput.value = product.qty;
-                productPriceInput.value = product.price;
-                productCostPriceInput.value = product.costPrice || '';
-                lowStockThresholdInput.value = product.lowStockThreshold || 5;
+        // Global variables provided by the environment
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-                productModalTitle.textContent = "Edit Product";
-                showCustomModal(addProductModal);
-            } else {
-                showMessage("Product not found.", "error");
+        let db;
+        let auth;
+        let userId;
+
+        let productToDeleteId = null;
+
+        // UI Element References
+        const stockTableBody = document.getElementById('stockTableBody');
+        const noProductsMessage = document.getElementById('noProductsMessage');
+        const addProductForm = document.getElementById('addProductForm');
+        const productNameInput = document.getElementById('productName');
+        const productPriceInput = document.getElementById('productPrice');
+        const productStockInput = document.getElementById('productStock');
+        const addProductModal = document.getElementById('addProductModal');
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+        const messageContainer = document.getElementById('messageContainer');
+        const loaderOverlay = document.getElementById('loaderOverlay');
+
+        // Functions for Modals
+        const showCustomModal = (modal) => modal.style.display = 'flex';
+        const hideCustomModal = (modal) => modal.style.display = 'none';
+
+        // Functions for Messages and Loader
+        const showMessage = (message, type) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageContainer.appendChild(messageDiv);
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        };
+        const showLoader = () => { loaderOverlay.style.display = 'flex'; };
+        const hideLoader = () => { loaderOverlay.style.display = 'none'; };
+
+        // Firebase Authentication and Initialization
+        const authenticate = async () => {
+            try {
+                if (!firebaseConfig.projectId) {
+                    console.error("Firebase config is missing projectId.");
+                    showMessage("Firebase not configured. Check the environment variables.", "error");
+                    return;
+                }
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                userId = auth.currentUser.uid;
+                
+                // Now that we have the userId, update the collection path
+                const updatedProductsCollectionPath = `artifacts/${appId}/users/${userId}/stock`;
+                setupRealtimeListener(updatedProductsCollectionPath);
+            } catch (error) {
+                console.error("Authentication or Firebase initialization error:", error);
+                showMessage("Authentication failed. Please try again.", "error");
             }
-        } catch (error) {
-            console.error("Error fetching product for edit:", error);
-            showMessage('Failed to load product for editing: ' + error.message, "error");
-        } finally {
-            hideLoader();
-        }
-    }
+        };
 
-    addProductForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        
-        if (!isAuthenticated) {
-            showMessage("Authentication in progress. Please wait and try again.", "warning");
-            return;
-        }
+        // Real-time listener for stock data
+        const setupRealtimeListener = (collectionPath) => {
+            onSnapshot(collection(db, collectionPath), (snapshot) => {
+                stockTableBody.innerHTML = '';
+                if (snapshot.empty) {
+                    noProductsMessage.classList.remove('hidden');
+                } else {
+                    noProductsMessage.classList.add('hidden');
+                    snapshot.forEach(doc => {
+                        renderProductRow({ id: doc.id, ...doc.data() });
+                    });
+                }
+            }, (error) => {
+                console.error("Error fetching documents:", error);
+                showMessage("Failed to load stock data.", "error");
+            });
+        };
 
-        // Basic form validation
-        if (!addProductForm.checkValidity()) {
-            addProductForm.classList.add('was-validated');
-            return;
-        }
-        addProductForm.classList.remove('was-validated'); // Reset validation class
+        // Render a single product row in the table
+        const renderProductRow = (product) => {
+            const row = document.createElement('tr');
+            row.className = "hover:bg-gray-100 transition-colors duration-150 border-b border-gray-200 last:border-0";
+            row.innerHTML = `
+                <td class="py-4 px-6">${product.name}</td>
+                <td class="py-4 px-6">Rs ${product.price.toFixed(2)}</td>
+                <td class="py-4 px-6">${product.stock}</td>
+                <td class="py-4 px-6 text-right space-x-2">
+                    <button class="btn-edit text-sm" data-id="${product.id}"><i class="fas fa-edit"></i></button>
+                    <button class="btn-delete text-sm" data-id="${product.id}"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            stockTableBody.appendChild(row);
+        };
 
-        const id = productIdInput.value;
-        const name = productNameInput.value.trim();
-        const code = productCodeInput.value.trim();
-        const qty = parseInt(productQtyInput.value);
-        const price = parseFloat(productPriceInput.value);
-        const costPrice = parseFloat(productCostPriceInput.value) || 0;
-        const lowStockThreshold = parseInt(lowStockThresholdInput.value) || 5;
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            authenticate();
 
-        showLoader();
-        try {
-            if (id) {
-                // Update existing product
-                const productDocRef = doc(db, "products", id);
-                await updateDoc(productDocRef, {
-                    name,
-                    code,
-                    qty,
-                    price,
-                    costPrice,
-                    lowStockThreshold
-                });
-                showMessage("Product updated successfully!", "success");
-            } else {
-                // Add new product
-                await addDoc(productsCollection, {
-                    name,
-                    code,
-                    qty,
-                    price,
-                    costPrice,
-                    lowStockThreshold,
-                    createdAt: new Date().toISOString()
-                });
-                showMessage("Product added successfully!", "success");
-            }
-            addProductForm.reset();
-            hideCustomModal(addProductModal);
-            loadProducts(); // Reload the list
-        } catch (error) {
-            console.error("Failed to save product: ", error);
-            showMessage('Failed to save product: ' + error.message, "error");
-        } finally {
-            hideLoader();
-        }
-    });
+            // Handle Add/Edit Product Form Submission
+            addProductForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                showLoader();
 
-    // --- Delete Product ---
-    confirmDeleteBtn.addEventListener('click', confirmDeleteProduct);
-    cancelConfirmBtn.addEventListener('click', () => hideCustomModal(confirmModal));
-    closeConfirmModalBtn.addEventListener('click', () => hideCustomModal(confirmModal));
+                const name = productNameInput.value.trim();
+                const price = parseFloat(productPriceInput.value);
+                const stock = parseInt(productStockInput.value);
 
-    async function confirmDeleteProduct() {
-        if (!isAuthenticated) {
-            showMessage("Authentication in progress. Please wait and try again.", "warning");
-            hideCustomModal(confirmModal);
-            return;
-        }
-        if (!productToDeleteId) {
-            showMessage("No product selected for deletion.", "error");
-            hideCustomModal(confirmModal);
-            return;
-        }
+                if (name && !isNaN(price) && !isNaN(stock) && stock >= 0) {
+                    try {
+                        await addDoc(collection(db, `artifacts/${appId}/users/${userId}/stock`), {
+                            name,
+                            price,
+                            stock
+                        });
+                        showMessage("Product saved successfully!", "success");
+                        addProductForm.reset();
+                    } catch (error) {
+                        console.error("Error saving product:", error);
+                        showMessage('Failed to save product: ' + error.message, "error");
+                    } finally {
+                        hideLoader();
+                    }
+                } else {
+                    showMessage("Please fill all fields with valid data.", "error");
+                    hideLoader();
+                }
+            });
 
-        showLoader();
-        try {
-            const productDocRef = doc(db, "products", productToDeleteId);
-            await deleteDoc(productDocRef);
-            showMessage("Product deleted successfully!", "success");
-            hideCustomModal(confirmModal);
-            productToDeleteId = null; // Clear the stored ID
-            loadProducts(); // Reload the list
-        }
-        catch (error) {
-            console.error("Error deleting product:", error);
-            showMessage('Failed to delete product: ' + error.message, "error");
-        } finally {
-            hideLoader();
-        }
-    }
+            // Handle Clicks on Edit/Delete Buttons using event delegation
+            stockTableBody.addEventListener('click', async (e) => {
+                const targetBtn = e.target.closest('button');
+                if (!targetBtn) return;
 
-    // --- Search Products ---
-    productSearchInput.addEventListener('input', async (e) => {
-        const queryText = e.target.value.toLowerCase().trim();
-        const productCards = productListDiv.querySelectorAll('.product-card');
-        
-        // Simple client-side filtering for immediate feedback
-        productCards.forEach(card => {
-            const name = card.querySelector('h3').textContent.toLowerCase();
-            // Get the element that holds the code, check if it exists before trying to access nextSibling
-            const codeElement = card.querySelector('p strong:first-of-type'); 
-            const code = (codeElement && codeElement.nextSibling) ? codeElement.nextSibling.textContent.toLowerCase() : ''; 
+                const productId = targetBtn.dataset.id;
+                
+                if (targetBtn.classList.contains('btn-delete')) {
+                    // Handle Delete
+                    productToDeleteId = productId;
+                    showCustomModal(confirmModal);
+                } else if (targetBtn.classList.contains('btn-edit')) {
+                    // Handle Edit
+                    showLoader();
+                    try {
+                        const docRef = doc(db, `artifacts/${appId}/users/${userId}/stock`, productId);
+                        const docSnap = await getDoc(docRef);
 
-            if (name.includes(queryText) || code.includes(queryText)) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            showCustomModal(addProductModal);
+                            document.getElementById('modalProductId').value = productId;
+                            document.getElementById('modalProductName').value = data.name;
+                            document.getElementById('modalProductPrice').value = data.price;
+                            document.getElementById('modalProductStock').value = data.stock;
+                            document.getElementById('modalTitle').textContent = 'Edit Product';
+                            document.getElementById('modalSaveProductBtn').textContent = 'Update';
+                        } else {
+                            showMessage("Product not found.", "error");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching product for edit:", error);
+                        showMessage('Failed to load product details for editing: ' + error.message, "error");
+                    } finally {
+                        hideLoader();
+                    }
+                }
+            });
+
+            // Handle Modal Form Submission for editing
+            document.getElementById('modalAddProductForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                showLoader();
+                
+                const productId = document.getElementById('modalProductId').value;
+                const name = document.getElementById('modalProductName').value.trim();
+                const price = parseFloat(document.getElementById('modalProductPrice').value);
+                const stock = parseInt(document.getElementById('modalProductStock').value);
+
+                if (name && !isNaN(price) && !isNaN(stock) && stock >= 0) {
+                    try {
+                        const productRef = doc(db, `artifacts/${appId}/users/${userId}/stock`, productId);
+                        await updateDoc(productRef, { name, price, stock });
+                        showMessage("Product updated successfully!", "success");
+                        hideCustomModal(addProductModal);
+                    } catch (error) {
+                        console.error("Error updating product:", error);
+                        showMessage('Failed to update product: ' + error.message, "error");
+                    } finally {
+                        hideLoader();
+                    }
+                } else {
+                    showMessage("Please fill all fields with valid data.", "error");
+                    hideLoader();
+                }
+            });
+
+            // Cancel button for Add/Edit Modal
+            document.getElementById('modalCancelBtn').addEventListener('click', () => {
+                hideCustomModal(addProductModal);
+                document.getElementById('modalAddProductForm').reset();
+            });
+
+            // Confirmation Modal Buttons
+            cancelConfirmBtn.addEventListener('click', () => {
+                hideCustomModal(confirmModal);
+                productToDeleteId = null;
+            });
+            confirmDeleteBtn.addEventListener('click', async () => {
+                if (!productToDeleteId) return;
+                showLoader();
+                try {
+                    await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/stock`, productToDeleteId));
+                    showMessage("Product deleted successfully!", "success");
+                } catch (error) {
+                    console.error("Error deleting product:", error);
+                    showMessage('Failed to delete product: ' + error.message, "error");
+                } finally {
+                    hideCustomModal(confirmModal);
+                    hideLoader();
+                    productToDeleteId = null;
+                }
+            });
         });
-    });
-
-    // Initial load of products on DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', () => {
-        // loadProducts() is now called by the onAuthStateChanged listener
-        // Failsafe to hide loader
-        setTimeout(() => {
-            const loader = document.getElementById("page-loader");
-            if (loader && !loader.classList.contains('hidden')) {
-                loader.classList.add('hidden');
-                console.warn("Loader hidden by failsafe timeout. Check console for any preceding errors.");
-            }
-        }, 10000); // Max 10 seconds load time
-    });
-  </script>
+    </script>
 </body>
 </html>
