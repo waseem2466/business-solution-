@@ -121,6 +121,9 @@
                             <input type="text" id="stock-product-search" placeholder="Search product in stock..." class="w-full px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-sky-200 shadow-inner transition-all duration-300">
                             <div id="stock-results" class="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto hidden"></div>
                         </div>
+                        <button id="seed-stock-btn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
+                            Add Sample Products
+                        </button>
                     </div>
                 </div>
             </div>
@@ -255,6 +258,7 @@
         const cancelNewCustomerBtn = document.getElementById('cancel-new-customer-btn');
         const stockProductSearchInput = document.getElementById('stock-product-search');
         const stockResultsDiv = document.getElementById('stock-results');
+        const seedStockBtn = document.getElementById('seed-stock-btn');
         const manualProductNameInput = document.getElementById('manual-product-name');
         const manualProductPriceInput = document.getElementById('manual-product-price');
         const addManualProductBtn = document.getElementById('add-manual-product-btn');
@@ -386,6 +390,34 @@
             });
         };
 
+        // Function to seed sample data into the stock collection
+        const seedStockData = async () => {
+            if (!db) {
+                showAlert("Database not ready.", "error");
+                return;
+            }
+
+            // Sample products to add
+            const sampleProducts = [
+                { name: 'WR T-Shirt', price: 2500, stock: 100 },
+                { name: 'WR Notebook', price: 500, stock: 200 },
+                { name: 'WR Pen', price: 100, stock: 500 },
+                { name: 'WR Cap', price: 1200, stock: 75 },
+                { name: 'WR Backpack', price: 4500, stock: 50 },
+            ];
+
+            try {
+                const stockCol = collection(db, `artifacts/${appId}/users/${userId}/stock`);
+                for (const product of sampleProducts) {
+                    await addDoc(stockCol, product);
+                }
+                showAlert("Sample products added to stock!", "success");
+            } catch (e) {
+                showAlert(`Error adding sample products: ${e.message}`, "error");
+                console.error("Error adding sample products:", e);
+            }
+        };
+
         const addProductToBill = (product) => {
             const existingItem = billItems.find(item => item.name === product.name);
             if (existingItem) {
@@ -511,7 +543,8 @@
             }
             message += `\n\nThank you for your business!`;
             const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${data.customerPhone}?text=${encodedMessage}`;
+            // Prepend the country code '94' (for Sri Lanka) to the phone number.
+            const whatsappUrl = `https://wa.me/94${data.customerPhone}?text=${encodedMessage}`;
             window.open(whatsappUrl, '_blank');
         };
 
@@ -599,6 +632,9 @@
                     showAlert("Please enter a valid product name and price.", "error");
                 }
             });
+            
+            // Seed stock button
+            seedStockBtn.addEventListener('click', seedStockData);
 
             // Bill item quantity and remove button
             billItemsTable.addEventListener('input', (e) => {
