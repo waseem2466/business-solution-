@@ -196,17 +196,17 @@
     <!-- Main Content Container -->
     <div class="container mx-auto p-4">
         <h1 class="text-4xl text-center mb-8">Stock Management</h1>
+        <p id="userIdDisplay" class="text-xs text-center text-gray-400 mb-4"></p>
 
-        <!-- Add/Edit Product Card -->
+        <!-- Form for Adding New Products Directly -->
         <div class="card p-6 mb-8">
-            <h2 class="text-2xl mb-4">Add a New Product</h2>
+            <h2 class="text-2xl mb-4">Add New Product</h2>
             <form id="addProductForm" class="space-y-4">
-                <input type="hidden" id="productId">
-                <input type="text" id="productName" placeholder="Product Name" required class="input-style w-full">
-                <input type="number" id="productPrice" placeholder="Price (Rs)" required class="input-style w-full">
-                <input type="number" id="productStock" placeholder="Stock" required class="input-style w-full">
-                <div class="flex justify-end space-x-4">
-                    <button type="submit" id="saveProductBtn" class="btn-style btn-primary">Save Product</button>
+                <input type="text" id="addProductName" placeholder="Product Name" required class="input-style">
+                <input type="number" id="addProductPrice" placeholder="Price (Rs)" required class="input-style">
+                <input type="number" id="addProductStock" placeholder="Stock" required class="input-style">
+                <div class="flex justify-center mt-6">
+                    <button type="submit" class="btn-style btn-primary">Add Product</button>
                 </div>
             </form>
         </div>
@@ -234,18 +234,18 @@
     </div>
 
     <!-- Modals -->
-    <!-- Add/Edit Product Modal -->
-    <div id="addProductModal" class="modal-overlay">
+    <!-- Edit Product Modal -->
+    <div id="editProductModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 class="text-2xl mb-4 text-center" id="modalTitle">Add Product</h3>
-            <form id="modalAddProductForm" class="space-y-4">
-                <input type="hidden" id="modalProductId">
-                <input type="text" id="modalProductName" placeholder="Product Name" required class="input-style">
-                <input type="number" id="modalProductPrice" placeholder="Price (Rs)" required class="input-style">
-                <input type="number" id="modalProductStock" placeholder="Stock" required class="input-style">
+            <h3 class="text-2xl mb-4 text-center">Edit Product</h3>
+            <form id="editProductForm" class="space-y-4">
+                <input type="hidden" id="editProductId">
+                <input type="text" id="editProductName" placeholder="Product Name" required class="input-style">
+                <input type="number" id="editProductPrice" placeholder="Price (Rs)" required class="input-style">
+                <input type="number" id="editProductStock" placeholder="Stock" required class="input-style">
                 <div class="flex justify-center space-x-4 mt-6">
-                    <button type="submit" id="modalSaveProductBtn" class="btn-style btn-primary">Save</button>
-                    <button type="button" id="modalCancelBtn" class="btn-style btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-style btn-primary">Update</button>
+                    <button type="button" id="cancelEditBtn" class="btn-style btn-secondary">Cancel</button>
                 </div>
             </form>
         </div>
@@ -272,34 +272,52 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
 
-        // Global variables provided by the environment
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
+            authDomain: "wr-smile-shop.firebaseapp.com",
+            databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
+            projectId: "wr-smile-shop",
+            storageBucket: "wr-smile-shop.firebasestorage.app",
+            messagingSenderId: "299864260187",
+            appId: "1:299864260187:web:fa6af65ef95674aff1097e",
+            measurementId: "G-3Z38G6MCYJ"
+        };
+        
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
         let db;
         let auth;
-        let userId;
+        let userId = null;
 
         let productToDeleteId = null;
 
         // UI Element References
         const stockTableBody = document.getElementById('stockTableBody');
         const noProductsMessage = document.getElementById('noProductsMessage');
+        const editProductModal = document.getElementById('editProductModal');
         const addProductForm = document.getElementById('addProductForm');
-        const productNameInput = document.getElementById('productName');
-        const productPriceInput = document.getElementById('productPrice');
-        const productStockInput = document.getElementById('productStock');
-        const addProductModal = document.getElementById('addProductModal');
+        const addProductNameInput = document.getElementById('addProductName');
+        const addProductPriceInput = document.getElementById('addProductPrice');
+        const addProductStockInput = document.getElementById('addProductStock');
+        const editProductForm = document.getElementById('editProductForm');
+        const editProductIdInput = document.getElementById('editProductId');
+        const editProductNameInput = document.getElementById('editProductName');
+        const editProductPriceInput = document.getElementById('editProductPrice');
+        const editProductStockInput = document.getElementById('editProductStock');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
         const confirmModal = document.getElementById('confirmModal');
         const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
         const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
         const messageContainer = document.getElementById('messageContainer');
         const loaderOverlay = document.getElementById('loaderOverlay');
+        const userIdDisplay = document.getElementById('userIdDisplay');
 
         // Functions for Modals
         const showCustomModal = (modal) => modal.style.display = 'flex';
@@ -318,36 +336,63 @@
         const showLoader = () => { loaderOverlay.style.display = 'flex'; };
         const hideLoader = () => { loaderOverlay.style.display = 'none'; };
 
+        // Helper to disable/enable forms
+        const setFormState = (disabled) => {
+            const forms = [addProductForm, editProductForm];
+            forms.forEach(form => {
+                const inputs = form.querySelectorAll('input, button');
+                inputs.forEach(input => {
+                    input.disabled = disabled;
+                    input.readOnly = disabled;
+                });
+            });
+        };
+
         // Firebase Authentication and Initialization
         const authenticate = async () => {
+            showLoader();
             try {
-                if (!firebaseConfig.projectId) {
-                    console.error("Firebase config is missing projectId.");
-                    showMessage("Firebase not configured. Check the environment variables.", "error");
-                    return;
-                }
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
                 
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                userId = auth.currentUser.uid;
-                
-                // Now that we have the userId, update the collection path
-                const updatedProductsCollectionPath = `artifacts/${appId}/users/${userId}/stock`;
-                setupRealtimeListener(updatedProductsCollectionPath);
+                // Listen for authentication state changes
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdDisplay.textContent = `User ID: ${userId}`;
+                        setFormState(false);
+                        const productsCollectionPath = `artifacts/${appId}/users/${userId}/stock`;
+                        setupRealtimeListener(productsCollectionPath);
+                        showMessage("Authentication successful!", 'success');
+                    } else {
+                        userId = null;
+                        userIdDisplay.textContent = `User ID: Not authenticated`;
+                        setFormState(true);
+                        stockTableBody.innerHTML = '';
+                        noProductsMessage.classList.remove('hidden');
+                        showMessage("Please wait, authenticating...", "error");
+                    }
+                    hideLoader();
+                });
+
+                // Directly sign in anonymously to ensure the app works for all users.
+                await signInAnonymously(auth);
+
             } catch (error) {
                 console.error("Authentication or Firebase initialization error:", error);
-                showMessage("Authentication failed. Please try again.", "error");
+                showMessage("Authentication failed. Check the console for more details.", "error");
+                setFormState(true);
+                hideLoader();
             }
         };
 
         // Real-time listener for stock data
         const setupRealtimeListener = (collectionPath) => {
+            if (!db) {
+                console.error("Firestore instance (db) is not initialized.");
+                return;
+            }
             onSnapshot(collection(db, collectionPath), (snapshot) => {
                 stockTableBody.innerHTML = '';
                 if (snapshot.empty) {
@@ -384,22 +429,25 @@
         document.addEventListener('DOMContentLoaded', () => {
             authenticate();
 
-            // Handle Add/Edit Product Form Submission
+            // Handle Add Product Form Submission
             addProductForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (!db || !userId) {
+                    showMessage("Database not ready. Please wait.", "error");
+                    return;
+                }
                 showLoader();
 
-                const name = productNameInput.value.trim();
-                const price = parseFloat(productPriceInput.value);
-                const stock = parseInt(productStockInput.value);
+                const name = addProductNameInput.value.trim();
+                const price = parseFloat(addProductPriceInput.value);
+                const stock = parseInt(addProductStockInput.value);
 
                 if (name && !isNaN(price) && !isNaN(stock) && stock >= 0) {
+                    const productData = { name, price, stock };
+                    const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
+
                     try {
-                        await addDoc(collection(db, `artifacts/${appId}/users/${userId}/stock`), {
-                            name,
-                            price,
-                            stock
-                        });
+                        await addDoc(productsCollectionRef, productData);
                         showMessage("Product saved successfully!", "success");
                         addProductForm.reset();
                     } catch (error) {
@@ -414,61 +462,29 @@
                 }
             });
 
-            // Handle Clicks on Edit/Delete Buttons using event delegation
-            stockTableBody.addEventListener('click', async (e) => {
-                const targetBtn = e.target.closest('button');
-                if (!targetBtn) return;
-
-                const productId = targetBtn.dataset.id;
-                
-                if (targetBtn.classList.contains('btn-delete')) {
-                    // Handle Delete
-                    productToDeleteId = productId;
-                    showCustomModal(confirmModal);
-                } else if (targetBtn.classList.contains('btn-edit')) {
-                    // Handle Edit
-                    showLoader();
-                    try {
-                        const docRef = doc(db, `artifacts/${appId}/users/${userId}/stock`, productId);
-                        const docSnap = await getDoc(docRef);
-
-                        if (docSnap.exists()) {
-                            const data = docSnap.data();
-                            showCustomModal(addProductModal);
-                            document.getElementById('modalProductId').value = productId;
-                            document.getElementById('modalProductName').value = data.name;
-                            document.getElementById('modalProductPrice').value = data.price;
-                            document.getElementById('modalProductStock').value = data.stock;
-                            document.getElementById('modalTitle').textContent = 'Edit Product';
-                            document.getElementById('modalSaveProductBtn').textContent = 'Update';
-                        } else {
-                            showMessage("Product not found.", "error");
-                        }
-                    } catch (error) {
-                        console.error("Error fetching product for edit:", error);
-                        showMessage('Failed to load product details for editing: ' + error.message, "error");
-                    } finally {
-                        hideLoader();
-                    }
-                }
-            });
-
-            // Handle Modal Form Submission for editing
-            document.getElementById('modalAddProductForm').addEventListener('submit', async (e) => {
+            // Handle Edit Product Form Submission
+            editProductForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (!db || !userId) {
+                    showMessage("Database not ready. Please wait.", "error");
+                    return;
+                }
                 showLoader();
-                
-                const productId = document.getElementById('modalProductId').value;
-                const name = document.getElementById('modalProductName').value.trim();
-                const price = parseFloat(document.getElementById('modalProductPrice').value);
-                const stock = parseInt(document.getElementById('modalProductStock').value);
+
+                const id = editProductIdInput.value;
+                const name = editProductNameInput.value.trim();
+                const price = parseFloat(editProductPriceInput.value);
+                const stock = parseInt(editProductStockInput.value);
 
                 if (name && !isNaN(price) && !isNaN(stock) && stock >= 0) {
+                    const productData = { name, price, stock };
+                    const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
+
                     try {
-                        const productRef = doc(db, `artifacts/${appId}/users/${userId}/stock`, productId);
-                        await updateDoc(productRef, { name, price, stock });
+                        const productRef = doc(productsCollectionRef, id);
+                        await updateDoc(productRef, productData);
                         showMessage("Product updated successfully!", "success");
-                        hideCustomModal(addProductModal);
+                        hideCustomModal(editProductModal);
                     } catch (error) {
                         console.error("Error updating product:", error);
                         showMessage('Failed to update product: ' + error.message, "error");
@@ -481,10 +497,49 @@
                 }
             });
 
-            // Cancel button for Add/Edit Modal
-            document.getElementById('modalCancelBtn').addEventListener('click', () => {
-                hideCustomModal(addProductModal);
-                document.getElementById('modalAddProductForm').reset();
+
+            // Handle Clicks on Edit/Delete Buttons using event delegation
+            stockTableBody.addEventListener('click', async (e) => {
+                const targetBtn = e.target.closest('button');
+                if (!targetBtn || !db || !userId) return;
+
+                const productId = targetBtn.dataset.id;
+                
+                if (targetBtn.classList.contains('btn-delete')) {
+                    // Handle Delete
+                    productToDeleteId = productId;
+                    showCustomModal(confirmModal);
+                } else if (targetBtn.classList.contains('btn-edit')) {
+                    // Handle Edit
+                    showLoader();
+                    try {
+                        const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
+                        const docRef = doc(productsCollectionRef, productId);
+                        const docSnap = await getDoc(docRef);
+
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            editProductIdInput.value = productId;
+                            editProductNameInput.value = data.name;
+                            editProductPriceInput.value = data.price;
+                            editProductStockInput.value = data.stock;
+                            showCustomModal(editProductModal);
+                        } else {
+                            showMessage("Product not found.", "error");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching product for edit:", error);
+                        showMessage('Failed to load product details for editing: ' + error.message, "error");
+                    } finally {
+                        hideLoader();
+                    }
+                }
+            });
+
+            // Cancel button for Edit Modal
+            cancelEditBtn.addEventListener('click', () => {
+                hideCustomModal(editProductModal);
+                editProductForm.reset();
             });
 
             // Confirmation Modal Buttons
@@ -493,10 +548,11 @@
                 productToDeleteId = null;
             });
             confirmDeleteBtn.addEventListener('click', async () => {
-                if (!productToDeleteId) return;
+                if (!productToDeleteId || !db || !userId) return;
                 showLoader();
                 try {
-                    await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/stock`, productToDeleteId));
+                    const productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
+                    await deleteDoc(doc(productsCollectionRef, productToDeleteId));
                     showMessage("Product deleted successfully!", "success");
                 } catch (error) {
                     console.error("Error deleting product:", error);
