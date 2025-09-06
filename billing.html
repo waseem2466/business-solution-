@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WR Smile & Supplies | Billing</title>
+    <title>WR Smile | Billing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -26,91 +26,105 @@
             background-color: #ffffff;
             border-radius: 1.5rem;
             padding: 2.5rem;
-            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.05), -10px -10px 20px rgba(255, 255, 255, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.05);
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.07), -15px -15px 30px rgba(255, 255, 255, 0.7);
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-        }
-        .input-style {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            background-color: #f0f4f8;
+        .btn {
             border-radius: 9999px;
-            box-shadow: inset 2px 2px 5px #c8d3e0, inset -2px -2px 5px #ffffff;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        .input-style:focus {
-            outline: none;
-            box-shadow: inset 3px 3px 8px #b9c7d8, inset -3px -3px 8px #ffffff;
-        }
-        .btn-style {
-            padding: 0.75rem 2rem;
-            border: none;
             font-weight: 600;
-            border-radius: 9999px;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
             transition: all 0.3s ease;
-            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .btn-style:hover {
+        .btn:hover {
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
             transform: translateY(-2px);
-            box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.6);
         }
-        .btn-style:active {
-            transform: translateY(0);
-            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.4);
+        .text-shadow-sm {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
-        .btn-primary {
-            background-color: #4f46e5;
-            color: #ffffff;
+        .table-container {
+            overflow-x: auto;
         }
-        .btn-danger {
-            background-color: #ef4444;
-            color: #ffffff;
-        }
-        .btn-checkout {
-            background-color: #10b981;
-            color: #ffffff;
-        }
-        .btn-remove-item {
-            background-color: transparent;
-            color: #dc2626;
-            box-shadow: none;
-        }
-        .custom-modal {
+
+        /* Custom Modal Styling */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
         .modal-content {
-            background: #ffffff;
-            padding: 2rem;
+            background: white;
+            padding: 2.5rem;
             border-radius: 1.5rem;
-            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.6);
             max-width: 500px;
             width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: modal-fade-in 0.3s forwards;
+        }
+        @keyframes modal-fade-in {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        .modal-close-btn:hover {
+            color: #4b5563;
+        }
+        
+        /* Custom Loader */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3b82f6;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom Alerts */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         .custom-alert {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1001;
             animation: fade-in-up 0.5s ease-out forwards;
         }
         @keyframes fade-in-up {
@@ -123,109 +137,146 @@
                 transform: translateY(0);
             }
         }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
-<body>
-    <div class="container mx-auto p-4">
-        <h1 class="text-4xl text-center mb-8">WR Smile & Supplies | Billing</h1>
-        <p id="userIdDisplay" class="text-xs text-center text-gray-400 mb-4"></p>
-        <div class="card p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="flex flex-col space-y-4">
-                <h2 class="text-3xl font-playfair mb-4">New Bill</h2>
-                <!-- Customer Section -->
-                <div id="customerSearchSection">
-                    <div class="relative mb-6">
-                        <label for="customerSearch" class="block text-sm font-medium text-gray-700 mb-1">Customer Details</label>
-                        <input type="text" id="customerSearch" placeholder="Search or add a customer..." class="input-style pr-12">
-                        <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 mt-2"></i>
-                        <ul id="customerSearchResults" class="absolute w-full mt-2 bg-white rounded-lg shadow-lg z-10 hidden"></ul>
-                    </div>
-                    <button id="manualCustomerToggleBtn" class="btn-style btn-primary w-full mt-4">Or, Manual Add Customer</button>
-                </div>
-                
-                <!-- Manual Customer Add Section (Initially Hidden) -->
-                <div id="manualCustomerSection" class="hidden">
-                    <h3 class="text-xl font-playfair mb-2">Manually Add Customer</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="manualCustomerNameInput" placeholder="Customer Name" class="input-style">
-                        <input type="tel" id="manualCustomerPhoneInput" placeholder="Customer Phone (Ex: 712345678)" class="input-style">
-                        <div class="flex items-center space-x-4">
-                            <button id="addManualCustomerBtn" class="btn-style btn-primary flex-grow">Add Customer</button>
-                            <button id="manualCustomerCancelBtn" class="btn-style btn-danger">Cancel</button>
-                        </div>
-                    </div>
-                </div>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <div id="alert-container"></div>
+    <div id="page-loader" class="loader-container hidden">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="container mx-auto mt-10 p-4">
+        <div class="card p-8 md:p-12 mb-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-center mb-4 text-gray-800">
+                Billing
+            </h1>
+            <p class="text-center text-lg md:text-xl text-gray-600 mb-8">
+                Create new bills and manage your transactions.
+            </p>
 
-                <!-- Product Add Section -->
-                <div id="productSearchSection">
-                    <div class="relative">
-                        <input type="text" id="productSearch" placeholder="Search products..." class="input-style pr-12">
-                        <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <ul id="searchResults" class="absolute w-full mt-2 bg-white rounded-lg shadow-lg z-10 hidden"></ul>
-                    </div>
-                    <div id="selectedProductDetails" class="hidden flex flex-col space-y-4 p-4 rounded-lg bg-gray-50 border border-gray-200 mt-4">
-                        <p class="font-bold text-lg"><span id="productName"></span></p>
-                        <p class="text-sm text-gray-600">Price: Rs <span id="productPrice"></span></p>
-                        <p class="text-sm text-gray-600">Stock: <span id="productStock"></span></p>
-                        <div class="flex items-center space-x-4">
-                            <input type="number" id="quantityInput" value="1" min="1" class="input-style w-24">
-                            <button id="addItemBtn" class="btn-style btn-primary flex-grow">Add to Bill</button>
-                        </div>
-                    </div>
-                    <button id="manualAddToggleBtn" class="btn-style btn-primary w-full mt-4">Or, Manual Add Product</button>
+            <div class="flex justify-between items-center mb-6">
+                <div class="bg-gray-100 px-4 py-2 rounded-full font-medium text-gray-500 text-sm">
+                    User ID: <span id="userIdDisplay" class="font-mono text-gray-700">Loading...</span>
                 </div>
-                
-                <!-- Manual Product Add Section (Initially Hidden) -->
-                <div id="manualAddSection" class="hidden">
-                    <h3 class="text-xl font-playfair mb-2">Manually Add Item</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="manualProductName" placeholder="Product Name" class="input-style">
-                        <input type="number" id="manualProductPrice" placeholder="Price" class="input-style">
-                        <input type="number" id="manualQuantity" placeholder="Quantity" value="1" min="1" class="input-style">
-                        <div class="flex items-center space-x-4">
-                            <button id="addManualItemBtn" class="btn-style btn-primary flex-grow">Add to Bill</button>
-                            <button id="manualAddCancelBtn" class="btn-style btn-danger">Cancel</button>
-                        </div>
+                <button id="addNewProductBtn" class="btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                    <i class="fas fa-plus-circle mr-2"></i> Add New Product
+                </button>
+            </div>
+
+            <!-- Customer Details Form -->
+            <div class="bg-white rounded-xl shadow p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Customer Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="customerName" class="block text-gray-700 font-medium mb-2">Customer Name</label>
+                        <input type="text" id="customerName" placeholder="e.g. John Doe" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                    </div>
+                    <div>
+                        <label for="customerArea" class="block text-gray-700 font-medium mb-2">Customer Area</label>
+                        <input type="text" id="customerArea" placeholder="e.g. Colombo" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                    </div>
+                    <div>
+                        <label for="customerPhone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                        <input type="tel" id="customerPhone" value="+94" placeholder="e.g. +94771234567" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
                     </div>
                 </div>
             </div>
-            <div>
-                <h2 class="text-3xl font-playfair mb-4">Bill Summary</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left table-auto">
-                        <thead>
-                            <tr class="text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6">Item</th>
-                                <th class="py-3 px-6">Qty</th>
-                                <th class="py-3 px-6">Price</th>
-                                <th class="py-3 px-6 text-right">Subtotal</th>
-                                <th class="py-3 px-6"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="billItemsContainer" class="text-gray-600 text-sm font-light">
-                            <!-- Bill items will be injected here -->
-                        </tbody>
-                    </table>
+
+            <!-- New Bill Item Form -->
+            <div class="bg-white rounded-xl shadow p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Add Items to Bill</h2>
+                <div class="flex justify-end mb-4">
+                    <button id="toggleManualAddBtn" class="btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                        <i class="fas fa-plus mr-2"></i> Add Custom Item
+                    </button>
                 </div>
-                <div class="mt-8 space-y-4">
-                    <div class="flex justify-between items-center text-md font-bold text-gray-700">
-                        <span>Subtotal:</span>
-                        <span id="subtotalAmount">Rs 0.00</span>
+                <!-- Product Selection Section -->
+                <div id="productSelectSection" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div class="md:col-span-2">
+                        <label for="productSelect" class="block text-gray-700 font-medium mb-2">Select Product</label>
+                        <select id="productSelect" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                            <option value="">-- Loading Products --</option>
+                        </select>
                     </div>
-                    <div class="flex justify-between items-center text-md font-bold text-gray-700">
-                        <span>Discount:</span>
-                        <input type="number" id="discountAmountInput" value="0" min="0" class="input-style w-24 text-right">
+                    <div>
+                        <label for="itemQuantity" class="block text-gray-700 font-medium mb-2">Quantity</label>
+                        <input type="number" id="itemQuantity" value="1" min="1" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
                     </div>
-                    <div class="flex justify-between items-center text-xl font-bold border-t pt-4 border-gray-200">
-                        <span>Total:</span>
-                        <span id="totalAmount" class="text-2xl text-primary-600">Rs 0.00</span>
+                </div>
+
+                <!-- Manual Product Entry Section (Hidden by default) -->
+                <div id="manualProductSection" class="hidden grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div class="md:col-span-2">
+                        <label for="manualProductName" class="block text-gray-700 font-medium mb-2">Custom Product Name</label>
+                        <input type="text" id="manualProductName" placeholder="e.g. New Item" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
                     </div>
-                    <div class="flex justify-end space-x-4 mt-4">
-                        <button id="clearBillBtn" class="btn-style btn-danger">Clear Bill</button>
-                        <button id="checkoutBtn" class="btn-style btn-checkout">Checkout</button>
+                    <div>
+                        <label for="manualProductPrice" class="block text-gray-700 font-medium mb-2">Unit Price (LKR)</label>
+                        <input type="number" id="manualProductPrice" placeholder="0.00" step="0.01" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                    </div>
+                    <div>
+                        <label for="manualProductQuantity" class="block text-gray-700 font-medium mb-2">Quantity</label>
+                        <input type="number" id="manualProductQuantity" value="1" min="1" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                    </div>
+                </div>
+
+                <div class="mt-4 flex justify-end">
+                    <button id="addItemBtn" class="btn bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 px-6 py-3 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        <i class="fas fa-cart-plus mr-2"></i> Add Item
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bill Table -->
+            <div class="bg-white rounded-xl shadow overflow-hidden mb-6 table-container">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price (LKR)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal (LKR)</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Bill items will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <p id="noItemsMessage" class="text-center text-gray-500 mt-8 hidden">Add an item to the bill to get started!</p>
+
+            <!-- Totals and Finalize Section -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center text-xl font-bold">
+                            <span class="text-gray-600">Total Price:</span>
+                            <span id="totalPriceDisplay" class="text-gray-800">LKR 0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label for="discountAmount" class="text-gray-600 font-medium">Discount (LKR):</label>
+                            <input type="number" id="discountAmount" value="0" min="0" class="w-32 text-right px-2 py-1 border rounded-full">
+                        </div>
+                        <div class="flex justify-between items-center text-xl font-bold">
+                            <span class="text-gray-600">Grand Total:</span>
+                            <span id="grandTotalDisplay" class="text-gray-800">LKR 0.00</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <label for="amountPaid" class="text-gray-600 font-medium">Amount Paid (LKR):</label>
+                            <input type="number" id="amountPaid" value="0" min="0" class="w-32 text-right px-2 py-1 border rounded-full">
+                        </div>
+                        <div class="flex justify-between items-center text-lg font-bold">
+                            <span class="text-gray-600">Loan Amount:</span>
+                            <span id="loanAmountDisplay" class="text-red-600">LKR 0.00</span>
+                        </div>
+                        <button id="finalizeBillBtn" class="w-full btn bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 px-6 py-3 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            <i class="fas fa-check-circle mr-2"></i> Finalize Bill
+                        </button>
                     </div>
                 </div>
             </div>
@@ -233,284 +284,110 @@
     </div>
     
     <!-- Finalize Modal -->
-    <div id="finalizeModal" class="custom-modal hidden">
-        <div class="modal-content">
-            <h3 class="text-2xl mb-4 font-playfair">Finalize Sale</h3>
-            <div class="space-y-4">
-                <div class="flex justify-between">
-                    <span class="text-lg">Final Total:</span>
-                    <span id="modalTotal" class="text-lg font-bold">Rs 0.00</span>
-                </div>
-                <div>
-                    <label for="customerNameInput" class="block text-gray-700">Customer Name</label>
-                    <input type="text" id="customerNameInput" class="input-style mt-1" placeholder="Enter customer name">
-                </div>
-                <div>
-                    <label for="customerPhoneInput" class="block text-gray-700">Customer Phone (WhatsApp)</label>
-                    <input type="tel" id="customerPhoneInput" class="input-style mt-1" placeholder="Ex: 712345678">
-                </div>
-                <div>
-                    <label for="amountPaidInput" class="block text-gray-700">Amount Paid</label>
-                    <input type="number" id="amountPaidInput" class="input-style mt-1" placeholder="Enter amount paid">
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-lg">Balance / Loan:</span>
-                    <span id="loanAmount" class="text-lg font-bold text-red-600">Rs 0.00</span>
-                </div>
-                <div class="flex justify-end space-x-4 mt-6">
-                    <button id="newBillBtn" class="btn-style btn-primary">Start New Bill</button>
-                    <button id="sendWhatsappBtn" class="btn-style btn-checkout">
-                        <i class="fab fa-whatsapp mr-2"></i>Send on WhatsApp
-                    </button>
-                </div>
+    <div id="finalizeModal" class="modal-overlay hidden">
+        <div class="modal-content text-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">Bill Finalized!</h3>
+            <p class="text-gray-600 mb-6">Your transaction has been recorded.</p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button id="newBillBtn" class="btn bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 px-6 py-3">
+                    <i class="fas fa-file-alt mr-2"></i> New Bill
+                </button>
+                <button id="whatsappBillBtn" class="btn bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 px-6 py-3">
+                    <i class="fab fa-whatsapp mr-2"></i> Send via WhatsApp
+                </button>
             </div>
         </div>
     </div>
-
-    <div id="alert-container" class="alert-container"></div>
+    
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal-overlay hidden">
+        <div class="modal-content text-center">
+            <button id="closeProductModalBtn" class="modal-close-btn">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">Add New Product</h3>
+            <form id="addProductForm">
+                <div class="space-y-4">
+                    <div>
+                        <label for="productName" class="block text-gray-700 font-medium mb-2 text-left">Product Name</label>
+                        <input type="text" id="productName" name="productName" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" required>
+                    </div>
+                    <div>
+                        <label for="productUnitPrice" class="block text-gray-700 font-medium mb-2 text-left">Unit Price (LKR)</label>
+                        <input type="number" id="productUnitPrice" name="productUnitPrice" min="0" step="0.01" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" required>
+                    </div>
+                    <div>
+                        <label for="productUnitCost" class="block text-gray-700 font-medium mb-2 text-left">Unit Cost (LKR)</label>
+                        <input type="number" id="productUnitCost" name="productUnitCost" min="0" step="0.01" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" required>
+                    </div>
+                    <div>
+                        <label for="productQuantity" class="block text-gray-700 font-medium mb-2 text-left">Quantity</label>
+                        <input type="number" id="productQuantity" name="productQuantity" min="0" class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" required>
+                    </div>
+                </div>
+                <button type="submit" class="w-full btn bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 px-6 py-3 mt-6">
+                    <i class="fas fa-save mr-2"></i> Save Product
+                </button>
+            </form>
+        </div>
+    </div>
     
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, runTransaction, doc, addDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-        // Global variables and Firebase setup
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // Use the globally provided variables as per the instructions
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
         let db;
         let auth;
-        let userId = null;
-        let isAuthReady = false;
-        let allProducts = [];
-        let allCustomers = [];
+        let userId;
+        let productsCollectionRef;
+        let salesCollectionRef;
+        
+        let products = [];
+        let productsMap = {}; // A map for quick lookup by name
         let billItems = [];
+        let latestFinalizedBill = null;
+        let isManualMode = false;
 
-        // UI Element References
-        const productSearchInput = document.getElementById('productSearch');
-        const searchResultsList = document.getElementById('searchResults');
-        const selectedProductDetailsDiv = document.getElementById('selectedProductDetails');
-        const productNameSpan = document.getElementById('productName');
-        const productPriceSpan = document.getElementById('productPrice');
-        const productStockSpan = document.getElementById('productStock');
-        const quantityInput = document.getElementById('quantityInput');
-        const addItemBtn = document.getElementById('addItemBtn');
-        const billItemsContainer = document.getElementById('billItemsContainer');
-        const subtotalAmountSpan = document.getElementById('subtotalAmount');
-        const discountAmountInput = document.getElementById('discountAmountInput');
-        const totalAmountSpan = document.getElementById('totalAmount');
-        const clearBillBtn = document.getElementById('clearBillBtn');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        const finalizeModal = document.getElementById('finalizeModal');
-        const modalTotalSpan = document.getElementById('modalTotal');
-        const amountPaidInput = document.getElementById('amountPaidInput');
-        const newBillBtn = document.getElementById('newBillBtn');
-        const loanAmountSpan = document.getElementById('loanAmount');
-        const customerNameInput = document.getElementById('customerNameInput');
-        const customerPhoneInput = document.getElementById('customerPhoneInput');
-        const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-
-        // Customer UI references
-        const customerSearchSection = document.getElementById('customerSearchSection');
-        const customerSearchInput = document.getElementById('customerSearch');
-        const customerSearchResultsList = document.getElementById('customerSearchResults');
-        const manualCustomerToggleBtn = document.getElementById('manualCustomerToggleBtn');
-        const manualCustomerSection = document.getElementById('manualCustomerSection');
-        const manualCustomerNameInput = document.getElementById('manualCustomerNameInput');
-        const manualCustomerPhoneInput = document.getElementById('manualCustomerPhoneInput');
-        const addManualCustomerBtn = document.getElementById('addManualCustomerBtn');
-        const manualCustomerCancelBtn = document.getElementById('manualCustomerCancelBtn');
-
-        // Product UI references
-        const manualAddToggleBtn = document.getElementById('manualAddToggleBtn');
-        const manualAddSection = document.getElementById('manualAddSection');
-        const productSearchSection = document.getElementById('productSearchSection');
+        // --- UI Element References ---
+        const customerNameInput = document.getElementById('customerName');
+        const customerAreaInput = document.getElementById('customerArea');
+        const customerPhoneInput = document.getElementById('customerPhone');
+        const addNewProductBtn = document.getElementById('addNewProductBtn');
+        const productSelectSection = document.getElementById('productSelectSection');
+        const productSelect = document.getElementById('productSelect');
+        const itemQuantityInput = document.getElementById('itemQuantity');
+        const manualProductSection = document.getElementById('manualProductSection');
         const manualProductNameInput = document.getElementById('manualProductName');
         const manualProductPriceInput = document.getElementById('manualProductPrice');
-        const manualQuantityInput = document.getElementById('manualQuantity');
-        const addManualItemBtn = document.getElementById('addManualItemBtn');
-        const manualAddCancelBtn = document.getElementById('manualAddCancelBtn');
+        const manualProductQuantityInput = document.getElementById('manualProductQuantity');
+        const toggleManualAddBtn = document.getElementById('toggleManualAddBtn');
+        const addItemBtn = document.getElementById('addItemBtn');
+        const billTableBody = document.getElementById('billTableBody');
+        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+        const discountAmountInput = document.getElementById('discountAmount');
+        const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+        const amountPaidInput = document.getElementById('amountPaid');
+        const loanAmountDisplay = document.getElementById('loanAmountDisplay');
+        const finalizeBillBtn = document.getElementById('finalizeBillBtn');
+        const finalizeModal = document.getElementById('finalizeModal');
+        const newBillBtn = document.getElementById('newBillBtn');
+        const whatsappBillBtn = document.getElementById('whatsappBillBtn');
+        const noItemsMessage = document.getElementById('noItemsMessage');
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        const loader = document.getElementById('page-loader');
+        const addProductModal = document.getElementById('addProductModal');
+        const closeProductModalBtn = document.getElementById('closeProductModalBtn');
+        const addProductForm = document.getElementById('addProductForm');
 
-        // Functions for UI rendering and logic
-        const calculateTotals = () => {
-            const subtotal = billItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const discount = parseFloat(discountAmountInput.value) || 0;
-            const total = Math.max(0, subtotal - discount);
-
-            subtotalAmountSpan.textContent = `Rs ${subtotal.toFixed(2)}`;
-            totalAmountSpan.textContent = `Rs ${total.toFixed(2)}`;
-            modalTotalSpan.textContent = `Rs ${total.toFixed(2)}`;
-            updateLoanAmount();
-        };
-
-        const renderBill = () => {
-            billItemsContainer.innerHTML = '';
-            if (billItems.length === 0) {
-                billItemsContainer.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-gray-500">No items added to the bill.</td></tr>`;
-            } else {
-                billItems.forEach((item, index) => {
-                    const subtotal = item.price * item.quantity;
-                    const tr = document.createElement('tr');
-                    tr.className = 'border-b border-gray-200 hover:bg-gray-100';
-                    tr.innerHTML = `
-                        <td class="py-3 px-6">${item.name}</td>
-                        <td class="py-3 px-6">${item.quantity}</td>
-                        <td class="py-3 px-6">Rs ${item.price.toFixed(2)}</td>
-                        <td class="py-3 px-6 text-right font-semibold">Rs ${subtotal.toFixed(2)}</td>
-                        <td class="py-3 px-6 text-right">
-                            <button class="btn-remove-item text-red-500" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    `;
-                    billItemsContainer.appendChild(tr);
-                });
-            }
-            calculateTotals();
-        };
-
-        const updateLoanAmount = () => {
-            const total = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
-            const paid = parseFloat(amountPaidInput.value) || 0;
-            const loan = total - paid;
-            loanAmountSpan.textContent = `Rs ${loan.toFixed(2)}`;
-            loanAmountSpan.className = `text-lg font-bold ${loan > 0 ? 'text-red-600' : 'text-green-600'}`;
-        };
-
-        const resetBill = () => {
-            billItems = [];
-            productSearchInput.value = '';
-            customerSearchInput.value = '';
-            selectedProductDetailsDiv.classList.add('hidden');
-            manualAddSection.classList.add('hidden');
-            productSearchSection.classList.remove('hidden');
-            manualCustomerSection.classList.add('hidden');
-            customerSearchSection.classList.remove('hidden');
-            amountPaidInput.value = '';
-            customerNameInput.value = '';
-            customerPhoneInput.value = '';
-            discountAmountInput.value = 0;
-            renderBill();
-        };
-
-        const finalizeBill = async () => {
-            if (billItems.length === 0) {
-                showAlert("Please add items to the bill before checking out.", 'error');
-                return;
-            }
-
-            const totalAmount = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
-            const subtotalAmount = parseFloat(subtotalAmountSpan.textContent.replace('Rs ', ''));
-            const discountAmount = parseFloat(discountAmountInput.value) || 0;
-            const amountPaid = parseFloat(amountPaidInput.value) || 0;
-            const customerName = customerNameInput.value.trim() || 'Guest';
-            const customerPhone = customerPhoneInput.value.trim();
-            const timestamp = new Date();
-
-            let loanAmount = 0;
-            let status = 'Paid';
-
-            if (amountPaid < totalAmount) {
-                loanAmount = totalAmount - amountPaid;
-                status = 'Partially Paid';
-            } else if (amountPaid === totalAmount) {
-                status = 'Paid';
-            } else {
-                status = 'Overpaid';
-            }
-            
-            try {
-                // Use a Firestore transaction to ensure atomic operations
-                await runTransaction(db, async (transaction) => {
-                    const salesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/sales`);
-                    const stockCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/stock`);
-                    const customersCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/customers`);
-
-                    // Check if customer exists and add if not
-                    if (customerName && customerPhone) {
-                        const existingCustomer = allCustomers.find(c => c.phone === customerPhone);
-                        if (!existingCustomer) {
-                            await addDoc(customersCollectionRef, {
-                                name: customerName,
-                                phone: customerPhone
-                            });
-                        }
-                    }
-
-                    // Add the sale record
-                    await addDoc(salesCollectionRef, {
-                        items: billItems,
-                        subtotal: subtotalAmount,
-                        discount: discountAmount,
-                        total: totalAmount,
-                        amountPaid: amountPaid,
-                        loanAmount: loanAmount,
-                        customerName: customerName,
-                        customerPhone: customerPhone,
-                        status: status,
-                        timestamp: timestamp
-                    });
-
-                    // Update product stock within the same transaction
-                    for (const item of billItems) {
-                        // Only update stock for items that have a product ID (not manually added)
-                        if (item.id) {
-                            const productRef = doc(stockCollectionRef, item.id);
-                            const productDoc = await transaction.get(productRef);
-                            if (!productDoc.exists()) {
-                                throw new Error(`Product with ID ${item.id} not found.`);
-                            }
-                            const newStock = productDoc.data().stock - item.quantity;
-                            if (newStock < 0) {
-                                throw new Error(`Not enough stock for ${item.name}. Available: ${productDoc.data().stock}`);
-                            }
-                            transaction.update(productRef, { stock: newStock });
-                        }
-                    }
-                });
-
-                showAlert("Bill finalized and stock updated successfully!", 'success');
-                finalizeModal.classList.add('hidden');
-                
-                // If a phone number is provided, send the WhatsApp message
-                if (customerPhone) {
-                    sendWhatsAppMessage({
-                        customerName,
-                        customerPhone,
-                        total: totalAmount,
-                        amountPaid: amountPaid,
-                        loanAmount: loanAmount
-                    });
-                }
-                resetBill();
-            } catch (error) {
-                console.error("Transaction failed: ", error);
-                showAlert(`Transaction failed: ${error.message}`, 'error');
-            }
-        };
-
-        const sendWhatsAppMessage = (data) => {
-            const total = data.total.toFixed(2);
-            const paid = data.amountPaid.toFixed(2);
-            const loan = data.loanAmount.toFixed(2);
-            
-            // Add Sri Lankan country code if not present
-            let phoneNumber = data.customerPhone.replace(/^0/, ''); // Remove leading 0 if present
-            if (!phoneNumber.startsWith('94')) {
-                phoneNumber = '94' + phoneNumber;
-            }
-
-            let message = `Welcome to Smile & Supplies!🛒\n\nWe offer a variety of online products, including kitchen accessories, home essentials, kids' items, and stationery.\n\nHello ${data.customerName}, here is your bill summary:\n\nTotal: Rs ${total}\nAmount Paid: Rs ${paid}`;
-            if (data.loanAmount > 0) {
-                message += `\nRemaining Loan: Rs ${loan}`;
-            }
-            message += `\n\nThank you for your business!\n\n📞 Contact: 0764950844\n📧 Email: smileandsupplier@outlook.com\n\nExplore, shop, and enjoy quality products at affordable prices. Feel free to reach out for inquiries or orders!"\n\n**Follow this link to join my WhatsApp group: https://chat.whatsapp.com/K7ALigMk9ad4SBlcRUqoxX`;
-
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-            window.open(whatsappUrl, '_blank');
-        };
-
-        // Utility functions for UI alerts
-        function showAlert(message, type = 'success', duration = 3000) {
+        // --- Utility Functions ---
+        function showMessage(message, type = 'success', duration = 3000) {
             const alertContainer = document.getElementById('alert-container');
             const alertDiv = document.createElement('div');
             alertDiv.className = `custom-alert p-4 rounded-lg shadow-md mb-2 text-white font-bold animate-fade-in-up ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
@@ -521,252 +398,413 @@
             }, duration);
         }
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Firebase Initialization
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
+        function showLoader() {
+            loader.classList.remove('hidden');
+        }
 
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    userIdDisplay.textContent = `User ID: ${userId}`;
-                    isAuthReady = true;
-                    // Listen for real-time stock changes
-                    const productsCollectionPath = `artifacts/${appId}/users/${userId}/stock`;
-                    onSnapshot(collection(db, productsCollectionPath), (snapshot) => {
-                        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        console.log("Stock data loaded:", allProducts);
-                    });
-                    // Listen for real-time customer changes
-                    const customersCollectionPath = `artifacts/${appId}/users/${userId}/customers`;
-                    onSnapshot(collection(db, customersCollectionPath), (snapshot) => {
-                        allCustomers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    });
+        function hideLoader() {
+            loader.classList.add('hidden');
+        }
+
+        function showCustomModal(modal) {
+            modal.classList.remove('hidden');
+        }
+
+        function hideCustomModal(modal) {
+            modal.classList.add('hidden');
+        }
+
+        // --- Firebase Authentication ---
+        async function authenticate() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                
+                setLogLevel('debug');
+
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
                 } else {
-                    userId = null;
-                    userIdDisplay.textContent = `User ID: Not authenticated`;
-                    isAuthReady = false;
                     await signInAnonymously(auth);
                 }
-            });
 
-            // Customer search and selection logic
-            customerSearchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                customerSearchResultsList.innerHTML = '';
-                if (query.length > 0) {
-                    const filtered = allCustomers.filter(c => 
-                        c.name.toLowerCase().includes(query) || c.phone.includes(query)
-                    );
-                    if (filtered.length > 0) {
-                        customerSearchResultsList.classList.remove('hidden');
-                        filtered.forEach(customer => {
-                            const li = document.createElement('li');
-                            li.className = 'p-2 hover:bg-gray-100 cursor-pointer';
-                            li.textContent = `${customer.name} (${customer.phone})`;
-                            li.addEventListener('click', () => {
-                                customerNameInput.value = customer.name;
-                                customerPhoneInput.value = customer.phone;
-                                customerSearchResultsList.classList.add('hidden');
-                                customerSearchInput.value = customer.name;
-                            });
-                            customerSearchResultsList.appendChild(li);
-                        });
-                    } else {
-                        customerSearchResultsList.classList.add('hidden');
-                    }
-                } else {
-                    customerSearchResultsList.classList.add('hidden');
-                }
-            });
+                userId = auth.currentUser.uid;
+                userIdDisplay.textContent = userId;
+                
+                productsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/products`);
+                salesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/sales`);
+                
+                console.log("Firebase authenticated. User ID:", userId);
+                console.log("Products Collection Path:", `artifacts/${appId}/users/${userId}/products`);
+                console.log("Sales Collection Path:", `artifacts/${appId}/users/${userId}/sales`);
+                
+                startRealtimeListeners();
 
-            // Toggle between customer search and manual add modes
-            manualCustomerToggleBtn.addEventListener('click', () => {
-                customerSearchSection.classList.add('hidden');
-                manualCustomerSection.classList.remove('hidden');
-            });
-            manualCustomerCancelBtn.addEventListener('click', () => {
-                manualCustomerSection.classList.add('hidden');
-                customerSearchSection.classList.remove('hidden');
-                manualCustomerNameInput.value = '';
-                manualCustomerPhoneInput.value = '';
-            });
-
-            // Add new customer manually
-            addManualCustomerBtn.addEventListener('click', async () => {
-                const name = manualCustomerNameInput.value.trim();
-                const phone = manualCustomerPhoneInput.value.trim();
-
-                if (!name || !phone) {
-                    showAlert('Please enter both customer name and phone number.', 'error');
+            } catch (error) {
+                console.error("Authentication Error:", error);
+                showMessage('Failed to authenticate: ' + error.message, 'error');
+            }
+        }
+        
+        // --- Real-time Data Listeners ---
+        function startRealtimeListeners() {
+            // Listen for changes in the products collection to keep the dropdown updated
+            onSnapshot(productsCollectionRef, (snapshot) => {
+                products = [];
+                productsMap = {};
+                if (snapshot.empty) {
+                    productSelect.innerHTML = '<option value="">-- No Products Found --</option>';
                     return;
                 }
                 
-                // Add Sri Lankan country code if not present
-                let formattedPhone = phone.replace(/^0/, ''); // Remove leading 0 if present
-                if (!formattedPhone.startsWith('94')) {
-                    formattedPhone = '94' + formattedPhone;
-                }
+                productSelect.innerHTML = '<option value="">Select a Product</option>';
+                snapshot.forEach((doc) => {
+                    const productData = { id: doc.id, ...doc.data() };
+                    products.push(productData);
+                    productsMap[productData.name] = productData;
+                    const option = document.createElement('option');
+                    option.value = productData.name;
+                    option.textContent = `${productData.name} (Qty: ${productData.quantity})`;
+                    productSelect.appendChild(option);
+                });
+                console.log("Products data updated.");
+            }, (error) => {
+                console.error("Error fetching products:", error);
+                showMessage('Failed to load products: ' + error.message, 'error');
+            });
+        }
+        
+        // --- Bill Management Functions ---
+        
+        function calculateTotals() {
+            let total = billItems.reduce((sum, item) => sum + item.subtotal, 0);
+            const discount = parseFloat(discountAmountInput.value) || 0;
+            const grandTotal = total - discount;
+            const amountPaid = parseFloat(amountPaidInput.value) || 0;
+            const loanAmount = grandTotal > amountPaid ? grandTotal - amountPaid : 0;
+            
+            totalPriceDisplay.textContent = `LKR ${total.toFixed(2)}`;
+            grandTotalDisplay.textContent = `LKR ${grandTotal.toFixed(2)}`;
+            loanAmountDisplay.textContent = `LKR ${loanAmount.toFixed(2)}`;
+            
+            finalizeBillBtn.disabled = billItems.length === 0;
+        }
+        
+        function renderBill() {
+            billTableBody.innerHTML = '';
+            if (billItems.length === 0) {
+                noItemsMessage.classList.remove('hidden');
+            } else {
+                noItemsMessage.classList.add('hidden');
+            }
+            
+            billItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.quantity}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LKR ${item.unitPrice.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LKR ${item.subtotal.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-center">
+                        <button class="text-red-600 hover:text-red-900 mx-2 remove-item-btn" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                billTableBody.appendChild(row);
+            });
+            
+            document.querySelectorAll('.remove-item-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index, 10);
+                    if (isNaN(index)) return;
+                    billItems.splice(index, 1);
+                    renderBill();
+                    calculateTotals();
+                });
+            });
+            
+            calculateTotals();
+        }
+        
+        function resetBill() {
+            billItems = [];
+            itemQuantityInput.value = 1;
+            discountAmountInput.value = 0;
+            amountPaidInput.value = 0;
+            customerNameInput.value = '';
+            customerAreaInput.value = '';
+            customerPhoneInput.value = '+94';
+            latestFinalizedBill = null;
+            if (isManualMode) toggleManualAdd(); // Switch back to default mode if needed
+            renderBill();
+        }
 
-                try {
-                    const customersCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/customers`);
-                    await addDoc(customersCollectionRef, {
-                        name: name,
-                        phone: formattedPhone
-                    });
-                    showAlert("Customer added successfully!", 'success');
-                    
-                    // Auto-fill the customer details on the bill
-                    customerNameInput.value = name;
-                    customerPhoneInput.value = formattedPhone;
-
-                    manualCustomerSection.classList.add('hidden');
-                    customerSearchSection.classList.remove('hidden');
-                    manualCustomerNameInput.value = '';
-                    manualCustomerPhoneInput.value = '';
-                } catch (error) {
-                    console.error("Error adding customer:", error);
-                    showAlert("Failed to add customer. Please try again.", 'error');
+        async function updateProductQuantity(productId, soldQuantity) {
+            const productRef = doc(db, productsCollectionRef.path, productId);
+            try {
+                const productSnapshot = await getDoc(productRef);
+                if (productSnapshot.exists()) {
+                    const currentQuantity = productSnapshot.data().quantity;
+                    const newQuantity = currentQuantity - soldQuantity;
+                    if (newQuantity >= 0) {
+                        await updateDoc(productRef, { quantity: newQuantity });
+                        console.log(`Updated quantity for product ${productId}.`);
+                        return true;
+                    } else {
+                        showMessage(`Not enough stock for ${productSnapshot.data().name}. Only ${currentQuantity} available.`, 'error');
+                        return false;
+                    }
+                } else {
+                    showMessage(`Product with ID ${productId} not found in stock.`, 'error');
+                    return false;
                 }
+            } catch (error) {
+                console.error("Error updating product quantity:", error);
+                showMessage('Failed to update stock quantity: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function finalizeBill() {
+            if (billItems.length === 0) {
+                showMessage("The bill is empty. Please add items.", "error");
+                return;
+            }
+            
+            const customerName = customerNameInput.value.trim();
+            const customerArea = customerAreaInput.value.trim();
+            const customerPhone = customerPhoneInput.value.trim();
+            if (!customerName || !customerArea || !customerPhone) {
+                showMessage("Please enter all customer details (Name, Area, Phone Number).", "error");
+                return;
+            }
+
+            showLoader();
+            
+            // Validate stock levels before saving
+            for (const item of billItems) {
+                // Only validate stock if the item is not a manual entry
+                if (item.id) {
+                    const stockProduct = productsMap[item.name];
+                    if (!stockProduct || stockProduct.quantity < item.quantity) {
+                        showMessage(`Not enough stock for ${item.name}.`, 'error');
+                        hideLoader();
+                        return;
+                    }
+                }
+            }
+            
+            const saleData = {
+                timestamp: new Date().toISOString(),
+                customerName: customerName,
+                customerArea: customerArea,
+                customerPhone: customerPhone,
+                totalPrice: parseFloat(totalPriceDisplay.textContent.replace('LKR ', '')),
+                discount: parseFloat(discountAmountInput.value),
+                grandTotal: parseFloat(grandTotalDisplay.textContent.replace('LKR ', '')),
+                amountPaid: parseFloat(amountPaidInput.value),
+                loanAmount: parseFloat(loanAmountDisplay.textContent.replace('LKR ', '')),
+                items: billItems,
+                userId: userId,
+            };
+            
+            try {
+                // Update stock quantities and save sale
+                for (const item of billItems) {
+                    if (item.id) { // Only update stock for non-manual items
+                        const stockProduct = productsMap[item.name];
+                        const success = await updateProductQuantity(stockProduct.id, item.quantity);
+                        if (!success) {
+                            hideLoader();
+                            return;
+                        }
+                    }
+                }
+                
+                await addDoc(salesCollectionRef, saleData);
+                showMessage("Bill finalized and stock updated!", "success");
+                
+                latestFinalizedBill = saleData; // Save the bill data for WhatsApp
+                
+                hideLoader();
+                showCustomModal(finalizeModal);
+                
+            } catch (error) {
+                console.error("Error finalizing bill:", error);
+                showMessage('Failed to finalize bill: ' + error.message, 'error');
+                hideLoader();
+            }
+        }
+
+        function sendWhatsAppMessage() {
+            if (!latestFinalizedBill) {
+                showMessage("No bill has been finalized yet.", "error");
+                return;
+            }
+            
+            const { customerPhone, customerName, grandTotal, loanAmount, items } = latestFinalizedBill;
+            
+            if (!customerPhone || customerPhone.length < 5) {
+                showMessage("Customer phone number is invalid.", "error");
+                return;
+            }
+            
+            let message = `Hello ${customerName},\n\n`;
+            message += `Your bill summary from WR Smile:\n\n`;
+            
+            items.forEach(item => {
+                message += `${item.name} - Qty: ${item.quantity} - Total: LKR ${item.subtotal.toFixed(2)}\n`;
             });
 
-            // Toggle between product search and manual add modes
-            manualAddToggleBtn.addEventListener('click', () => {
-                productSearchSection.classList.add('hidden');
-                manualAddSection.classList.remove('hidden');
-                selectedProductDetailsDiv.classList.add('hidden');
-            });
-            manualAddCancelBtn.addEventListener('click', () => {
-                manualAddSection.classList.add('hidden');
-                productSearchSection.classList.remove('hidden');
+            message += `\n*Grand Total:* LKR ${grandTotal.toFixed(2)}\n`;
+            if (loanAmount > 0) {
+                message += `*Loan Amount:* LKR ${loanAmount.toFixed(2)}\n`;
+            }
+            message += `\nThank you for your business!`;
+            
+            // Encode the message and phone number for the URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappLink = `https://wa.me/${customerPhone}?text=${encodedMessage}`;
+            
+            // Open the WhatsApp link in a new tab
+            window.open(whatsappLink, '_blank');
+        }
+
+        function toggleManualAdd() {
+            isManualMode = !isManualMode;
+            if (isManualMode) {
+                productSelectSection.classList.add('hidden');
+                manualProductSection.classList.remove('hidden');
+                toggleManualAddBtn.innerHTML = `<i class="fas fa-list mr-2"></i> Select From Stock`;
+                productSelect.value = '';
+                itemQuantityInput.value = 1;
+            } else {
+                productSelectSection.classList.remove('hidden');
+                manualProductSection.classList.add('hidden');
+                toggleManualAddBtn.innerHTML = `<i class="fas fa-plus mr-2"></i> Add Custom Item`;
                 manualProductNameInput.value = '';
                 manualProductPriceInput.value = '';
-                manualQuantityInput.value = 1;
-            });
+                manualProductQuantityInput.value = 1;
+            }
+        }
 
-            // Product search and add logic
-            productSearchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                searchResultsList.innerHTML = '';
-                if (query.length > 0) {
-                    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query) && p.stock > 0);
-                    if (filtered.length > 0) {
-                        searchResultsList.classList.remove('hidden');
-                        filtered.forEach(product => {
-                            const li = document.createElement('li');
-                            li.className = 'p-2 hover:bg-gray-100 cursor-pointer';
-                            li.textContent = `${product.name} (Rs ${product.price.toFixed(2)}) - ${product.stock} in stock`;
-                            li.addEventListener('click', () => {
-                                productNameSpan.textContent = product.name;
-                                productPriceSpan.textContent = product.price.toFixed(2);
-                                productStockSpan.textContent = product.stock;
-                                quantityInput.value = 1;
-                                selectedProductDetailsDiv.classList.remove('hidden');
-                                searchResultsList.classList.add('hidden');
-                                productSearchInput.value = '';
-                                selectedProductDetailsDiv.dataset.productId = product.id;
-                            });
-                            searchResultsList.appendChild(li);
-                        });
-                    } else {
-                        searchResultsList.classList.add('hidden');
-                    }
-                } else {
-                    searchResultsList.classList.add('hidden');
-                }
-            });
+        // --- Event Listeners ---
+        addItemBtn.addEventListener('click', () => {
+            if (isManualMode) {
+                const productName = manualProductNameInput.value.trim();
+                const productPrice = parseFloat(manualProductPriceInput.value);
+                const quantity = parseInt(manualProductQuantityInput.value, 10);
 
-            addItemBtn.addEventListener('click', () => {
-                const productId = selectedProductDetailsDiv.dataset.productId;
-                const quantity = parseInt(quantityInput.value);
-                const product = allProducts.find(p => p.id === productId);
-
-                if (!product || quantity <= 0) {
-                    showAlert('Please select a product and enter a valid quantity.', 'error');
+                if (!productName || isNaN(productPrice) || isNaN(quantity) || quantity <= 0) {
+                    showMessage("Please enter valid product details.", "error");
                     return;
                 }
 
-                if (quantity > product.stock) {
-                    showAlert(`Not enough stock. Only ${product.stock} available.`, 'error');
-                    return;
-                }
-                
-                const existingItemIndex = billItems.findIndex(item => item.id === productId);
-                if (existingItemIndex !== -1) {
-                    billItems[existingItemIndex].quantity += quantity;
-                } else {
-                    billItems.push({
-                        id: productId,
-                        name: product.name,
-                        price: product.price,
-                        quantity: quantity
-                    });
-                }
-                showAlert(`${quantity} x ${product.name} added to bill.`, 'success');
-                selectedProductDetailsDiv.classList.add('hidden');
+                const subtotal = productPrice * quantity;
+                const item = {
+                    name: productName,
+                    quantity: quantity,
+                    unitPrice: productPrice,
+                    unitCost: 0, // Manual items have no cost
+                    subtotal: subtotal
+                };
+                billItems.push(item);
                 renderBill();
-            });
 
-            addManualItemBtn.addEventListener('click', () => {
-                const name = manualProductNameInput.value.trim();
-                const price = parseFloat(manualProductPriceInput.value);
-                const quantity = parseInt(manualQuantityInput.value);
-
-                if (!name || isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
-                    showAlert('Please enter a valid name, price, and quantity.', 'error');
+                // Reset manual inputs
+                manualProductNameInput.value = '';
+                manualProductPriceInput.value = '';
+                manualProductQuantityInput.value = 1;
+            } else {
+                const selectedProduct = productSelect.value;
+                const quantity = parseInt(itemQuantityInput.value, 10);
+            
+                if (!selectedProduct) {
+                    showMessage("Please select a product.", "error");
                     return;
                 }
-
-                billItems.push({
-                    name: name,
-                    price: price,
+                if (isNaN(quantity) || quantity <= 0) {
+                    showMessage("Please enter a valid quantity.", "error");
+                    return;
+                }
+            
+                const product = productsMap[selectedProduct];
+                if (!product || product.quantity < quantity) {
+                    showMessage(`Not enough stock for ${selectedProduct}. Available: ${product ? product.quantity : 0}`, "error");
+                    return;
+                }
+            
+                const subtotal = product.unitPrice * quantity;
+                const item = {
+                    id: product.id,
+                    name: product.name,
+                    quantity: quantity,
+                    unitPrice: product.unitPrice,
+                    unitCost: product.unitCost,
+                    subtotal: subtotal
+                };
+            
+                billItems.push(item);
+                renderBill();
+            
+                // Reset quantity and select after adding item
+                itemQuantityInput.value = 1;
+                productSelect.value = '';
+            }
+        });
+        
+        discountAmountInput.addEventListener('input', calculateTotals);
+        amountPaidInput.addEventListener('input', calculateTotals);
+        finalizeBillBtn.addEventListener('click', finalizeBill);
+        newBillBtn.addEventListener('click', () => {
+            hideCustomModal(finalizeModal);
+            resetBill();
+        });
+        
+        whatsappBillBtn.addEventListener('click', sendWhatsAppMessage);
+        
+        // Manual Product Add Event Listeners
+        addNewProductBtn.addEventListener('click', () => showCustomModal(addProductModal));
+        closeProductModalBtn.addEventListener('click', () => hideCustomModal(addProductModal));
+        toggleManualAddBtn.addEventListener('click', toggleManualAdd);
+        
+        addProductForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const productName = document.getElementById('productName').value.trim();
+            const unitPrice = parseFloat(document.getElementById('productUnitPrice').value);
+            const unitCost = parseFloat(document.getElementById('productUnitCost').value);
+            const quantity = parseInt(document.getElementById('productQuantity').value, 10);
+            
+            if (!productName || isNaN(unitPrice) || isNaN(unitCost) || isNaN(quantity)) {
+                showMessage("Please fill in all product fields with valid numbers.", "error");
+                return;
+            }
+            
+            showLoader();
+            try {
+                await addDoc(productsCollectionRef, {
+                    name: productName,
+                    unitPrice: unitPrice,
+                    unitCost: unitCost,
                     quantity: quantity
                 });
-
-                showAlert(`${quantity} x ${name} added to bill.`, 'success');
-                manualProductNameInput.value = '';
-                manualProductPriceInput.value = '';
-                manualQuantityInput.value = 1;
-                renderBill();
-            });
-
-            // Bill item removal
-            billItemsContainer.addEventListener('click', (e) => {
-                const removeBtn = e.target.closest('.btn-remove-item');
-                if (removeBtn) {
-                    const index = removeBtn.dataset.index;
-                    billItems.splice(index, 1);
-                    showAlert('Item removed from bill.', 'success');
-                    renderBill();
-                }
-            });
-
-            clearBillBtn.addEventListener('click', () => {
-                resetBill();
-                showAlert('Bill cleared.', 'success');
-            });
-
-            checkoutBtn.addEventListener('click', () => {
-                if (billItems.length === 0) {
-                    showAlert('Please add items to checkout.', 'error');
-                    return;
-                }
-                finalizeModal.classList.remove('hidden');
-                amountPaidInput.value = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
-                updateLoanAmount();
-            });
-
-            // Modal logic
-            amountPaidInput.addEventListener('input', updateLoanAmount);
-            discountAmountInput.addEventListener('input', calculateTotals);
-            newBillBtn.addEventListener('click', () => {
-                finalizeModal.classList.add('hidden');
-                resetBill();
-            });
-            sendWhatsappBtn.addEventListener('click', finalizeBill);
+                showMessage("Product added successfully!", "success");
+                addProductForm.reset();
+                hideCustomModal(addProductModal);
+            } catch (error) {
+                console.error("Error adding product:", error);
+                showMessage('Failed to add product: ' + error.message, 'error');
+            } finally {
+                hideLoader();
+            }
         });
+
+        // Initial setup
+        authenticate();
     </script>
 </body>
 </html>
