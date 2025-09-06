@@ -340,7 +340,7 @@
         
         // Use the globally provided variables as per the instructions
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const firebaseConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
         let db;
@@ -417,6 +417,12 @@
         // --- Firebase Authentication ---
         async function authenticate() {
             try {
+                const firebaseConfig = JSON.parse(firebaseConfigRaw);
+                console.log("Firebase Config:", firebaseConfig);
+                if (Object.keys(firebaseConfig).length === 0) {
+                     // This is the explicit check for the invalid-api-key issue.
+                    throw new Error("Firebase configuration is empty. Please check your environment settings.");
+                }
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
@@ -577,8 +583,8 @@
             const customerName = customerNameInput.value.trim();
             const customerArea = customerAreaInput.value.trim();
             const customerPhone = customerPhoneInput.value.trim();
-            if (!customerName || !customerArea || !customerPhone) {
-                showMessage("Please enter all customer details (Name, Area, Phone Number).", "error");
+            if (!customerName || !customerArea || !customerPhone || customerPhone.length < 5) {
+                showMessage("Please enter all customer details (Name, Area, Phone Number with at least 5 digits).", "error");
                 return;
             }
 
