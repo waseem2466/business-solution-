@@ -537,6 +537,7 @@
                     const productsCollectionPath = `artifacts/${appId}/users/${userId}/stock`;
                     onSnapshot(collection(db, productsCollectionPath), (snapshot) => {
                         allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        console.log("Stock data loaded:", allProducts);
                     });
                     // Listen for real-time customer changes
                     const customersCollectionPath = `artifacts/${appId}/users/${userId}/customers`;
