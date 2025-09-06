@@ -1,1545 +1,652 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WR Smile - Billing</title>
-
+    <title>WR Smile | Billing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Accent Color (Teal Example) */
-        :root {
-           --accent-color: #2dd4bf; /* Example Teal */
-           --accent-hover-color: #14b8a6;
-        }
-
-        /* Base Body Styling for Luxury UI */
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #e0e7ee, #c8d3e0); /* Soft, cool grey gradient */
+            background: linear-gradient(145deg, #f0f4f8, #d9e2ec);
+            color: #334155;
             min-height: 100vh;
             display: flex;
-            flex-direction: column; /* Allow content to stack and footer to push down */
+            flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Align content to top initially */
             padding: 20px;
-            color: #334155; /* Darker default text color */
-            box-sizing: border-box; /* Include padding in element's total width and height */
         }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif; /* Elegant serif for headings */
-            font-weight: 700;
-            color: #2c5282; /* Deep blue for titles - will be overridden for section-title */
-            letter-spacing: 0.5px; /* Subtle letter spacing */
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Soft text shadow */
-        }
-
-        /* Main Container Styling */
-        .main-container {
-            max-width: 1200px; /* Wider container for billing layout */
+        .container {
             width: 100%;
-            background: #ffffff;
-            padding: 2.5rem 2rem; /* More generous padding */
-            border-radius: 24px; /* More rounded corners */
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
-            margin-top: 30px; /* Space from top */
-            margin-bottom: 30px; /* Space from bottom */
+            max-width: 1100px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.05), -10px -10px 20px rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.07), -15px -15px 30px rgba(255, 255, 255, 0.7);
+        }
+        .input-group {
             position: relative;
-            overflow: hidden; /* For subtle background patterns if desired */
-            z-index: 1; /* Ensure content is above pseudo-element */
-            display: flex; /* Use flex for internal layout of sections */
-            gap: 2rem; /* Space between columns */
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
         }
-        .main-container::before {
-            content: '';
+        .input-group input {
+            padding-right: 2.5rem;
+            box-shadow: inset 2px 2px 5px #d9e2ec, inset -2px -2px 5px #ffffff;
+        }
+        .input-group .icon {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234a5568" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); /* Subtle geometric pattern */
-            opacity: 0.8;
-            z-index: -1; /* Place behind content */
-            pointer-events: none;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
         }
-
-        /* Logo Styling */
-        .logo-container {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 2rem; /* Space below the logo */
-            order: -1; /* Ensure logo appears at the top of flex container */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
         }
-        /* New Text Logo Styling */
-        .text-logo {
-            font-family: 'Playfair Display', serif; /* Elegant font for the logo */
-            font-size: 3rem; /* Large font size */
-            font-weight: 700;
-            color: #2c5282; /* Deep blue color, matching headings */
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Soft shadow for depth */
-            letter-spacing: 2px; /* A bit of spacing */
-            display: inline-block; /* For transform effects */
-            transition: transform 0.3s ease-in-out;
-        }
-        .text-logo:hover {
-            transform: scale(1.02); /* Slight hover effect */
-        }
-
-
-        /* Section specific styles */
-        .left-panel {
-            flex: 2; /* Takes 2/3 of space */
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .right-panel {
-            flex: 1; /* Takes 1/3 of space */
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            background-color: #f8fafc; /* Light background for the receipt/summary side */
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.05); /* Inner shadow for depth */
-        }
-        .section-box {
-            background-color: #fdfdfd;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-        }
-        .section-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--accent-color); /* Accent color for section titles */
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 0.5rem;
-        }
-
-        /* Input and Button Focus Styles */
-        input, button, select, textarea {
-            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3); /* Accent color shadow */
-            outline: none;
-        }
-
-        /* Form elements */
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.4rem;
-            display: block;
-            font-size: 0.95rem;
-        }
-        .form-input, .form-select, .form-textarea {
-            padding: 0.75rem 1rem;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            width: 100%;
-            font-size: 1rem;
-            color: #4a5568;
-        }
-        .form-input::placeholder, .form-textarea::placeholder {
-            color: #a0aec0;
-        }
-        .search-results-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 0.5rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            background-color: #fff;
-            position: absolute; /* Position relative to search input container */
-            width: 100%;
-            z-index: 10;
-        }
-        .search-results-list li {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #edf2f7;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-        .search-results-list li:hover {
-            background-color: #f0f4f8;
-            color: #2c5282;
-        }
-        .search-results-list li:last-child {
-            border-bottom: none;
-        }
-
-        /* Cart & Summary */
-        .cart-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px dashed #cbd5e0;
-        }
-        .cart-item-details {
-            flex-grow: 1;
-            font-size: 1.05rem;
-            color: #4a5568;
-        }
-        .cart-item-details span {
-            font-weight: 600;
-            color: #2d3748;
-        }
-        .cart-item-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .qty-input {
-            width: 60px;
-            padding: 0.4rem;
-            border-radius: 6px;
-            border: 1px solid #cbd5e0;
-            text-align: center;
-        }
-        .cart-summary-line {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            font-size: 1.1rem;
-            color: #4a5568;
-        }
-        .cart-summary-line strong {
-            color: #2d3748;
-        }
-        .total-amount-line {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #2c5282;
-            padding-top: 1rem;
-            border-top: 2px solid #a0aec0;
-            margin-top: 1rem;
-        }
-        .invoice-info {
-            font-size: 1.1rem; /* Slightly larger for better readability */
-            color: #4a5568; /* Darker grey */
-            margin-bottom: 1rem;
-            font-weight: 600; /* Make it stand out a bit */
-        }
-        .invoice-info span {
-            font-size: 1.2rem;
-            color: #2c5282; /* Highlight invoice number */
-            font-weight: 700;
-        }
-        .balance-line { /* New style for balance/change display */
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-            border-top: 1px dashed #cbd5e0;
-            padding-top: 1rem;
-        }
-        .balance-line.positive { /* Change due to customer */
-            color: #10b981; /* Green */
-        }
-        .balance-line.negative { /* Balance still due from customer */
-            color: #ef4444; /* Red */
-        }
-
-
-        /* Custom Button Styles */
-        .btn-primary-custom {
-            background: linear-gradient(to right, var(--accent-color), var(--accent-hover-color));
-            border: 1px solid transparent; /* Subtle border */
-            font-weight: 600;
-            color: white; /* Changed for better contrast */
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); /* Accent color shadow */
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 1.05rem;
-        }
-        .btn-primary-custom:hover {
-            background: linear-gradient(to right, var(--accent-hover-color), #118e82); /* Darker accent */
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(45, 212, 191, 0.4); /* Stronger accent shadow */
-            border-color: rgba(255, 255, 255, 0.2); /* White border on hover */
-        }
-        .btn-primary-custom:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 15px rgba(45, 212, 191, 0.2); /* Lighter accent shadow */
-        }
-
-        .btn-danger-custom {
-            background-color: #ef4444;
-            border: 1px solid transparent;
+        .custom-alert {
+            animation: fadeInOut 3s forwards;
             font-weight: 500;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
-            cursor: pointer;
         }
-        .btn-danger-custom:hover {
-            background-color: #dc2626;
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-        .btn-danger-custom.small {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.8rem;
-            border-radius: 6px;
-        }
-
-        .btn-secondary-custom {
-            background-color: #6b7280;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(107, 114, 128, 0.2);
-            border: 1px solid transparent;
-        }
-        .btn-secondary-custom:hover {
-            background-color: #4b5563;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(107, 114, 128, 0.3);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Back Button Styling */
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #4a5568; /* Dark grey */
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 10; /* Ensure it's above other content */
-        }
-        .back-button:hover {
-            background-color: #2d3748; /* Darker grey on hover */
-            transform: translateX(-5px); /* Slight slide effect */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Utility for hidden elements */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Message Alert Styling */
-        .alert-message {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .alert-message.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .alert-message.info { background-color: #3b82f6; } /* blue-500 */
-        .alert-message.success { background-color: #10b981; } /* emerald-500 */
-        .alert-message.error { background-color: #ef4444; } /* red-500 */
-        .alert-message.warning { background-color: #f59e0b; } /* amber-500 */
-
-        /* Loader Styling */
-        #page-loader {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(255, 255, 255, 0.95);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease-in-out;
-        }
-        #page-loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .spinner {
-            border: 6px solid rgba(45, 212, 191, 0.2); /* Accent color */
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border-left-color: var(--accent-color);
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Custom Modal styles */
-        .modal-custom {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1050; /* Ensure it's on top */
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.6); /* This now acts as the backdrop */
-            display: flex; /* To center content */
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow-x: hidden;
-            overflow-y: auto;
-            outline: 0;
-            opacity: 0; /* Initial state for transition */
-            transition: opacity 0.3s ease-in-out;
-        }
-        .modal-custom:not(.hidden) {
-            opacity: 1; /* Fade in */
-        }
-        .modal-custom.hidden {
-            display: none; /* Hide completely when hidden */
-            opacity: 0;
-            pointer-events: none; /* Ensure no clicks */
-        }
-        .modal-custom-content {
-            background-color: #fff;
-            border-radius: 16px; /* Rounded corners */
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Deep shadow */
-            max-width: 600px; /* Adjusted max width */
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: translateY(-20px); /* Initial lift for animation */
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            opacity: 0; /* Start invisible for the content itself */
-            pointer-events: auto; /* Ensure content is clickable */
-        }
-        .modal-custom:not(.hidden) .modal-custom-content {
-            transform: translateY(0); /* Slide down */
-            opacity: 1; /* Fade in content */
-        }
-        .modal-custom-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0; /* Subtle border */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f0f4f8; /* Light header background */
-            border-radius: 16px 16px 0 0;
-        }
-        .modal-custom-title {
-            color: #2c5282;
-            font-weight: 700;
-            font-size: 1.8rem; /* Larger modal title */
-            letter-spacing: 0.5px;
-        }
-        .modal-custom-body {
-            padding: 1.5rem;
-        }
-        .modal-custom-footer {
-            padding: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: flex-end; /* Align buttons to end */
-            gap: 0.75rem; /* Spacing between buttons */
-        }
-        .form-label-custom {
-            font-weight: 600;
-            color: #2d3748; /* Dark grey for labels */
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        .form-input-custom {
-            padding: 0.75rem 1rem;
-            border: 1px solid #cbd5e0; /* Subtle grey border */
-            border-radius: 8px; /* Rounded input fields */
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        .form-input-custom:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3);
-        }
-        .invalid-feedback-custom {
-            color: #ef4444; /* Red for validation feedback */
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        /* Receipt content for print */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #receipt-content, #receipt-content * {
-                visibility: visible;
-            }
-            #receipt-content {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                padding: 20px;
-                box-sizing: border-box;
-                font-family: 'Inter', sans-serif;
-                color: #000;
-                background-color: white;
-            }
-            #receipt-content h3, #receipt-content h4 {
-                font-family: 'Playfair Display', serif;
-            }
-            #receipt-content .receipt-item-print {
-                display: flex;
-                justify-content: space-between;
-                padding: 4px 0;
-                border-bottom: 1px dashed #ccc;
-                font-size: 0.9rem;
-            }
-            #receipt-content .receipt-item-print:last-of-type {
-                border-bottom: none;
-            }
-            #receipt-content .total-line-print {
-                font-weight: bold;
-                border-top: 1px solid #000;
-                padding-top: 5px;
-                margin-top: 5px;
-            }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1024px) {
-            .main-container {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            .left-panel, .right-panel {
-                flex: none;
-                width: 100%;
-            }
-            .logo-container {
-                margin-bottom: 1.5rem;
-            }
-            .text-logo {
-                font-size: 2.5rem; /* Smaller logo on tablets */
-            }
-        }
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .main-container {
-                padding: 1.5rem;
-                border-radius: 16px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-                gap: 1rem;
-            }
-            .logo-container {
-                margin-bottom: 1rem;
-            }
-            .text-logo {
-                font-size: 2rem; /* Even smaller on mobile */
-            }
-            .section-box {
-                padding: 1rem;
-            }
-            .section-title {
-                font-size: 1.4rem;
-                margin-bottom: 0.8rem;
-            }
-            .form-input, .form-select, .form-textarea {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-            }
-            .btn-primary-custom, .btn-secondary-custom, .btn-danger-custom {
-                padding: 0.6rem 1rem;
-                font-size: 0.95rem;
-                width: 100%; /* Stack buttons on small screens */
-                margin-bottom: 0.5rem;
-            }
-            .btn-danger-custom.small {
-                padding: 0.15rem 0.4rem;
-                font-size: 0.75rem;
-            }
-            .cart-item {
-                flex-direction: column; /* Stack details vertically on mobile */
-                align-items: flex-start;
-                gap: 0.5rem;
-                font-size: 0.95rem;
-            }
-            .cart-item-actions {
-                width: 100%;
-                justify-content: space-between; /* Distribute actions better */
-                margin-top: 0.5rem;
-            }
-            .qty-input {
-                width: 50px;
-                padding: 0.3rem;
-                font-size: 0.85rem;
-            }
-            .cart-summary-line {
-                font-size: 1rem;
-            }
-            .total-amount-line {
-                font-size: 1.4rem;
-            }
-            .back-button {
-                top: 10px;
-                left: 10px;
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-            }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 flex flex-col items-center p-4">
 
-<div id="confirmModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Confirm Action</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeConfirmModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <div class="modal-custom-body">
-            <p id="confirmMessage" class="text-gray-700 text-lg">Are you sure you want to proceed?</p>
-        </div>
-        <div class="modal-custom-footer">
-            <button type="button" class="btn-secondary-custom" id="cancelConfirm">No, Cancel</button>
-            <button type="button" class="btn-primary-custom" id="confirmProceed">Yes, Proceed</button>
-        </div>
-    </div>
-</div>
+    <!-- Custom Alert Container -->
+    <div id="alert-container" class="fixed top-5 right-5 z-50"></div>
 
-<div id="addCustomerModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Add New Customer</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeAddCustomerModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <form id="add-customer-form">
-            <div class="modal-custom-body">
-                <div class="form-group">
-                    <label for="customerPhoneInModal" class="form-label-custom">Phone Number</label>
-                    <input type="text" id="customerPhoneInModal" class="form-input-custom" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="customerNameInModal" class="form-label-custom">Customer Name</label>
-                    <input type="text" id="customerNameInModal" class="form-input-custom" required autocomplete="off" placeholder="Enter customer name" />
-                </div>
-            </div>
-            <div class="modal-custom-footer">
-                <button type="button" class="btn-secondary-custom" id="cancelAddCustomerModal">Cancel</button>
-                <button type="submit" class="btn-primary-custom">Add Customer</button>
-            </div>
-        </form>
-    </div>
-</div>
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 space-y-12">
+        <h1 class="text-5xl font-extrabold text-center text-gray-800 font-playfair-display">Billing Dashboard</h1>
 
-<div id="addManualProductModal" class="modal-custom hidden">
-    <div class="modal-custom-content">
-        <div class="modal-custom-header">
-            <h5 class="modal-custom-title">Add Custom Product</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 rounded-full hover:bg-gray-100 transition" id="closeAddManualProductModal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <form id="add-manual-product-form">
-            <div class="modal-custom-body">
-                <div class="form-group">
-                    <label for="manualProductName" class="form-label-custom">Product Name</label>
-                    <input type="text" id="manualProductName" class="form-input-custom" required placeholder="Enter product name" autocomplete="off" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <!-- Left Side: Customer & Product Input -->
+            <div class="space-y-12">
+                <!-- Customer Details Card -->
+                <div class="card p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Customer Details</h2>
+                    <div class="space-y-6">
+                        <div class="input-group">
+                            <input type="text" id="customer-search" placeholder="Search by name or phone..." class="w-full px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all duration-300">
+                            <i class="fas fa-search icon"></i>
+                        </div>
+                        <div id="customer-details-box" class="p-6 bg-gray-100 rounded-2xl hidden transition-all duration-300 shadow-inner">
+                            <p class="text-lg"><strong>Name:</strong> <span id="customer-name" class="font-medium"></span></p>
+                            <p class="text-lg"><strong>Phone:</strong> <span id="customer-phone" class="font-medium"></span></p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <hr class="flex-grow border-gray-300">
+                            <span class="text-sm text-gray-500 font-medium">OR</span>
+                            <hr class="flex-grow border-gray-300">
+                        </div>
+                        <button id="add-customer-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
+                            Add New Customer
+                        </button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="manualProductPrice" class="form-label-custom">Price (LKR)</label>
-                    <input type="number" id="manualProductPrice" class="form-input-custom" required min="0" step="0.01" placeholder="Enter price" />
+
+                <!-- Manual Product Entry Card -->
+                <div class="card p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Manual Product Entry</h2>
+                    <div class="space-y-6">
+                        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+                            <input type="text" id="manual-product-name" placeholder="Product Name" class="flex-1 w-full px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-purple-200 shadow-inner transition-all duration-300">
+                            <input type="number" id="manual-product-price" placeholder="Price" class="w-full md:w-36 px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-purple-200 shadow-inner transition-all duration-300">
+                        </div>
+                        <button id="add-manual-product-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
+                            Add Product
+                        </button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="manualProductQuantity" class="form-label-custom">Quantity</label>
-                    <input type="number" id="manualProductQuantity" class="form-input-custom" required min="1" value="1" placeholder="Enter quantity" />
+
+                <!-- Add from Stock Card -->
+                <div class="card p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Add from Stock</h2>
+                    <div class="space-y-6">
+                        <div class="relative">
+                            <input type="text" id="stock-product-search" placeholder="Search product in stock..." class="w-full px-6 py-3 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-sky-200 shadow-inner transition-all duration-300">
+                            <div id="stock-results" class="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto hidden"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-custom-footer">
-                <button type="button" class="btn-secondary-custom" id="cancelAddManualProductModal">Cancel</button>
-                <button type="submit" class="btn-primary-custom">Add to Cart</button>
-            </div>
-        </form>
-    </div>
-</div>
 
+            <!-- Right Side: Bill & Payment -->
+            <div class="space-y-12">
+                <!-- Bill Details Card -->
+                <div class="card p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Bill Details</h2>
+                    <div class="space-y-6">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bill-items" class="bg-white divide-y divide-gray-200">
+                                    <!-- Bill items will be added here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex flex-col space-y-4 items-end pr-4">
+                            <div class="flex justify-end items-center gap-4 text-sm font-semibold w-full">
+                                <span class="text-gray-700">Subtotal:</span>
+                                <span id="subtotal-amount" class="text-gray-900 font-bold">Rs 0.00</span>
+                            </div>
+                            <div class="flex justify-end items-center gap-4 text-sm font-semibold w-full">
+                                <span class="text-gray-700">Discount Amount:</span>
+                                <input type="number" id="discount-amount" value="0" class="w-32 px-4 py-2 border-none rounded-xl focus:outline-none text-right shadow-inner">
+                            </div>
+                            <div class="flex justify-end items-center gap-4 text-lg font-extrabold w-full">
+                                <span class="text-gray-700">Total:</span>
+                                <span id="total-amount" class="text-indigo-600">Rs 0.00</span>
+                            </div>
+                            <div class="flex justify-end items-center gap-4 text-lg font-extrabold w-full">
+                                <span class="text-gray-700">Amount Paid:</span>
+                                <input type="number" id="amount-paid" class="w-32 px-4 py-2 border-none rounded-xl focus:outline-none text-right shadow-inner">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div id="page-loader" class="fixed inset-0 bg-white bg-opacity-95 z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
-    <div class="spinner"></div>
-    <div class="mt-6 text-2xl text-gray-700 font-semibold animate-pulse tracking-wide">Loading Billing Data...</div>
-</div>
-
-<a href="index.html" class="back-button">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-    </svg>
-    Back to Dashboard
-</a>
-
-<div class="main-container">
-    <div class="logo-container">
-        <h1 class="text-logo">WR Smile</h1>
-    </div>
-
-    <div class="left-panel">
-        <div class="section-box">
-            <h3 class="section-title">Customer Information</h3>
-            <div class="form-group">
-                <label for="customer-phone" class="form-label">Customer Phone</label>
-                <input type="text" id="customer-phone" class="form-input" placeholder="Enter phone number" autocomplete="off" />
-                <button id="search-customer-btn" class="btn-primary-custom mt-2" type="button">Search Customer</button>
-            </div>
-            <div class="form-group">
-                <label for="customer-name" class="form-label">Customer Name</label>
-                <input type="text" id="customer-name" class="form-input" placeholder="Customer Name" />
-            </div>
-            <div id="pending-loan-info" class="text-sm text-gray-600 mt-2"></div>
-        </div>
-
-        <div class="section-box relative">
-            <h3 class="section-title">Product Search</h3>
-            <div class="form-group">
-                <label for="product-search" class="form-label">Search Product</label>
-                <input type="text" id="product-search" class="form-input" placeholder="Search by name" autocomplete="off" />
-                <ul id="search-results" class="search-results-list hidden"></ul>
-                <button id="add-manual-product-btn" class="btn-secondary-custom mt-2" type="button">Add Custom Product</button>
-            </div>
-        </div>
-
-        <div class="section-box">
-            <h3 class="section-title">Shopping Cart</h3>
-            <button id="clear-cart-btn" class="btn-danger-custom small mb-2" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block align-text-bottom mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h12a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 01-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 002 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-                Clear Cart
-            </button>
-            <div id="cart-items" class="min-h-[150px]">
-                <p class="text-gray-500 text-center py-4">No items in cart yet. Add some products!</p>
+                <!-- Finalize Bill Card -->
+                <div class="card p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-gray-800 font-playfair-display">Finalize Bill</h2>
+                    <div class="flex flex-col space-y-6">
+                        <button id="finalize-bill-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
+                            Finalize Bill
+                        </button>
+                        <p id="bill-status" class="text-center font-bold"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="right-panel">
-        <div class="section-box">
-            <h3 class="section-title">Bill Summary</h3>
-            <p class="invoice-info">Invoice: <span id="invoice-number">INV-XXXX</span></p>
-            <div class="cart-summary-line">
-                <span>Subtotal:</span>
-                <strong><span id="sub-total-amount">LKR 0.00</span></strong>
+    <!-- Modals -->
+    <!-- New Customer Modal -->
+    <div id="new-customer-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-10 shadow-2xl max-w-lg w-full space-y-8">
+            <h3 class="text-3xl font-semibold text-gray-800 font-playfair-display text-center">Add New Customer</h3>
+            <input type="text" id="new-customer-name-input" placeholder="Customer Name" class="w-full px-6 py-4 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-200 shadow-inner">
+            <input type="tel" id="new-customer-phone-input" placeholder="Phone Number" class="w-full px-6 py-4 border-none rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-200 shadow-inner">
+            <div class="flex justify-between space-x-4">
+                <button id="save-new-customer-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
+                    Save
+                </button>
+                <button id="cancel-new-customer-btn" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
+                    Cancel
+                </button>
             </div>
-            <div class="form-group mt-2">
-                <label for="discount" class="form-label">Discount (LKR)</label>
-                <input type="number" id="discount" class="form-input" value="0" min="0" step="0.01" />
-            </div>
-            <div class="cart-summary-line total-amount-line">
-                <span>Total:</span>
-                <strong><span id="total-amount">LKR 0.00</span></strong>
-            </div>
-        </div>
-
-        <div class="section-box">
-            <h3 class="section-title">Payment & Loan</h3>
-            <div class="form-group">
-                <label for="cash-paid" class="form-label">Cash Paid (LKR)</label>
-                <input type="number" id="cash-paid" class="form-input" value="0" min="0" step="0.01" />
-            </div>
-            <div class="cart-summary-line">
-                <span>Change/Balance Due:</span>
-                <strong><span id="balance-due" class="text-gray-700">LKR 0.00</span></strong>
-            </div>
-            <div class="form-group">
-                <label for="loan-amount" class="form-label">Loan Amount (LKR)</label>
-                <input type="number" id="loan-amount" class="form-input" value="0" readonly />
-            </div>
-            <div class="form-group">
-                <label for="loan-note" class="form-label">Loan Note (Optional)</label>
-                <textarea id="loan-note" class="form-input form-textarea" rows="2" placeholder="e.g., 'Payment due next week'"></textarea>
-            </div>
-        </div>
-
-        <div class="section-box text-center">
-            <h3 class="section-title">Bill Actions</h3>
-            <button id="save-bill-btn" class="btn-primary-custom w-full mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h-1v5.586L7.707 10.293z" />
-                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM2 10a8 8 0 1116 0 8 8 0 01-16 0z" />
-                </svg>
-                Save Bill
-            </button>
-            <button id="print-bill-btn" class="btn-secondary-custom w-full mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5 4V3a1 1 0 00-1-1H3a1 1 0 00-1 1v1h1V3h1v1zm8 0V3a1 1 0 011-1h1a1 1 0 011 1v1h-1V3h-1v1zM5 16v1a1 1 0 001 1h1a1 1 0 001-1v-1H5zm8 0v1a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1h3zM3 8V6a1 1 0 011-1h12a1 1 0 011 1v2H3zm14 0v4a1 1 0 01-1 1H4a1 1 0 01-1-1V8h14zM4 14v-2h12v2H4z" clip-rule="evenodd" />
-                </svg>
-                Print Bill (PDF)
-            </button>
-            <button id="whatsapp-bill-btn" class="btn-secondary-custom w-full mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zM5 10a5 0 1110 0 5 5 0 01-10 0z" clip-rule="evenodd" />
-                </svg>
-                WhatsApp Bill
-            </button>
-            <button id="new-bill-btn" class="btn-danger-custom w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                </svg>
-                New Bill
-            </button>
         </div>
     </div>
-</div>
 
-<div id="alert-container"></div>
+    <!-- Finalize Modal -->
+    <div id="finalize-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-10 shadow-2xl max-w-lg w-full text-center space-y-8">
+            <h3 id="finalize-modal-title" class="text-3xl font-semibold text-gray-800 font-playfair-display">Bill Finalized!</h3>
+            <p id="finalize-modal-text" class="text-gray-600 text-lg"></p>
+            <div class="flex flex-col space-y-4">
+                <button id="send-whatsapp-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2"></i> Send on WhatsApp
+                </button>
+                <button id="new-bill-btn" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-4 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-100 shadow-lg">
+                    New Bill
+                </button>
+            </div>
+        </div>
+    </div>
 
-<script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // Firebase Configuration - Using the exact config provided by the user
-    const firebaseConfig = {
-        apiKey: "AIzaSyACehOi7n-dbdN00D4tJr2kD_-AVR6S-Vo",
-        authDomain: "wr-smile-shop.firebaseapp.com",
-        databaseURL: "https://wr-smile-shop-default-rtdb.firebaseio.com",
-        projectId: "wr-smile-shop",
-        storageBucket: "wr-smile-shop.appspot.com",
-        messagingSenderId: "299864260187",
-        appId: "1:299864260187:web:fa6af65ef95674aff1097e"
-    };
+        // Global variables for Firebase configuration, provided by the environment
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app); // We are using Firestore as per previous code structure
+        let db;
+        let auth;
+        let userId = 'anonymous';
+        let currentCustomer = null;
+        let billItems = [];
+        let stockItems = [];
 
-    // Global variable for Canvas App ID. Assuming a consistent pattern across your pages.
-    // This provides a default if __app_id is not globally defined.
-    const appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId;
+        // UI elements
+        const customerSearchInput = document.getElementById('customer-search');
+        const customerDetailsBox = document.getElementById('customer-details-box');
+        const customerNameSpan = document.getElementById('customer-name');
+        const customerPhoneSpan = document.getElementById('customer-phone');
+        const addCustomerBtn = document.getElementById('add-customer-btn');
+        const newCustomerModal = document.getElementById('new-customer-modal');
+        const newCustomerNameInput = document.getElementById('new-customer-name-input');
+        const newCustomerPhoneInput = document.getElementById('new-customer-phone-input');
+        const saveNewCustomerBtn = document.getElementById('save-new-customer-btn');
+        const cancelNewCustomerBtn = document.getElementById('cancel-new-customer-btn');
+        const stockProductSearchInput = document.getElementById('stock-product-search');
+        const stockResultsDiv = document.getElementById('stock-results');
+        const manualProductNameInput = document.getElementById('manual-product-name');
+        const manualProductPriceInput = document.getElementById('manual-product-price');
+        const addManualProductBtn = document.getElementById('add-manual-product-btn');
+        const billItemsTable = document.getElementById('bill-items');
+        const subtotalAmountSpan = document.getElementById('subtotal-amount');
+        const discountAmountInput = document.getElementById('discount-amount');
+        const totalAmountSpan = document.getElementById('total-amount');
+        const amountPaidInput = document.getElementById('amount-paid');
+        const finalizeBillBtn = document.getElementById('finalize-bill-btn');
+        const finalizeModal = document.getElementById('finalize-modal');
+        const finalizeModalTitle = document.getElementById('finalize-modal-title');
+        const finalizeModalText = document.getElementById('finalize-modal-text');
+        const sendWhatsAppBtn = document.getElementById('send-whatsapp-btn');
+        const newBillBtn = document.getElementById('new-bill-btn');
 
-    // Firestore Collection References
-    // Data is public across the app, stored under /artifacts/{appId}/public/data/
-    const productsCollectionRef = collection(db, `artifacts/${appId}/public/data/products`);
-    const customersCollectionRef = collection(db, `artifacts/${appId}/public/data/customers`);
-    const invoicesCollectionRef = collection(db, `artifacts/${appId}/public/data/invoices`);
-    const loansCollectionRef = collection(db, `artifacts/${appId}/public/data/loans`); // For customer loans
-    const paymentsCollectionRef = collection(db, `artifacts/${appId}/public/data/payments`); // For loan payments (though not used in this specific billing logic yet)
-
-    // --- DOM Elements ---
-    const pageLoader = document.getElementById('page-loader');
-    const customerPhoneInput = document.getElementById('customer-phone');
-    const customerNameInput = document.getElementById('customer-name');
-    const searchCustomerBtn = document.getElementById('search-customer-btn');
-    const pendingLoanInfoDiv = document.getElementById('pending-loan-info');
-    const productSearchInput = document.getElementById('product-search');
-    const searchResultsList = document.getElementById('search-results');
-    const cartItemsDiv = document.getElementById('cart-items');
-    const clearCartBtn = document.getElementById('clear-cart-btn'); // New: Clear Cart button
-    const subTotalAmountSpan = document.getElementById('sub-total-amount');
-    const discountInput = document.getElementById('discount');
-    const totalAmountSpan = document.getElementById('total-amount');
-    const cashPaidInput = document.getElementById('cash-paid');
-    const loanAmountInput = document.getElementById('loan-amount');
-    const loanNoteTextarea = document.getElementById('loan-note');
-    const invoiceNumberSpan = document.getElementById('invoice-number');
-    const saveBillBtn = document.getElementById('save-bill-btn');
-    const printBillBtn = document.getElementById('print-bill-btn'); // Corrected line
-    const whatsappBillBtn = document.getElementById('whatsapp-bill-btn');
-    const newBillBtn = document.getElementById('new-bill-btn');
-    const confirmModal = document.getElementById('confirmModal'); // Get the confirmation modal
-    // New customer modal elements
-    const addCustomerModal = document.getElementById('addCustomerModal');
-    const addCustomerForm = document.getElementById('add-customer-form');
-    const customerPhoneInModal = document.getElementById('customerPhoneInModal');
-    const customerNameInModal = document.getElementById('customerNameInModal');
-    // Manual Product Input elements
-    const addManualProductBtn = document.getElementById('add-manual-product-btn');
-    const addManualProductModal = document.getElementById('addManualProductModal');
-    const addManualProductForm = document.getElementById('add-manual-product-form');
-    const manualProductNameInput = document.getElementById('manualProductName');
-    const manualProductPriceInput = document.getElementById('manualProductPrice');
-    const manualProductQuantityInput = document.getElementById('manualProductQuantity');
-    // New: Balance/Change Due element
-    const balanceDueSpan = document.getElementById('balance-due');
-
-
-    // --- Global State Variables ---
-    let cart = [];
-    let allProducts = []; // Cache all products
-    let customerData = null; // Stores currently loaded customer's full data
-    let invoiceNumber = 'INV-' + Date.now(); // Initial invoice number
-    let selectedCustomerId = null; // Store ID of selected customer for
-
-    // --- Utility Functions ---
-    function formatLKR(amount) {
-        return new Intl.NumberFormat('en-LK', {
-            style: 'currency',
-            currency: 'LKR',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(amount);
-    }
-
-    function showAlert(message, type = 'info', duration = 3000) {
-        const alertContainer = document.getElementById('alert-container');
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `alert-message ${type}`;
-        alertDiv.textContent = message;
-        alertContainer.appendChild(alertDiv);
-        setTimeout(() => {
-            alertDiv.classList.add('show');
-        }, 10);
-        setTimeout(() => {
-            alertDiv.classList.remove('show');
-            setTimeout(() => {
-                alertContainer.removeChild(alertDiv);
-            }, 300);
-        }, duration);
-    }
-
-    function renderCartItems() {
-        cartItemsDiv.innerHTML = '';
-        if (cart.length === 0) {
-            cartItemsDiv.innerHTML = '<p class="text-gray-500 text-center py-4">No items in cart yet. Add some products!</p>';
-            return;
-        }
-        cart.forEach(item => {
-            const cartItem = document.createElement('div');
-            cartItem.className = 'cart-item';
-            // Use item.type to differentiate between pre-existing products and manual ones if needed
-            // For now, ID is a unique key for both
-            cartItem.innerHTML = `
-                <div class="cart-item-details">
-                    <span>${item.name}</span>
-                    <p class="text-sm text-gray-600">${formatLKR(item.price)} x ${item.quantity} = ${formatLKR(item.price * item.quantity)}</p>
-                </div>
-                <div class="cart-item-actions">
-                    <input type="number" class="qty-input" value="${item.quantity}" min="1" data-id="${item.id}">
-                    <button class="btn-danger-custom small remove-item-btn" data-id="${item.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h12a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 01-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 002 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            `;
-            cartItemsDiv.appendChild(cartItem);
-        });
-
-        // Re-attach event listeners for quantity changes and remove buttons
-        attachCartItemListeners();
-    }
-
-    function calculateTotals() {
-        const subTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const discount = parseFloat(discountInput.value) || 0;
-        let total = subTotal - discount;
-        if (total < 0) total = 0; // Prevent total from going negative due to discount
-
-        const cashPaid = parseFloat(cashPaidInput.value) || 0;
-        let loanAmount = total - cashPaid;
-        let balanceDue = cashPaid - total; // Positive for change, negative for amount still due
-
-        subTotalAmountSpan.textContent = formatLKR(subTotal);
-        totalAmountSpan.textContent = formatLKR(total);
-        loanAmountInput.value = parseFloat(loanAmount > 0 ? loanAmount.toFixed(2) : 0); // Loan is only positive amount still owed
-
-        // Display balance/change
-        balanceDueSpan.textContent = formatLKR(Math.abs(balanceDue)); // Always show absolute value
-        balanceDueSpan.closest('.cart-summary-line').classList.remove('positive', 'negative');
-        if (balanceDue > 0) { // Customer paid more than total, change is due
-            balanceDueSpan.closest('.cart-summary-line').classList.add('positive');
-        } else if (balanceDue < 0) { // Customer paid less than total, balance is due/loan
-            balanceDueSpan.closest('.cart-summary-line').classList.add('negative');
-        }
-    }
-
-    function attachCartItemListeners() {
-        cartItemsDiv.querySelectorAll('.qty-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const productId = e.target.dataset.id; // Use data-id from input directly
-                const newQuantity = parseInt(e.target.value);
-                if (newQuantity > 0) {
-                    const itemIndex = cart.findIndex(item => item.id === productId);
-                    if (itemIndex !== -1) {
-                        // Create a new array to ensure reactivity if used with a framework, good practice regardless
-                        cart = cart.map(item =>
-                            item.id === productId ? { ...item, quantity: newQuantity } : item
-                        );
-                        renderCartItems();
-                        calculateTotals();
-                    }
-                } else {
-                    e.target.value = cart.find(item => item.id === productId).quantity; // Revert to valid qty
-                    showAlert('Quantity must be at least 1', 'error');
-                }
-            });
-        });
-
-        cartItemsDiv.querySelectorAll('.remove-item-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const productId = e.target.dataset.id || e.target.closest('button').dataset.id;
-                cart = cart.filter(item => item.id !== productId);
-                renderCartItems();
-                calculateTotals();
-                showAlert('Item removed from cart', 'info');
-            });
-        });
-    }
-
-    function clearCart() {
-        cart = [];
-        renderCartItems();
-        calculateTotals();
-        showAlert('Cart cleared', 'info');
-    }
-
-    // --- Loader Functions ---
-    function showLoader() {
-        pageLoader.classList.remove('hidden');
-    }
-
-    function hideLoader() {
-        setTimeout(() => {
-            pageLoader.classList.add('hidden');
-        }, 300); // Small delay for smoother transition
-    }
-
-
-    // --- Event Listeners ---
-    document.addEventListener('DOMContentLoaded', async () => {
-        showLoader();
-        try {
-            const productsSnapshot = await getDocs(productsCollectionRef);
-            allProducts = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            hideLoader();
-        } catch (error) {
-            console.error("Error fetching products:", error);
-            showAlert('Failed to load products', 'error');
-            hideLoader();
-        }
-        invoiceNumberSpan.textContent = invoiceNumber;
-        renderCartItems();
-        calculateTotals();
-
-        // Customer Search
-        searchCustomerBtn.addEventListener('click', async () => {
-            const phone = customerPhoneInput.value.trim();
-            if (phone) {
-                showLoader();
-                try {
-                    const q = query(customersCollectionRef, where("phone", "==", phone));
-                    const querySnapshot = await getDocs(q);
-                    if (!querySnapshot.empty) {
-                        customerData = { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() };
-                        customerNameInput.value = customerData.name || ''; // Allow editing
-                        selectedCustomerId = customerData.id;
-                        // Fetch and display pending loan for the customer
-                        const loansQuery = query(loansCollectionRef, where("customerId", "==", customerData.id), where("status", "==", "pending"));
-                        const loansSnapshot = await getDocs(loansQuery);
-                        let loanInfo = '';
-                        if (!loansSnapshot.empty) {
-                             loansSnapshot.forEach(doc => {
-                                const loan = doc.data();
-                                // Handle Firebase Timestamp or Date objects correctly
-                                const loanDate = loan.date && typeof loan.date.toDate === 'function' ? loan.date.toDate() : new Date(loan.date);
-                                loanInfo += `Pending Loan: ${formatLKR(loan.loanAmount)}, Date: ${loanDate.toLocaleDateString()}<br>`;
-                            });
-                        } else {
-                            loanInfo = 'No pending loans.';
-                        }
-                        pendingLoanInfoDiv.innerHTML = loanInfo;
-                        showAlert(`Customer found: ${customerData.name}`, 'success');
-                    } else {
-                        customerData = null;
-                        customerNameInput.value = '';
-                        selectedCustomerId = null;
-                        pendingLoanInfoDiv.innerHTML = 'No customer found with this number.';
-                        // Prompt to add new customer
-                        customerPhoneInModal.value = phone;
-                        addCustomerModal.classList.remove('hidden');
-                    }
-                } catch (error) {
-                    console.error("Error searching customer:", error);
-                    showAlert('Error searching for customer', 'error');
-                } finally {
-                    hideLoader();
-                }
-            } else {
-                showAlert('Please enter a customer phone number', 'info');
-            }
-        });
-
-        // Add New Customer Form Submission
-        addCustomerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const phone = customerPhoneInModal.value;
-            const name = customerNameInModal.value.trim();
-            if (name) {
-                showLoader();
-                try {
-                    const newCustomer = { phone, name, createdDate: new Date() };
-                    const docRef = await addDoc(customersCollectionRef, newCustomer);
-                    customerData = { id: docRef.id, ...newCustomer };
-                    customerNameInput.value = name; // Update the main form field
-                    selectedCustomerId = docRef.id;
-                    showAlert(`Customer "${name}" added successfully!`, 'success');
-                    addCustomerModal.classList.add('hidden');
-                    customerNameInModal.value = ''; // Reset modal form
-                    pendingLoanInfoDiv.innerHTML = 'No pending loans.'; // New customer, so no existing loans
-                } catch (error) {
-                    console.error("Error adding new customer:", error);
-                    showAlert('Error adding new customer', 'error');
-                } finally {
-                    hideLoader();
-                }
-            } else {
-                showAlert('Please enter the customer name', 'warning');
-            }
-        });
-
-        // Close Add Customer Modal
-        document.getElementById('cancelAddCustomerModal').addEventListener('click', () => {
-            addCustomerModal.classList.add('hidden');
-            customerNameInModal.value = ''; // Reset modal form
-        });
-        document.getElementById('closeAddCustomerModal').addEventListener('click', () => {
-            addCustomerModal.classList.add('hidden');
-            customerNameInModal.value = ''; // Reset modal form
-        });
-
-        // Product Search
-        productSearchInput.addEventListener('input', () => {
-            const searchTerm = productSearchInput.value.toLowerCase().trim();
-            const filteredProducts = allProducts.filter(p => p.name.toLowerCase().includes(searchTerm));
-            searchResultsList.innerHTML = '';
-            if (searchTerm && filteredProducts.length > 0) {
-                filteredProducts.forEach(product => {
-                    const li = document.createElement('li');
-                    li.textContent = `${product.name} (${formatLKR(product.price)})`; // Use formatLKR
-                    li.addEventListener('click', () => {
-                        addProductToCart(product);
-                        productSearchInput.value = '';
-                        searchResultsList.classList.add('hidden');
-                    });
-                    searchResultsList.appendChild(li);
-                });
-                searchResultsList.classList.remove('hidden');
-            } else {
-                searchResultsList.classList.add('hidden');
-            }
-        });
-
-        function addProductToCart(product) {
-            // Assign a unique temporary ID if it's a manual product
-            const productId = product.id || `manual-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-            const existingItem = cart.find(item => item.id === productId);
-
-            if (existingItem) {
-                cart = cart.map(item =>
-                    item.id === productId ? { ...item, quantity: item.quantity + product.quantity } : item
-                );
-            } else {
-                cart = [...cart, { id: productId, name: product.name, price: product.price, quantity: product.quantity }];
-            }
-            renderCartItems();
-            calculateTotals();
-            showAlert(`${product.name} added to cart`, 'success');
-        }
-
-        // Add Manual Product Button Click
-        addManualProductBtn.addEventListener('click', () => {
-            addManualProductModal.classList.remove('hidden');
-            manualProductNameInput.value = '';
-            manualProductPriceInput.value = '';
-            manualProductQuantityInput.value = '1';
-            manualProductNameInput.focus(); // Focus on the first input field
-        });
-
-        // Add Manual Product Form Submission
-        addManualProductForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = manualProductNameInput.value.trim();
-            const price = parseFloat(manualProductPriceInput.value);
-            const quantity = parseInt(manualProductQuantityInput.value);
-
-            if (name && !isNaN(price) && price >= 0 && !isNaN(quantity) && quantity >= 1) {
-                const customProduct = {
-                    // No Firebase ID needed for temporary manual products
-                    // We generate a unique ID for cart management
-                    id: `manual-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-                    name: name,
-                    price: price,
-                    quantity: quantity
-                };
-                addProductToCart(customProduct);
-                addManualProductModal.classList.add('hidden');
-                showAlert('Custom product added to cart', 'success');
-            } else {
-                showAlert('Please enter valid product name, price (>=0), and quantity (>=1) for custom product.', 'error');
-            }
-        });
-
-        // Close Manual Product Modal
-        document.getElementById('cancelAddManualProductModal').addEventListener('click', () => {
-            addManualProductModal.classList.add('hidden');
-        });
-        document.getElementById('closeAddManualProductModal').addEventListener('click', () => {
-            addManualProductModal.classList.add('hidden');
-        });
-
-
-        discountInput.addEventListener('input', calculateTotals);
-        cashPaidInput.addEventListener('input', calculateTotals);
-        clearCartBtn.addEventListener('click', clearCart); // New: Clear Cart button listener
-
-        saveBillBtn.addEventListener('click', async () => {
-            if (!customerData && !customerPhoneInput.value && !customerNameInput.value) { // Ensure customer data is present or at least manually entered
-                showAlert('Please search for a customer or enter customer name/phone.', 'warning');
-                return;
-            }
-            if (cart.length === 0) {
-                showAlert('Cart is empty', 'warning');
-                return;
-            }
-
-            const totalAmount = parseFloat(totalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, '')); // Extract number
-            const cashPaid = parseFloat(cashPaidInput.value) || 0;
-            const loanAmount = parseFloat(loanAmountInput.value); // This is already positive or zero
-            const loanNote = loanNoteTextarea.value.trim();
-            const billDate = new Date();
-            const items = cart.map(item => ({
-                // Check if it's a Firebase product ID or a temporary manual one
-                productId: item.id.startsWith('manual-') ? null : item.id,
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity,
-                isManual: item.id.startsWith('manual-') // Flag to indicate if it was a manual entry
-            }));
-
-            // Prioritize manually entered customer name if it's been changed, otherwise use customerData.name
-            let finalCustomerName = customerNameInput.value.trim();
-            let finalCustomerId = selectedCustomerId; // Keep the existing customer ID if found
-
-            // If a customer was searched, but their name was edited, we should use the edited name.
-            // If no customer was searched, but a name was manually typed, use that.
-            // If there's no selectedCustomerId (meaning customer wasn't found by phone and was not added via modal),
-            // but a name and phone are entered, we should save this as a new customer first.
-            if (!finalCustomerId && customerPhoneInput.value.trim() && finalCustomerName) {
-                // Scenario: User typed phone, typed name, but didn't click "Search Customer" or "Add Customer"
-                showLoader();
-                try {
-                    const newCustomer = {
-                        phone: customerPhoneInput.value.trim(),
-                        name: finalCustomerName,
-                        createdDate: new Date()
-                    };
-                    const docRef = await addDoc(customersCollectionRef, newCustomer);
-                    finalCustomerId = docRef.id;
-                    showAlert(`New customer "${finalCustomerName}" saved for this bill.`, 'info');
-                } catch (error) {
-                    console.error("Error creating new customer on bill save:", error);
-                    showAlert('Error creating new customer for bill.', 'error');
-                    hideLoader();
-                    return; // Stop saving bill if customer creation fails
-                }
-            } else if (finalCustomerId && customerData && finalCustomerName !== customerData.name) {
-                // Scenario: Existing customer, but name was manually edited on the form
-                showLoader();
-                try {
-                    await updateDoc(doc(db, `artifacts/${appId}/public/data/customers`, finalCustomerId), {
-                        name: finalCustomerName
-                    });
-                    showAlert(`Customer name updated to "${finalCustomerName}".`, 'info');
-                } catch (error) {
-                    console.error("Error updating customer name:", error);
-                    showAlert('Error updating customer name.', 'error');
-                    hideLoader();
+        // Initialize Firebase
+        const initFirebase = async () => {
+            try {
+                if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
+                    console.error("Firebase config is missing. Skipping Firebase initialization.");
+                    showAlert("Firebase config is missing.", "error");
                     return;
                 }
-            } else if (!finalCustomerName) {
-                 showAlert('Customer name cannot be empty.', 'warning');
-                 return;
-            }
 
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
 
-            const billData = {
-                invoiceNumber,
-                customerId: finalCustomerId, // Use the new or existing customer ID
-                customerName: finalCustomerName, // Use the potentially updated name
-                date: billDate,
-                items,
-                subTotal: parseFloat(subTotalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, '')),
-                discount: parseFloat(discountInput.value) || 0,
-                totalAmount,
-                cashPaid,
-                loanAmount,
-                loanNote: loanAmount > 0 ? loanNote : '', // Only save note if there's a loan
-                status: loanAmount > 0 ? 'pending_loan' : 'paid'
-            };
-
-            showLoader();
-            try {
-                const invoiceRef = await addDoc(invoicesCollectionRef, billData);
-                showAlert(`Bill saved successfully! Invoice: ${invoiceNumber}`, 'success');
-
-                // If there's a loan, save it to the loans collection
-                if (loanAmount > 0) {
-                    await addDoc(loansCollectionRef, {
-                        invoiceId: invoiceRef.id,
-                        customerId: finalCustomerId,
-                        customerName: finalCustomerName, // Use potentially updated name
-                        date: billDate,
-                        loanAmount,
-                        note: loanNote,
-                        status: 'pending'
-                    });
-                    showAlert('Loan recorded.', 'info');
+                // Use the initial auth token if available, otherwise sign in anonymously
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
                 }
 
-                // Optionally update product stock (needs implementation) - this logic would go here
-                // For each item in cart:
-                // Only decrement stock for products that came from Firebase (not manual ones)
-                // For this, you would need to import { increment } from "firebase/firestore";
-                /*
-                for (const item of cart) {
-                    if (!item.id.startsWith('manual-')) {
-                        const productDocRef = doc(db, `artifacts/${appId}/public/data/products`, item.id);
-                        await updateDoc(productDocRef, { stock: increment(-item.quantity) });
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log(`User signed in with ID: ${userId}`);
+                        showAlert("Firebase initialized successfully!", "success");
+                        // Fetch stock and listen for changes
+                        fetchStockItems();
+                    } else {
+                        console.log("No user is signed in. Using anonymous user ID.");
+                        userId = crypto.randomUUID();
+                        showAlert("Signed in anonymously. Firebase initialized.", "success");
+                        // Fetch stock even for anonymous user
+                        fetchStockItems();
                     }
-                }
-                */
+                });
 
-                console.log("Bill saved with ID: ", invoiceRef.id);
-                newBill(); // Prepare for the next bill
             } catch (error) {
-                console.error("Error saving bill:", error);
-                showAlert('Error saving bill', 'error');
-            } finally {
-                hideLoader();
+                showAlert(`Firebase initialization failed: ${error.message}`, "error");
+                console.error("Firebase initialization failed:", error);
             }
-        });
+        };
 
-        printBillBtn.addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            let y = 20;
-            doc.setFontSize(22);
-            doc.text("WR Smile Shop Invoice", 105, y, null, null, "center");
-            y += 10;
-            doc.setFontSize(12);
-            doc.text(`Invoice Number: ${invoiceNumber}`, 10, y);
-            y += 7;
-            doc.text(`Date: ${new Date().toLocaleDateString()}`, 10, y);
-            y += 7;
-            // Use the current value in the customerNameInput field
-            const customerNameForPrint = customerNameInput.value.trim() || 'N/A';
-            const customerPhoneForPrint = customerPhoneInput.value.trim() || 'N/A';
-
-            doc.text(`Customer: ${customerNameForPrint} (Tel: ${customerPhoneForPrint})`, 10, y);
-            y += 15;
-
-            doc.setFontSize(14);
-            doc.text("Items:", 10, y);
-            y += 7;
-
-            cart.forEach(item => {
-                doc.setFontSize(12);
-                doc.text(`${item.name} x ${item.quantity}`, 15, y);
-                doc.text(formatLKR(item.price * item.quantity), 190, y, null, null, "right");
-                y += 6;
-            });
-
-            y += 10;
-            doc.setFontSize(12);
-            doc.text(`Subtotal: ${formatLKR(parseFloat(subTotalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, '')))}`, 190, y, null, null, "right");
-            y += 7;
-            const discountVal = parseFloat(discountInput.value) || 0;
-            if (discountVal > 0) {
-                doc.text(`Discount: ${formatLKR(discountVal)}`, 190, y, null, null, "right");
-                y += 7;
-            }
-            doc.setFontSize(16);
-            doc.text(`Total: ${formatLKR(parseFloat(totalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, '')))}`, 190, y, null, null, "right");
-            y += 10;
-
-            const cashPaidVal = parseFloat(cashPaidInput.value) || 0;
-            if (cashPaidVal > 0) {
-                doc.setFontSize(12);
-                doc.text(`Cash Paid: ${formatLKR(cashPaidVal)}`, 190, y, null, null, "right");
-                y += 7;
-            }
-            const loanAmountVal = parseFloat(loanAmountInput.value);
-            if (loanAmountVal > 0) {
-                doc.setFontSize(12);
-                doc.text(`Loan Amount: ${formatLKR(loanAmountVal)}`, 190, y, null, null, "right");
-                if (loanNoteTextarea.value.trim()) {
-                    doc.setFontSize(10);
-                    doc.text(`Note: ${loanNoteTextarea.value.trim()}`, 10, y + 5);
-                }
-            }
-
-            // Print the Balance/Change Due on the PDF
-            const currentBalanceDue = parseFloat(balanceDueSpan.textContent.replace('LKR\xa0', '').replace(/,/g, ''));
-            const totalToPay = parseFloat(totalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, ''));
-            const actualCashPaid = parseFloat(cashPaidInput.value) || 0;
-            const finalBalance = actualCashPaid - totalToPay;
-
-            if (finalBalance > 0) {
-                doc.setFontSize(12);
-                doc.text(`Change Due: ${formatLKR(finalBalance)}`, 190, y + 7, null, null, "right");
-            } else if (finalBalance < 0 && loanAmountVal === 0) { // If there's a negative balance, but no official "loan" was recorded (meaning cash paid was insufficient but not a formal loan)
-                doc.setFontSize(12);
-                doc.text(`Balance Remaining: ${formatLKR(Math.abs(finalBalance))}`, 190, y + 7, null, null, "right");
-            }
-
-
-            // doc.save(`${invoiceNumber}.pdf`); // Save as a PDF file
-            window.open(doc.output('bloburl'), '_blank'); // Open in a new tab for printing/viewing
-            // Alternatively, for direct print dialog, you could use window.print() after rendering a printable HTML div
-        });
-
-        whatsappBillBtn.addEventListener('click', () => {
-            // Use current customer name and phone from the inputs, which can be manually edited.
-            const currentCustomerName = customerNameInput.value.trim();
-            const currentCustomerPhone = customerPhoneInput.value.trim();
-
-            if (!currentCustomerName || !currentCustomerPhone || cart.length === 0) {
-                showAlert('Please enter customer name & phone, and add items to the cart first', 'warning');
+        // Customer Functions
+        const searchCustomer = async (queryText) => {
+            if (!db) {
+                showAlert("Database not ready.", "error");
                 return;
             }
 
-            let message = `*WR Smile - Invoice ${invoiceNumber}*\n`;
-            message += `*Customer:* ${currentCustomerName}\n`;
-            message += `*Phone:* ${currentCustomerPhone}\n\n`; // Add phone to WhatsApp message
-            message += `*Items:*\n`;
-            cart.forEach(item => {
-                message += `${item.name} x ${item.quantity} = ${formatLKR(item.price * item.quantity)}\n`;
-            });
-            message += `\n*Subtotal:* ${formatLKR(parseFloat(subTotalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, '')))}`;
-            const discountVal = parseFloat(discountInput.value) || 0;
-            if (discountVal > 0) {
-                message += `\n*Discount:* ${formatLKR(discountVal)}`;
-            }
-            message += `\n*Total:* ${formatLKR(parseFloat(totalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, '')))}`;
-            const cashPaidVal = parseFloat(cashPaidInput.value) || 0;
-            if (cashPaidVal > 0) {
-                message += `\n*Cash Paid:* ${formatLKR(cashPaidVal)}`;
+            const customersCol = collection(db, `artifacts/${appId}/users/${userId}/customers`);
+            let q;
+            if (/\d/.test(queryText)) {
+                // Search by phone number
+                q = query(customersCol, where("phone", "==", queryText));
+            } else {
+                // Search by name
+                q = query(customersCol, where("name", "==", queryText));
             }
 
-            const loanAmountVal = parseFloat(loanAmountInput.value);
-            if (loanAmountVal > 0) {
-                message += `\n*Loan Amount:* ${formatLKR(loanAmountVal)}`;
-                if (loanNoteTextarea.value.trim()) {
-                    message += ` (Note: ${loanNoteTextarea.value.trim()})`;
+            try {
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const customerData = querySnapshot.docs[0].data();
+                    currentCustomer = customerData;
+                    customerNameSpan.textContent = customerData.name;
+                    customerPhoneSpan.textContent = customerData.phone;
+                    customerDetailsBox.classList.remove('hidden');
+                } else {
+                    currentCustomer = null;
+                    customerDetailsBox.classList.add('hidden');
+                    showAlert("Customer not found.", "error");
                 }
-            } else { // If no loan, check for change due
-                 const totalToPay = parseFloat(totalAmountSpan.textContent.replace('LKR\xa0', '').replace(/,/g, ''));
-                 const finalBalance = cashPaidVal - totalToPay;
-                 if (finalBalance > 0) {
-                     message += `\n*Change Due:* ${formatLKR(finalBalance)}`;
-                 } else if (finalBalance < 0) {
-                     // This scenario should ideally be covered by loanAmountVal > 0, but as a fallback
-                     // or for cases where a small amount is just "balance remaining" vs. a formal loan
-                     message += `\n*Balance Remaining:* ${formatLKR(Math.abs(finalBalance))}`;
-                 }
+            } catch (e) {
+                showAlert(`Error searching customer: ${e.message}`, "error");
+                console.error("Error searching customer: ", e);
+            }
+        };
+
+        const addNewCustomer = async (name, phone) => {
+            if (!db) {
+                showAlert("Database not ready.", "error");
+                return;
             }
 
-            message += `\n\n_Thank you for your purchase!_`;
+            try {
+                const customersCol = collection(db, `artifacts/${appId}/users/${userId}/customers`);
+                const docRef = await addDoc(customersCol, {
+                    name: name,
+                    phone: phone,
+                    createdAt: new Date()
+                });
+                currentCustomer = { name, phone, id: docRef.id };
+                customerNameSpan.textContent = name;
+                customerPhoneSpan.textContent = phone;
+                customerDetailsBox.classList.remove('hidden');
+                showAlert("New customer added successfully!", "success");
+                newCustomerModal.classList.add('hidden');
+            } catch (e) {
+                showAlert(`Error adding customer: ${e.message}`, "error");
+                console.error("Error adding customer: ", e);
+            }
+        };
 
+        // Product and Bill Functions
+        const fetchStockItems = () => {
+            if (!db) return;
+            const stockCol = collection(db, `artifacts/${appId}/users/${userId}/stock`);
+            onSnapshot(stockCol, (snapshot) => {
+                stockItems = [];
+                snapshot.forEach(doc => {
+                    stockItems.push({ id: doc.id, ...doc.data() });
+                });
+                console.log("Stock items fetched:", stockItems);
+            }, (error) => {
+                showAlert(`Error fetching stock: ${error.message}`, "error");
+                console.error("Error fetching stock:", error);
+            });
+        };
 
-            // Ensure the phone number starts with the correct country code for WhatsApp API
-            let whatsappNumber = currentCustomerPhone; // Use the value from the input field
-            if (whatsappNumber.startsWith('0') && whatsappNumber.length === 10) {
-                whatsappNumber = '+94' + whatsappNumber.substring(1);
-            } else if (!whatsappNumber.startsWith('+')) {
-                // If it's a number without leading 0 or + (e.g., 771234567), assume +94
-                whatsappNumber = '+94' + whatsappNumber;
+        const addProductToBill = (product) => {
+            const existingItem = billItems.find(item => item.name === product.name);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                billItems.push({ ...product, qty: 1 });
+            }
+            renderBill();
+        };
+
+        const renderBill = () => {
+            billItemsTable.innerHTML = '';
+            billItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50";
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${item.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">Rs ${item.price.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="number" class="w-16 px-2 py-1 border rounded-md text-center shadow-inner" value="${item.qty}" data-index="${index}">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">Rs ${(item.price * item.qty).toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <button class="remove-item-btn text-red-500 hover:text-red-700 transition-colors duration-200" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                billItemsTable.appendChild(row);
+            });
+
+            calculateTotals();
+        };
+
+        const calculateTotals = () => {
+            const subtotal = billItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+            const discount = parseFloat(discountAmountInput.value) || 0;
+            const total = subtotal - discount;
+
+            subtotalAmountSpan.textContent = `Rs ${subtotal.toFixed(2)}`;
+            totalAmountSpan.textContent = `Rs ${total.toFixed(2)}`;
+            amountPaidInput.value = total.toFixed(2);
+        };
+
+        const finalizeBill = async () => {
+            if (!db) {
+                showAlert("Database not ready.", "error");
+                return;
+            }
+            if (!currentCustomer) {
+                showAlert("Please select or add a customer first.", "error");
+                return;
+            }
+            if (billItems.length === 0) {
+                showAlert("Bill is empty.", "error");
+                return;
+            }
+            
+            const totalAmount = parseFloat(totalAmountSpan.textContent.replace('Rs ', ''));
+            const amountPaid = parseFloat(amountPaidInput.value);
+
+            let transactionType = 'sale';
+            let loanAmount = 0;
+            let status = 'Paid';
+
+            if (amountPaid < totalAmount) {
+                transactionType = 'loan';
+                loanAmount = totalAmount - amountPaid;
+                status = 'Partially Paid';
+            } else if (amountPaid === totalAmount) {
+                status = 'Paid';
+            } else {
+                status = 'Overpaid';
             }
 
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            const transactionData = {
+                customerId: currentCustomer.id,
+                customerName: currentCustomer.name,
+                customerPhone: currentCustomer.phone,
+                items: billItems,
+                subtotal: billItems.reduce((sum, item) => sum + item.price * item.qty, 0),
+                discount: parseFloat(discountAmountInput.value) || 0,
+                total: totalAmount,
+                amountPaid: amountPaid,
+                loanAmount: loanAmount,
+                status: status,
+                timestamp: new Date()
+            };
+
+            try {
+                const billsCol = collection(db, `artifacts/${appId}/users/${userId}/bills`);
+                await addDoc(billsCol, transactionData);
+                showAlert("Bill finalized successfully!", "success");
+
+                let modalText = "";
+                if (transactionType === 'loan') {
+                    modalText = `A loan of Rs ${loanAmount.toFixed(2)} has been created for ${currentCustomer.name}.`;
+                    finalizeModalTitle.textContent = "Loan Created";
+                } else {
+                    modalText = `The bill for Rs ${totalAmount.toFixed(2)} has been finalized for ${currentCustomer.name}.`;
+                    finalizeModalTitle.textContent = "Bill Finalized!";
+                }
+
+                finalizeModalText.textContent = modalText;
+                finalizeModal.classList.remove('hidden');
+
+                // Set up WhatsApp button link
+                sendWhatsAppBtn.onclick = () => sendWhatsAppMessage(transactionData);
+
+            } catch (e) {
+                showAlert(`Error finalizing bill: ${e.message}`, "error");
+                console.error("Error finalizing bill: ", e);
+            }
+        };
+
+        const sendWhatsAppMessage = (data) => {
+            const total = data.total.toFixed(2);
+            const paid = data.amountPaid.toFixed(2);
+            const loan = data.loanAmount.toFixed(2);
+            let message = `Hello ${data.customerName}, here is your bill summary:\n\nTotal: Rs ${total}\nAmount Paid: Rs ${paid}`;
+            if (data.loanAmount > 0) {
+                message += `\nRemaining Loan: Rs ${loan}`;
+            }
+            message += `\n\nThank you for your business!`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${data.customerPhone}?text=${encodedMessage}`;
             window.open(whatsappUrl, '_blank');
+        };
+
+        const resetBill = () => {
+            currentCustomer = null;
+            billItems = [];
+            customerDetailsBox.classList.add('hidden');
+            customerSearchInput.value = '';
+            discountAmountInput.value = '0';
+            stockProductSearchInput.value = '';
+            manualProductNameInput.value = '';
+            manualProductPriceInput.value = '';
+            renderBill();
+        };
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            initFirebase();
+
+            // Customer search
+            customerSearchInput.addEventListener('change', (e) => {
+                if (e.target.value.trim() !== '') {
+                    searchCustomer(e.target.value.trim());
+                }
+            });
+
+            // Add new customer via modal
+            addCustomerBtn.addEventListener('click', () => {
+                newCustomerModal.classList.remove('hidden');
+            });
+            saveNewCustomerBtn.addEventListener('click', () => {
+                const name = newCustomerNameInput.value.trim();
+                const phone = newCustomerPhoneInput.value.trim();
+                if (name && phone) {
+                    addNewCustomer(name, phone);
+                } else {
+                    showAlert("Please enter both name and phone number.", "error");
+                }
+            });
+            cancelNewCustomerBtn.addEventListener('click', () => {
+                newCustomerModal.classList.add('hidden');
+                newCustomerNameInput.value = '';
+                newCustomerPhoneInput.value = '';
+            });
+
+            // Product search from stock
+            stockProductSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                stockResultsDiv.innerHTML = '';
+                if (query.length > 0) {
+                    const filteredItems = stockItems.filter(item => 
+                        item.name.toLowerCase().includes(query)
+                    );
+                    if (filteredItems.length > 0) {
+                        filteredItems.forEach(item => {
+                            const resultItem = document.createElement('div');
+                            resultItem.className = "px-4 py-2 cursor-pointer hover:bg-gray-200 transition-colors duration-150";
+                            resultItem.textContent = `${item.name} (Rs ${item.price.toFixed(2)})`;
+                            resultItem.onclick = () => {
+                                addProductToBill(item);
+                                stockProductSearchInput.value = '';
+                                stockResultsDiv.classList.add('hidden');
+                            };
+                            stockResultsDiv.appendChild(resultItem);
+                        });
+                        stockResultsDiv.classList.remove('hidden');
+                    } else {
+                        stockResultsDiv.innerHTML = '<div class="px-4 py-2 text-gray-500">No products found.</div>';
+                        stockResultsDiv.classList.remove('hidden');
+                    }
+                } else {
+                    stockResultsDiv.classList.add('hidden');
+                }
+            });
+
+            // Manual product add
+            addManualProductBtn.addEventListener('click', () => {
+                const name = manualProductNameInput.value.trim();
+                const price = parseFloat(manualProductPriceInput.value);
+                if (name && !isNaN(price) && price > 0) {
+                    addProductToBill({ name, price });
+                    manualProductNameInput.value = '';
+                    manualProductPriceInput.value = '';
+                } else {
+                    showAlert("Please enter a valid product name and price.", "error");
+                }
+            });
+
+            // Bill item quantity and remove button
+            billItemsTable.addEventListener('input', (e) => {
+                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                    const index = e.target.closest('input').dataset.index;
+                    const newQty = parseInt(e.target.value);
+                    if (!isNaN(newQty) && newQty > 0) {
+                        billItems[index].qty = newQty;
+                        renderBill();
+                    } else {
+                        // Reset to previous value if input is invalid
+                        e.target.value = billItems[index].qty;
+                    }
+                }
+            });
+            billItemsTable.addEventListener('click', (e) => {
+                if (e.target.closest('.remove-item-btn')) {
+                    const index = e.target.closest('.remove-item-btn').dataset.index;
+                    billItems.splice(index, 1);
+                    renderBill();
+                }
+            });
+
+            // Discount and amount paid input
+            discountAmountInput.addEventListener('input', calculateTotals);
+            amountPaidInput.addEventListener('input', () => {
+                // This is a user-controlled field, so we don't recalculate totals based on it
+                // It only impacts the loan calculation on finalization
+            });
+
+            // Finalize bill button
+            finalizeBillBtn.addEventListener('click', finalizeBill);
+
+            // Modal buttons
+            newBillBtn.addEventListener('click', () => {
+                finalizeModal.classList.add('hidden');
+                resetBill();
+            });
+
+            // Initial render
+            renderBill();
         });
 
-        newBillBtn.addEventListener('click', confirmNewBill);
-
-        function confirmNewBill() {
-            // Check if cart has items, or if customer phone/name inputs have values
-            if (cart.length > 0 || customerPhoneInput.value || customerNameInput.value) {
-                confirmModal.classList.remove('hidden');
-                document.getElementById('confirmMessage').textContent = 'Are you sure you want to start a new bill? Unsaved items or customer data will be cleared.';
-                document.getElementById('confirmProceed').onclick = () => {
-                    newBill();
-                    confirmModal.classList.add('hidden');
-                };
-                document.getElementById('cancelConfirm').onclick = () => {
-                    confirmModal.classList.add('hidden');
-                };
-                document.getElementById('closeConfirmModal').onclick = () => {
-                    confirmModal.classList.add('hidden');
-                };
-            } else {
-                newBill();
-            }
+        // Utility functions for UI alerts
+        function showAlert(message, type = 'success', duration = 3000) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-alert p-4 rounded-lg shadow-md mb-2 text-white font-bold animate-fade-in-up ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+            alertDiv.textContent = message;
+            alertContainer.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.remove();
+            }, duration);
         }
-
-        function newBill() {
-            cart = [];
-            customerData = null; // Clear customer data
-            selectedCustomerId = null; // Clear selected customer ID
-            customerPhoneInput.value = '';
-            customerNameInput.value = ''; // Clear customer name
-            pendingLoanInfoDiv.innerHTML = '';
-            productSearchInput.value = '';
-            searchResultsList.classList.add('hidden');
-            discountInput.value = '0';
-            cashPaidInput.value = '0';
-            loanAmountInput.value = '0';
-            loanNoteTextarea.value = '';
-            invoiceNumber = 'INV-' + Date.now(); // Generate new invoice number
-            invoiceNumberSpan.textContent = invoiceNumber;
-            renderCartItems();
-            calculateTotals(); // Recalculate totals and balance for a fresh start
-            showAlert('New bill started', 'info');
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
